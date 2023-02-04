@@ -2,6 +2,10 @@
 
 
 @section('content')
+
+@section('title','Dashboard')
+    
+
 {{-- Section Header --}}
 <section class="header">
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
@@ -10,6 +14,7 @@
                 <a class="navbar-brand" href="#">
                     <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
                     <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
+
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,6 +22,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     @if(Auth::guard('masyarakat')->check())
+
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
                             <a class="nav-link ml-3 text-white" href="{{ route('pekat.laporan') }}">Laporan</a>
@@ -28,6 +34,14 @@
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">
+                        <li class="nav-item">
+                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#loginModal">Tentang kami</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#loginModal">Hubungi kami</button>
+                        </li>
                         <li class="nav-item">
                             <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#loginModal">Masuk</button>
@@ -43,8 +57,8 @@
     </nav>
 
     <div class="text-center">
-        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat</h2>
-        <p class="italic text-white mb-5">Sampaikan laporan Anda langsung kepada yang pemerintah berwenang</p>
+        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Rancamanyar</h2>
+        <p class="italic text-white mb-5">Sampaikan laporan anda</p>
     </div>
 
     <div class="wave wave1"></div>
@@ -53,31 +67,60 @@
     <div class="wave wave4"></div>
 </section>
 {{-- Section Card Pengaduan --}}
+
 <div class="row justify-content-center">
     <div class="col-lg-6 col-10 col">
         <div class="content shadow">
 
             @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger">{{ $error }}</div>
-                @endforeach
+            @foreach ($errors->all() as $error)
+            <div class="alert alert-danger">{{ $error }}</div>
+            @endforeach
             @endif
 
             @if (Session::has('pengaduan'))
-                <div class="alert alert-{{ Session::get('type') }}">{{ Session::get('pengaduan') }}</div>
+            <div class="alert alert-{{ Session::get('type') }}">{{ Session::get('pengaduan') }}</div>
             @endif
 
             <div class="card mb-3">Tulis Laporan Disini</div>
             <form action="{{ route('pekat.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+
                 <div class="form-group">
                     <textarea name="isi_laporan" placeholder="Masukkan Isi Laporan" class="form-control"
                         rows="4">{{ old('isi_laporan') }}</textarea>
                 </div>
                 <div class="form-group">
-                    <input type="file" name="foto" class="form-control">
+                    <input name="tgl_pengaduan" type="date" id="datepicker" class="form-control"
+                        placeholder="Tanggal laporan">
                 </div>
-                <button type="submit" class="btn btn-custom mt-2">Kirim</button>
+                <div class="form-group">
+                    <textarea name="lokasi_kejadian" placeholder="Masukan lokasi kejadian" class="form-control"
+                    rows="2">{{ old('lokasi_kejadian') }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="images" class="drop-container">
+                        <span class="drop-title">Tambahkan lampiran</span>
+                        or
+                        <input type="file" id="images" accept="image/*">
+                    </label>
+                </div>
+                <div class="form-check">
+                    <div class="row text-center mb-3">
+                    <div class="col-6">
+                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input" id="exampleCheck1" data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish">
+                    <label class="form-check-label" for="exampleCheck1">Anonymous</label>
+                </div>
+                <div class="col-6">
+                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input" id="exampleCheck1" data-toggle="tooltip" data-placement="top" title="Laporan anda tidak dapat dilihat publik">
+                    <label class="form-check-label" for="exampleCheck1">Rahasia</label>
+                </div>
+                </div>
+                </div>
+                  <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-custom mt-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-title="Tooltip on top">Update</button>
+                </div>
             </form>
         </div>
     </div>
@@ -91,13 +134,7 @@
         </div>
     </div>
 </div>
-{{-- Footer --}}
-<div class="mt-5">
-    <hr>
-    <div class="text-center">
-        <p class="italic text-secondary">© 2021 Ihsanfrr • All rights reserved</p>
-    </div>
-</div>
+
 {{-- Modal --}}
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -129,10 +166,14 @@
 @endsection
 
 @section('js')
-    @if (Session::has('pesan'))
-    <script>
-        $('#loginModal').modal('show');
-
-    </script>
-    @endif
+@if (Session::has('pesan'))
+<script>
+    $('#loginModal').modal('show');
+</script>
+@endif
+{{-- <script>
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+</script> --}}
 @endsection

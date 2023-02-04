@@ -17,8 +17,12 @@ return new class extends Migration
             $table->char('nik',16)->primary();
             $table->string('nama',35);
             $table->string('username',25)->unique();
+            $table->string('alamat')->nullable();
+            $table->string('email')->nullable();
             $table->string('password');
-            $table->string('telp',13);
+            $table->string('telp',13)->nullable();
+            $table->string('tgl_lahir')->nullable();
+            $table->string('foto_ktp')->nullable();
             $table->timestamps();
         });
     }

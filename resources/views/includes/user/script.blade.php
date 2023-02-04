@@ -1,0 +1,95 @@
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+</script>
+
+<script src="https://kit.fontawesome.com/4c48033608.js" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+{{-- <script>
+    // profile-photo.js
+
+    document.getElementById("profile-photo-input").addEventListener("change", function () {
+        document.getElementById("profile-photo-form").submit();
+    });
+</script> --}}
+
+<script>
+    function showForm(formId) {
+        var form1 = document.getElementById("form1");
+        var form2 = document.getElementById("form2");
+        if (formId === "form1") {
+            form1.style.display = "block";
+            form2.style.display = "none";
+        } else if (formId === "form2") {
+            form2.style.display = "block";
+            form1.style.display = "none";
+        }
+    }
+</script>
+
+{{-- <script>
+        document.getElementById("profile-photo-input").addEventListener("change", function() {
+        document.getElementById("profile-photo-form").submit();
+    }); 
+  </script> --}}
+
+<script>
+    document.getElementById("inputNumber").addEventListener("keypress", function (event) {
+        if (event.key === "e") {
+            event.preventDefault();
+        }
+    });
+</script>
+
+<script>
+    function previewImage() {
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('.img-preview');
+        imgPreview.style.display = 'block';
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+        oFReader.onload = function (oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
+
+<script>
+    const tabs = document.querySelectorAll(".tab");
+    const forms = document.querySelectorAll(".form");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", function () {
+            const id = this.id.replace("tab", "");
+            tabs.forEach(tab => {
+                tab.classList.remove("tab-active");
+            });
+            this.classList.add("tab-active");
+            contents.forEach(content => {
+                content.style.display = "none";
+            });
+            document.getElementById("form" + id).style.display = "block";
+        });
+    });
+
+    document.getElementById("tab1").classList.add("tab-active");
+    document.getElementById("content1").style.display = "block";
+</script>
+{{-- <script>
+    document.getElementById("showInputButton").addEventListener("click", function() {
+  const input = document.getElementById("image");
+  if (input.style.display === "none") {
+    input.style.display = "block";
+  } else {
+    input.style.display = "none";
+  }
+});
+
+</script> --}}
