@@ -98,7 +98,7 @@ class AdminController extends Controller
         }
     }
 
-    // Masyarakat EDIT,DETAIL,DELETE
+    // Society EDIT,DETAIL,DELETE
     public function showsociety()
     {
         $society = Masyarakat::latest()->get(); 
@@ -136,5 +136,34 @@ class AdminController extends Controller
 
         return redirect('/admin/masyarakat')->with('success','Data berhasil di update');
 
+    }
+
+    public function detailsociety($nik)
+    {
+        
+        $society = Masyarakat::where('nik',$nik)->first();
+
+        return view('contents.admin.society.detail',compact('society'));
+    }
+
+    public function destroysociety($nik)
+    {
+        $society = Masyarakat::findOrFail($nik);
+
+        $society->delete();
+
+        return redirect('/admin/masyarakat')->with('success','Masyarakat berhasil dihapus');
+    }
+
+    public function societytrash()
+    {
+        $society = Masyarakat::onlyTrashed()->get();
+        return view('contents.admin.society.trash', compact('society'));
+    }
+    public function restoresociety($nik)
+    {
+        $masyarakat = Masyarakat::onlyTrashed()->findOrFail($nik);
+        $masyarakat->restore();
+        return redirect('/admin/masyarakat')->with('success', 'Masyarakat restored successfully.');
     }
 }

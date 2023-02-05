@@ -25,12 +25,20 @@
 
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.laporan') }}">Laporan</a>
+                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.logout') }}"
-                                style="text-decoration: underline">{{ Auth::guard('masyarakat')->user()->nama }}</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link ml-4 dropdown-toggle text-white" href="/profile" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ Auth::guard('masyarakat')->user()->nama }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/profile">Profil Saya</a>
+                              <a class="dropdown-item" href="/laporan/me">Laporan Saya</a>
+                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="/logout">Keluar</a>
+                            </div>
+                          </li>
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">
@@ -119,7 +127,7 @@
                 </div>
                   <div class="text-center mt-3">
                     <button type="submit" class="btn btn-custom mt-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                        data-bs-title="Tooltip on top">Update</button>
+                        data-bs-title="Tooltip on top">Kirim</button>
                 </div>
             </form>
         </div>

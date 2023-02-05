@@ -30,4 +30,5 @@
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="/admins/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/admins/css/datatable-extension.css">
+<link rel="stylesheet" type="text/css" href="/admins/css/photoswipe.css">
 <!-- Plugins css Ends-->

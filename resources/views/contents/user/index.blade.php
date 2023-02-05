@@ -4,7 +4,7 @@
 @section('content')
 {{-- Section Header --}}
 <section class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top scrolled">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div class="container">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
@@ -66,7 +66,7 @@
 
 <div class="row justify-content-center">
     <div class="col-lg-8 col-10 col">
-        <div class="content shadow">
+        <div class="content shadow mb-5">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
@@ -96,8 +96,60 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <a class="d-inline tab mr-4" href="">
+                Semua Laporan
+            </a>
+            <hr>
+        </div>
+        @foreach ($pengaduan as $k => $v)
+        <div class="col-lg-12">
+            <div class="laporan-top">
+                <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        @if ($v->hide_identitas == 2)
+                        <p>Anonymous</p>
+                        @else
+                        <p>{{ $v->user->nama }}</p>
+                        @endif
+                        @if ($v->status == '0')
+                        <p class="text-danger">Pending</p>
+                        @elseif($v->status == 'proses')
+                        <p class="text-warning">{{ ucwords($v->status) }}</p>
+                        @else
+                        <p class="text-success">{{ ucwords($v->status) }}</p>
+                        @endif
+                    </div>
+                    <div>
+                        <p>{{ $v->tgl_pengaduan->format('d M, h:i') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="laporan-mid">
+                <div class="judul-laporan">
+                    {{ $v->judul_laporan }}
+                </div>
+                <p>{{ $v->isi_laporan }}</p>
+            </div>
+            <div class="laporan-bottom">
+                @if ($v->foto != null)
+                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}" class="gambar-lampiran">
+                @endif
+                @if ($v->tanggapan != null)
+                <p class="mt-3 mb-1">{{ '*Tanggapan dari '. $v->tanggapan->petugas->nama_petugas }}</p>
+                <p class="light">{{ $v->tanggapan->tanggapan }}</p>
+                @endif
+            </div>
+            <hr>
+        </div>
+        @endforeach
     </div>
 </div>
+
+
+
+
 {{-- Section Hitung Pengaduan --}}
 <div class="pengaduan mt-5">
     <div class="bg-purple">

@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
-| Admin & Petugas
+| Admin & Officer
 |--------------------------------------------------------------------------
 |
 */
@@ -36,7 +36,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/masyarakat',[AdminController::class,'showsociety']);
         Route::get('/masyarakat/edit/{nik}',[AdminController::class,'editsociety']);
         Route::put('/masyarakat/update/{nik}',[AdminController::class,'updatesociety']);
-
+        Route::get('/masyarakat/detail/{nik}',[AdminController::class,'detailsociety']);
+        Route::delete('/masyarakat/delete/{nik}', [AdminController::class,'destroysociety']);
+        Route::get('/masyarakat/sampah',[AdminController::class,'societytrash']);
+        Route::put('/masyarakat/restore/{nik}',[AdminController::class,'restoresociety']);
     });
     
 
@@ -45,16 +48,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', [AdminController::class,'logout'])->name('admin.logout');
     });
 
-    Route::middleware(['isGuest'])->group(function () {
-        // Auth
-        
-
-    });
 });
 
 /*
 |--------------------------------------------------------------------------
-| Masyarakat
+| Society
 |--------------------------------------------------------------------------
 |
 */
@@ -64,7 +62,7 @@ Route::middleware(['isMasyarakat'])->group(function() {
 
     Route::get('/dashboard', [UserController::class, 'dashboard']);
     Route::post('/store', [UserController::class, 'storePengaduan'])->name('pekat.store');
-    Route::get('/laporan/{siapa?}', [UserController::class, 'laporan'])->name('pekat.laporan');
+    Route::get('/profile', [UserController::class, 'laporan'])->name('pekat.laporan');
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     Route::put('/update/{nik}', [UserController::class, 'updatesociety']);
 });

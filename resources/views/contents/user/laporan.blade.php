@@ -21,12 +21,20 @@
                     @if(Auth::guard('masyarakat')->check())
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.laporan') }}">Laporan</a>
+                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.logout') }}"
-                                style="text-decoration: underline">{{ Auth::guard('masyarakat')->user()->nama }}</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ Auth::guard('masyarakat')->user()->nama }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="#">Profil Saya</a>
+                              <a class="dropdown-item" href="#">Laporan Saya</a>
+                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="/logout">Keluar</a>
+                            </div>
+                          </li>
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">
@@ -127,16 +135,15 @@
                         <div class="form-group">
                             <small class="text-muted">Foto KTP <small style="color: red"> (*) </small></small>
                             @if (Auth::guard('masyarakat')->user()->foto_ktp)
-                            <img src="{{ asset(Auth::guard('masyarakat')->user()->foto_ktp) }}" class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                            <img src="{{ asset(Auth::guard('masyarakat')->user()->foto_ktp) }}" class="img-preview img-fluid mb-2 col-sm-5 d-block">
                             @else
-                            <img class="img-preview img-fluid mb-3 col-sm-5">
+                            <img class="img-preview img-fluid mb-2 col-sm-5">
                             @endif
-                            <img class="img-preview img-fluid mb-3">
+                            <img class="img-preview img-fluid mb-2">
                             
-                            <input type="file" name="foto" id="image"
+                            <input type="file" name="foto_ktp" id="image"
                                 class="form-control @error('foto') is-invalid @enderror" onchange="previewImage()">
                         </div>
-
                         <div class="mt-3">
                             <button type="submit" class="btn btn-custom mt-2">Update</button>
                         </div>
@@ -148,7 +155,7 @@
             <div class="menu menu-top shadow">
                 <h5>Menu</h5>
                 <hr>
-              <a href="/laporan" style="text-decoration: none; color:black;"> <i class="fa fa-file my-2"></i>  <small>Laporan saya</small></a>
+              <a href="/laporan/me" style="text-decoration: none; color:black;"> <i class="fa fa-file my-2"></i>  <small>Laporan saya</small></a>
                 <hr>
                 <a href="/laporan" style="text-decoration: none; color:black;"><i class="fa fa-lock my-2"></i>  <small>Ubah Password</small></a>
                 <hr>

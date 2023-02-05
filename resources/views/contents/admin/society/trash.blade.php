@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 
-@section('title','Masyarakat')
+@section('title','Sampah')
     
 @section('content')
 
@@ -30,10 +30,10 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Data Masyarakat</h5>
+                    <h5>Data masyarakat yang telah dihapus</h5>
                 </div>
                 <div class="card-body mb-4">
-                  <a class="btn btn-primary mb-2" href="/admin/masyarakat/sampah">Trash</a>
+                  {{-- <a class="btn btn-success mb-2" href="/admin/masyarakat/tambah">Tambah Data</a> --}}
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>
@@ -55,27 +55,25 @@
                                     <td>{{ $s->username }}</td>
                                     <td>{{ $s->email }}</td>
                                     <td>
-                                        <a class="btn mb-3" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->nik }}">Detail</a>
-                                        <a class="btn btn-warning mb-3" href="/admin/masyarakat/edit/{{ $s->nik }}">Edit</a>
-                                        <a class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/delete/{{ $s->nik }}">Hapus</a>
+                                        <a class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/restore/{{ $s->nik }}">Restore</a>
 
                                          {{-- modal delete --}}
                                    <div class="modal fade" id="modalDelete{{ $s->nik }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                       <div class="modal-content">
                                         <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Hapus Masyarakat</h5>
+                                          <h5 class="modal-title" id="exampleModalLabel">Restore Masyarakat</h5>
                                           <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
                                           </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Apakah anda yakin menghapus {{ $s->nama }} ?</p>
+                                            <p>Apakah anda yakin ingin mengembalikan {{ $s->nama }} ?</p>
                                         </div>
                                         <div class="modal-footer">
                                           <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                                          <form action="/admin/masyarakat/delete/{{ $s->nik }}" method="POST">
+                                          <form action="/admin/masyarakat/restore/{{ $s->nik }}" method="POST">
                                             @csrf
-                                            @method('delete')
+                                            @method('put')
                                           <button class="btn btn-primary" type="submit">Yakin</button>
                                         </form>
                                         </div>

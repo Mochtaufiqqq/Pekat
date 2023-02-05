@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('telp',13)->nullable();
             $table->string('tgl_lahir')->nullable();
             $table->string('foto_ktp')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

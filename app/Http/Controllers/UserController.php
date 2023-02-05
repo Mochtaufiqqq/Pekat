@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function index()
-    {
-        return view('contents.user.index');
+    {  
+        $pengaduan = Pengaduan::where('status', '!=', '0')->where('hide_identitas','!=','0')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan','desc')->get();
+
+        return view('contents.user.index', ['pengaduan' => $pengaduan, ]);
+        
     }
 
     public function dashboard()
@@ -91,7 +94,7 @@ class UserController extends Controller
         if ($username) {
             return redirect()->back()->with(['pesan' => 'Username sudah terdaftar!']);
         }
-        
+         
 
         Masyarakat::create([
             'nik' => $data['nik'],

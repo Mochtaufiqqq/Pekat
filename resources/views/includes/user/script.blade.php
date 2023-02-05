@@ -40,6 +40,8 @@
     }); 
   </script> --}}
 
+
+  {{-- input number --}}
 <script>
     document.getElementById("inputNumber").addEventListener("keypress", function (event) {
         if (event.key === "e") {
@@ -93,3 +95,26 @@
 });
 
 </script> --}}
+
+
+<script>
+    // listen for scroll event
+    window.addEventListener("scroll", function () {
+        let btn = document.getElementById("scroll-to-top-btn");
+        // show or hide the button based on the page scroll position
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    });
+
+    // handle click event
+    document.getElementById("scroll-to-top-btn").addEventListener("click", function () {
+        // smoothly scroll to the top of the page
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+</script>

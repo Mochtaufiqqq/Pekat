@@ -65,3 +65,6 @@
 <script src="/admins/js/datatable/datatable-extension/custom.js"></script>
 <script src="/admins/js/tooltip-init.js"></script>
 <!-- Plugins JS Ends-->
+<script src="/admins/js/photoswipe/photoswipe.min.js"></script>
+    <script src="/admins/js/photoswipe/photoswipe-ui-default.min.js"></script>
+    <script src="/admins/js/photoswipe/photoswipe.js"></script>
