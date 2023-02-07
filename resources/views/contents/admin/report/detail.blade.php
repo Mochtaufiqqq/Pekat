@@ -9,7 +9,7 @@
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h4 class="card-title mb-0">My Profile</h4>
+                        <h4 class="card-title mb-0">Pelapor</h4>
                         <div class="card-options"><a class="card-options-collapse" href="#"
                                 data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a
                                 class="card-options-remove" href="#" data-bs-toggle="card-remove"><i
@@ -22,24 +22,36 @@
                                     <div class="media"><img class="img-70 rounded-circle" alt=""
                                             src="/admins/images/user/7.jpg">
                                         <div class="media-body">
-                                            <h3 class="mb-1 f-20 txt-primary">MARK JECNO</h3>
-                                            <p class="f-12">DESIGNER</p>
+                                            <a href="/admin/masyarakat/detail/{{ $pengaduan->user->nik }}"><h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}</h3></a>
+                                            <p class="f-12">({{ $pengaduan->user->nik }})</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <h6 class="form-label">Isi Laporan</h6>
-                                <span class="text text-end">Isi laporan</span>
+                                <h6 class="form-label text-primary">Isi Laporan</h6>
+                               <small>{{ $pengaduan->isi_laporan }}</small>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Nama Pelapor</label>
-                                <span class="text">Moch</span>
+                                <label class="form-label text-primary">Nama Pelapor</label>
+                               <p>{{ $pengaduan->user->nama }}</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Tanggal Laporan</label>
-                                <span class="text">09089</span>
+                                <label class="form-label text-primary">Tanggal Laporan</label>
+                                <p>{{ $pengaduan->tgl_pengaduan }}</p>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Foto Laporan</label>
+                                <div class="gallery my-gallery card-body row" itemscope="" data-pswp-uid="1" id="aniimated-thumbnials">
+                                    @foreach (explode('|', $pengaduan->foto) as $img)
+                                    <figure class="col-xl-3 col-md-4 xl-33" itemprop="associatedMedia" itemscope="">
+                                        <a href="/storage/{{ $img }}" itemprop="contentUrl" data-size="1600x950"><img class="img-thumbnail" src="/storage/{{ $img }}" itemprop="thumbnail" alt="Image description"></a>
+                                      <figcaption itemprop="caption description">Image caption  1</figcaption>
+                                    </figure>
+                                    @endforeach
+                                  </div>
+                            </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 @if ($pengaduan->status == '0')

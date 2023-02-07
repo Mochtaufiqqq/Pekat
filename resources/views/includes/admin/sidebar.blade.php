@@ -46,6 +46,9 @@
                     <li class="dropdown"><a class="nav-link menu-title link-nav" href="/admin/laporan"><i
                                 data-feather="file-text"></i><span>Laporan</span></a>
                     </li>
+                    <li class="dropdown"><a class="nav-link menu-title link-nav" href="/admin/sampah"><i
+                        data-feather="trash"></i><span>Sampah</span></a>
+            </li>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
         </div>

@@ -63,6 +63,21 @@
                             @csrf
                             <h4>Login</h4>
                             <h6>Selamat Datang ! Silahkan masuk dengan akun yang sudah terdaftar.</h6>
+                            <div class="row container-fluid">
+                                <div class="col-6">
+                                <a class="d-inline tab" id="tab1" onclick="showForm('form1')">
+                                    <span class="text-primary">
+                                        asdas
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a class="d-inline tab text-end" id="tab2" onclick="showForm('form2')">
+                                    Masuk Sebagai Admin
+                                </a>
+                            </div>
+                                <hr>
+                            </div>
                             @if (Session::has('pesan'))
                             <div class="alert alert-danger mt-2">
                                 {{ Session::get('pesan') }}

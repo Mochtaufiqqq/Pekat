@@ -57,8 +57,8 @@
                                         </h5>
                                         <p class="email_add_0">{{ $petugas->email }}</p>
                                         <ul>
-                                          <li><a href="/admin/editpetugas/{{ $petugas->id_petugas }}" onclick="editContact(0)">Edit</a></li>
-                                          <li><a href="/deletepetugas/{{ $petugas->id_petugas }}" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $petugas->id_petugas }}">Hapus</a>
+                                          <li><a href="/admin/petugas/edit/{{ $petugas->id_petugas }}" onclick="editContact(0)">Edit</a></li>
+                                          <li><a href="/admin/petugas/delete/{{ $petugas->id_petugas }}" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $petugas->id_petugas }}">Hapus</a>
                                         </li>
 
                                           {{-- modal delete --}}
@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="modal-footer">
                                           <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                                          <form action="/deletepetugas/{{ $petugas->id_petugas }}" method="POST">
+                                          <form action="/admin/petugas/delete{{ $petugas->id_petugas }}" method="POST">
                                             @method('delete')
                                             @csrf
 

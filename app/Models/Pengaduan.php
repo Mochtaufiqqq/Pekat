@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pengaduan extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'pengaduans';
 
@@ -24,7 +26,7 @@ class Pengaduan extends Model
     'status'
 ];
 
-    protected $dates = ['tgl_pengaduan'];
+    protected $dates = ['tgl_pengaduan','deleted_at'];
 
     public function user ()
     {

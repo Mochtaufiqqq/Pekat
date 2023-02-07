@@ -84,6 +84,7 @@
     document.getElementById("tab1").classList.add("tab-active");
     document.getElementById("content1").style.display = "block";
 </script>
+
 {{-- <script>
     document.getElementById("showInputButton").addEventListener("click", function() {
   const input = document.getElementById("image");

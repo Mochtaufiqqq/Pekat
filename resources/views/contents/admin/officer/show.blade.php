@@ -33,7 +33,7 @@
                     <h5>Data Petugas</h5><span>Dibawah Ini adalah table semua data user aktif dan user nonaktif kamu bisa mengelolanya. Terdapat Beberapa Button Untuk Mengelola</span>
                 </div>
                 <div class="card-body">
-                  <a class="btn btn-success mb-2" href="/admin/tambahpetugas">Tambah Data</a>
+                  <a class="btn btn-success mb-2" href="/admin/petugas/tambah">Tambah Data</a>
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>
@@ -55,9 +55,9 @@
                                     <td>{{ $p->telp }}</td>
                                     <td>{{ $p->level }}</td>
                                     <td>
-                                        <a class="btn btn-primary mb-3" href="/admin/detailpetugas/{{ $p->id_petugas }}">Detail</a>
-                                        <a class="btn btn-warning mb-3" href="/admin/editpetugas/{{ $p->id_petugas }}">Edit</a>
-                                        <a class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_petugas }}" href="/admin/deletepetugas/{{ $p->id_petugas }}">Hapus</a>
+                                        <a class="btn btn-primary mb-3" href="/admin/petugas/detail/{{ $p->id_petugas }}">Detail</a>
+                                        <a class="btn btn-warning mb-3" href="/admin/petugas/edit/{{ $p->id_petugas }}">Edit</a>
+                                        <a class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_petugas }}" href="/admin/petugas/delete/{{ $p->id_petugas }}">Hapus</a>
 
                                          {{-- modal delete --}}
                                    <div class="modal fade" id="modalDelete{{ $p->id_petugas }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="modal-footer">
                                           <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                                          <form action="/admin/deletepetugas/{{ $p->id_petugas }}" method="POST">
+                                          <form action="/admin/petugas/delete/{{ $p->id_petugas }}" method="POST">
                                             @csrf
                                             @method('delete')
                                           <button class="btn btn-primary" type="submit">Yakin</button>

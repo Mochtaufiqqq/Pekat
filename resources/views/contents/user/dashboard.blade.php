@@ -108,9 +108,9 @@
                 </div>
                 <div class="form-group">
                     <label for="images" class="drop-container">
-                        <span class="drop-title">Tambahkan lampiran</span>
+                        <span class="drop-title">Drag files here</span>
                         or
-                        <input type="file" id="images" accept="image/*">
+                        <input type="file" name="images[]" id="images" accept="image/*" multiple>
                     </label>
                 </div>
                 <div class="form-check">

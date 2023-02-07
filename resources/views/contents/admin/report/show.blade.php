@@ -41,7 +41,7 @@
                                 <th scope="col">No</th>
                                 <th scope="col">Tanggal pengaduan</th>
                                 <th scope="col">NIK</th>
-                                {{-- <th scope="col">Nama Pelapor</th> --}}
+                                <th scope="col">Nama Pelapor</th>
                                 <th scope="col">Isi Laporan</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Opsi</th>
@@ -54,6 +54,7 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $p->tgl_pengaduan->format('d-M-Y') }}</td>
                                     <td>{{ $p->nik }}</td>
+                                    <td>{{ $p->user->nama }}</td>
                                     <td>{{ $p->isi_laporan }}</td>
                                     <td>
                                         @if ($p->status == '0')
@@ -65,7 +66,34 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a class="btn btn-primary mb-3" href="/admin/detailpengaduan/{{ $p->id_pengaduan }}">Detail</a>
+                                        <div class="mx-auto">
+                                        <a class="btn " style="background-color: #645CBB; color: white;" href="/admin/pengaduan/detail/{{ $p->id_pengaduan }}">Detail</a>
+                                        <a class="btn btn-danger" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_pengaduan }}" href="/admin/pengaduan/hapus/{{ $p->id_pengaduan }}">Hapus</a>
+
+                                        {{-- modal delete --}}
+                                        <div class="modal fade" id="modalDelete{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <h5 class="modal-title" id="exampleModalLabel">Hapus Pengaduan</h5>
+                                                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                                  </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Apakah anda yakin ingin menghapus pengaduan dari user yang bernama {{ $p->user->nama }} ?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
+                                                  <form action="/admin/pengaduan/delete/{{ $p->id_pengaduan }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                  <button class="btn btn-primary" type="submit">Yakin</button>
+                                                </form>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                    </div>
                                     </td>
                             </tr>
                             @endforeach

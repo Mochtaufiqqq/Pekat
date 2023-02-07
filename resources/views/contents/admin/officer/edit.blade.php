@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <form action="/admin/updatepetugas/{{ $petugas->id_petugas }}" method="POST" enctype="multipart/form-data">
+                            <form action="/admin/petugas/update/{{ $petugas->id_petugas }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="mb-3 m-form__group">

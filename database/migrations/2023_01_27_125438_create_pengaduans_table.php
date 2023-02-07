@@ -18,11 +18,12 @@ return new class extends Migration
             $table->dateTime('tgl_pengaduan');
             $table->char('nik',16);
             $table->text('isi_laporan');
-            $table->string('foto')->nullable();
+            $table->text('foto')->nullable();
             $table->string('lokasi_kejadian')->nullable();
             $table->enum('status', ['0','proses','selesai']);
             $table->string('hide_identitas')->default('1');
             $table->string('hide_laporan')->default('1');
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('nik')->references('nik')->on('masyarakats');
         });

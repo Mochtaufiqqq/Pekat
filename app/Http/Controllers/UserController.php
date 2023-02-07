@@ -24,9 +24,11 @@ class UserController extends Controller
         return view('contents.user.dashboard');
     }
 
-    public function updatesociety(Request $request ,$nik)
+    public function updateinfopribadi(Request $request ,$nik)
     {
         $validatedData = $request->validate([
+            // 'username' => 'required',
+            'alamat' => 'required',
             'telp' => 'required',
             'tgl_lahir' => 'required',
             'foto_ktp' => 'image|mimes:jpg,png,jpeg|max:5000',
@@ -59,7 +61,7 @@ class UserController extends Controller
         }
 
         if (Auth::guard('masyarakat')->attempt(['username' => $request->username, 'password' => $request->password])) {
-            return redirect('/dashboard');
+            return redirect('/home');
         } else {
             return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
         }
@@ -67,7 +69,7 @@ class UserController extends Controller
 
     public function formRegister()
     {
-        return view('contents.user.register');
+        return view('contents.user.auth.register');
     }
 
     public function register(Request $request)
@@ -124,14 +126,20 @@ class UserController extends Controller
 
         $validate = Validator::make($data, [
             'isi_laporan' => ['required'],
+            'images.*' => 'required|mimes:jpg,png,jpeg|max:5000',
         ]);
 
         if ($validate->fails()) {
             return redirect()->back()->withInput()->withErrors($validate);
         }
 
-        if ($request->file('foto')) {
-            $data['foto'] = $request->file('foto')->store('assets/pengaduan', 'public');
+        $image = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('foto-laporan');
+                $image[] = $path;
+            }
         }
 
         date_default_timezone_set('Asia/Bangkok');
@@ -143,7 +151,7 @@ class UserController extends Controller
             'lokasi_kejadian' => $data['lokasi_kejadian'],
             'hide_identitas' => $data['hide_identitas'] ?? '1',
             'hide_laporan' => $data['hide_laporan'] ?? '1',
-            'foto' => $data['foto'] ?? '',
+            'foto' => implode('|', $image) ??'',
             'status' => '0',
         ]);
 
@@ -154,7 +162,7 @@ class UserController extends Controller
         }
     }
 
-    public function laporan($siapa = '')
+    public function profile($siapa = '')
     {
         $terverifikasi = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->get()->count();
         $proses = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'proses']])->get()->count();
@@ -165,11 +173,30 @@ class UserController extends Controller
         if ($siapa == 'me') {
             $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
 
-            return view('contents.user.laporan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
+            return view('contents.user.profile.profile', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
         } else {
             $pengaduan = Pengaduan::where([['nik', '!=', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->where('hide_identitas' ,'=', '2')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan', 'desc')->get();
 
-            return view('contents.user.laporan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
+            return view('contents.user.profile.profile', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
+        }
+    }
+
+    public function pengaduan($siapa = '')
+    {
+        $terverifikasi = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->get()->count();
+        $proses = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'proses']])->get()->count();
+        $selesai = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'selesai']])->get()->count();
+
+        $hitung = [$terverifikasi, $proses, $selesai];
+
+        if ($siapa == 'me') {
+            $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
+
+            return view('contents.user.report.pengaduan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
+        } else {
+            $pengaduan = Pengaduan::where([['nik', '!=', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->where('hide_identitas' ,'=', '2')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan', 'desc')->get();
+
+            return view('contents.user.report.pengaduan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
         }
     }
 

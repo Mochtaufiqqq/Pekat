@@ -11,9 +11,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Masyarakat extends Authenticatable
 {
     use HasFactory;
-    use SoftDeletes;
-
-    protected $dates = ['deleted_at'];
 
     protected $table = 'masyarakats';
 

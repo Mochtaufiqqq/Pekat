@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <form action="/admin/storepetugas" method="POST" enctype="multipart/form-data">
+                            <form action="/admin/petugas/store" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3 m-form__group">
                                     <label class="form-label">Nama Petugas</label>

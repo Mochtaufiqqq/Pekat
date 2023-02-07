@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
     public function formLogin()
     {
-        return view ('contents.admin.login');
+        return view ('contents.admin.auth.login');
     }
 
     public function login(Request $request)
@@ -54,7 +54,7 @@ class AdminController extends Controller
     {
         $pengaduan = Pengaduan::orderBy('tgl_pengaduan', 'desc')->get();
 
-        return view('contents.admin.pengaduanshow',compact('pengaduan'));
+        return view('contents.admin.report.show',compact('pengaduan'));
     }
 
     public function detailpengaduan($id_pengaduan)
@@ -63,7 +63,7 @@ class AdminController extends Controller
 
         $tanggapan = Tanggapan::where('id_pengaduan', $id_pengaduan)->first();
 
-        return view('contents.admin.pengaduandetail',compact('pengaduan','tanggapan'));
+        return view('contents.admin.report.detail',compact('pengaduan','tanggapan'));
     }
 
     // tanggapan
@@ -94,9 +94,31 @@ class AdminController extends Controller
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             
-            return redirect('/admin/detailpengaduan/'. $pengaduan->id_pengaduan)->with('success','Tanggapan berhasil dikirim');
+            return redirect('/admin/pengaduan/detail/'. $pengaduan->id_pengaduan)->with('success','Tanggapan berhasil dikirim');
         }
+        
     }
+
+    public function destroypengaduan($id_pengaduan){
+        $pengaduan = Pengaduan::findOrFail($id_pengaduan);
+
+        $pengaduan->delete();
+
+        return redirect('/admin/pengaduan')->with('success','Laporan berhasil dihapus');       
+    }
+
+    public function pengaduantrash()
+    {
+        $pengaduan = Pengaduan::onlyTrashed()->get();
+        return view('contents.admin.report.trash', compact('pengaduan'));
+    }
+    public function restorepengaduan($id_pengaduan)
+    {
+        $pengaduan = Pengaduan::onlyTrashed()->findOrFail($id_pengaduan);
+        $pengaduan->restore();
+        return redirect('/admin/pengaduan')->with('success', 'Berhasil mengembalikan laporan.');
+    }
+
 
     // Society EDIT,DETAIL,DELETE
     public function showsociety()
@@ -153,17 +175,5 @@ class AdminController extends Controller
         $society->delete();
 
         return redirect('/admin/masyarakat')->with('success','Masyarakat berhasil dihapus');
-    }
-
-    public function societytrash()
-    {
-        $society = Masyarakat::onlyTrashed()->get();
-        return view('contents.admin.society.trash', compact('society'));
-    }
-    public function restoresociety($nik)
-    {
-        $masyarakat = Masyarakat::onlyTrashed()->findOrFail($nik);
-        $masyarakat->restore();
-        return redirect('/admin/masyarakat')->with('success', 'Masyarakat restored successfully.');
     }
 }

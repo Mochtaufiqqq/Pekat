@@ -1,7 +1,7 @@
 @extends('layouts.user.master')
 
 
-@section('title', 'PEKAT - Pengaduan Masyarakat')
+@section('title','Profil Saya')
 
 @section('content')
 {{-- Section Header --}}
@@ -55,19 +55,25 @@
 </section>
 
 {{-- Section Card --}}
+
 <div class="container">
+    
     <div class="row justify-content-between">
+        
         <div class="col-lg-8 col-md-12 col-sm-12 col-12 col">
+           
             <div class="menu menu-top shadow">
                 <div>
                     <h5 class="mb-2">Profile saya</h5>
+                    
                     <hr>
+                    <div class="alert alert-danger">Lengkapi profil anda agar laporan cepat dikonfirmasi</div>
                     <img src="{{ asset('images/user_default.svg') }}" alt="user profile" class="photo">
                     <div class="self-align">
                         <h5><a style="color: #6a70fc" href="#">{{ Auth::guard('masyarakat')->user()->nama }}</a></h5>
                         <p class="text-dark">{{ Auth::guard('masyarakat')->user()->username }}</p>
+                        
                     </div>
-
                 </div>
                 <div class="mt-5">
                     <a class="d-inline tab" id="tab1" onclick="showForm('form1')">
@@ -98,7 +104,7 @@
                             <input class="form-control" type="email" placeholder="asasd"
                                 value="{{ Auth::guard('masyarakat')->user()->email }}">
                         </div>
-                        <div class="form-check">
+                        {{-- <div class="form-check">
                             <div class="row text-center mb-3">
                                 <div class="col-6">
                                     <input type="radio" id="flexRadioDefault1">
@@ -109,7 +115,7 @@
                                     <label class="form-check-label" for="exampleCheck1">Perempuan</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mt-3">
                             <button type="submit" class="btn btn-custom mt-2" data-bs-toggle="tooltip"
                                 data-bs-placement="top" data-bs-title="Tooltip on top">Update</button>
@@ -121,6 +127,10 @@
                         style="display: none;" enctype="multipart/form-data">
                         @csrf
                         @method('put')
+                        <div class="form-group">
+                            <small class="text-muted">Alamat <small style="color: red"> (*) </small></small>
+                            <textarea class="form-control" name="alamat" value="{{ Auth::guard('masyarakat')->user()->alamat }}" id="" rows="2">{{ Auth::guard('masyarakat')->user()->alamat }}</textarea>
+                        </div>
                         <div class="form-group">
                             <small class="text-muted">No Handphone <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="number" id="inputNumber" name="telp" placeholder="No Telp"

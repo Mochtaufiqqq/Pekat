@@ -13,12 +13,12 @@ class PetugasController extends Controller
     {
         $petugas = Petugas::all();
 
-        return view ('contents.admin.petugasshow',compact('petugas'));
+        return view ('contents.admin.officer.show',compact('petugas'));
     }
 
     public function add()
     {
-        return view ('contents.admin.addpetugas');
+        return view ('contents.admin.officer.add');
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class PetugasController extends Controller
     {
         $petugas = Petugas::where('id_petugas', $id_petugas)->first();
 
-        return view ('contents.admin.editpetugas',compact('petugas'));
+        return view ('contents.admin.officer.edit',compact('petugas'));
     }
 
     public function update(Request $request, $id_petugas)
@@ -92,6 +92,6 @@ class PetugasController extends Controller
     {
         $petugas = Petugas::where('id_petugas',$id_petugas)->first();
 
-        return view('contents.admin.detailpetugas',compact('petugas'));
+        return view('contents.admin.officer.detail',compact('petugas'));
     }
 }
