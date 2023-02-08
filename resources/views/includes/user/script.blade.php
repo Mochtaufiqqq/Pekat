@@ -11,6 +11,46 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+{{-- <script>
+    $(document).ready(function () {
+        $('a[data-id_pengaduan]').click(function (e) {
+            e.preventDefault();
+            var id_pengaduan = $(this).data('id_pengaduan');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/pengaduan/me/delete/' + id_pengaduan,
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'id_pengaduan': id_pengaduan
+                        },
+                        success: function (data) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            );
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script> --}}
+
+
 
 {{-- <script>
     // profile-photo.js
@@ -119,3 +159,19 @@
         });
     });
 </script>
+
+<script>
+    $('.gambar-lampiran').click(function() {
+  var imageSrc = $(this).attr('src');
+  $('#imagePreview').attr('src', imageSrc);
+});
+</script>
+
+{{-- <script>
+    $(document).ready(function(){
+    $('.menu-right').click(function(){
+        $('.menu-right').removeClass('active');
+        $(this).addClass('active');
+    });
+});
+</script> --}}

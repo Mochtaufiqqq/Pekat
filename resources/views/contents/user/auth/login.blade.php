@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="login-card">
-                        <form class="theme-form login-form" action="{{ route('admin.login') }}" method="POST">
+                        <form class="theme-form login-form" action="{{ route('pekat.login') }}" method="POST">
                             @csrf
                             <h4>Login</h4>
                             <h6>Selamat Datang ! Silahkan masuk dengan akun yang sudah terdaftar.</h6>
@@ -62,6 +62,7 @@
                                                 data-feather="instagram"> </i></a></li>
                                 </ul>
                             </div> --}}
+                            <p>Belum punya akun ?<a class="ms-2" href="{{ route('pekat.formRegister') }}">Register</a></p>
                         </form>
                     </div>
                 </div>

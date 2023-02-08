@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use App\Models\Pengaduan;
+use App\Models\Tanggapan;
 use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -46,7 +47,12 @@ class UserController extends Controller
 
     }
 
-    public function login(Request $request)
+    public function login()
+    {
+        return view('contents.user.auth.login');
+    }
+
+    public function loginPost(Request $request)
     {
         $username = Masyarakat::where('username', $request->username)->first();
 
@@ -77,11 +83,12 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'nik' => ['required'],
+            'nik' => ['required','min:16'],
             'nama' => ['required'],
-            'username' => ['required'],
+            'username' => ['required','min:3'],
             'email' => ['required'],
             'password' => ['required','min:8'],
+            'confirmation' => ['required','min:8','same:password'],
 
             ]);
 
@@ -181,23 +188,63 @@ class UserController extends Controller
         }
     }
 
-    public function pengaduan($siapa = '')
+    public function pengaduan($active = '')
     {
-        $terverifikasi = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->get()->count();
-        $proses = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'proses']])->get()->count();
-        $selesai = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'selesai']])->get()->count();
+        $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
 
-        $hitung = [$terverifikasi, $proses, $selesai];
-
-        if ($siapa == 'me') {
-            $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
-
-            return view('contents.user.report.pengaduan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
-        } else {
-            $pengaduan = Pengaduan::where([['nik', '!=', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->where('hide_identitas' ,'=', '2')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan', 'desc')->get();
-
-            return view('contents.user.report.pengaduan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
-        }
+        return view('contents.user.report.pengaduan',compact('pengaduan','active'));
     }
 
+    public function editpengaduan($id_pengaduan)
+    {
+        $pengaduan = Pengaduan::where('id_pengaduan',$id_pengaduan)->first();
+        return view('contents.user.report.edit',compact('pengaduan'));
+    }
+
+    public function updatepengaduan(Request $request, $id_pengaduan)
+    {
+        $data = $request->all();
+
+        $validate = Validator::make($data, [
+            'isi_laporan' => ['required'],
+            'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+        ]);
+
+        if ($validate->fails()) {
+            return redirect()->back()->withInput()->withErrors($validate);
+        }
+
+        $image = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('foto-laporan');
+                $image[] = $path;
+            }
+        }
+
+        date_default_timezone_set('Asia/Bangkok');
+
+        Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
+            'tgl_pengaduan' => date('Y-m-d h:i:s'),
+            'nik' => Auth::guard('masyarakat')->user()->nik,
+            'isi_laporan' => $data['isi_laporan'],
+            'lokasi_kejadian' => $data['lokasi_kejadian'],
+            'hide_identitas' => $data['hide_identitas'] ?? '1',
+            'hide_laporan' => $data['hide_laporan'] ?? '1',
+            'foto' => implode('|', $image) ??'',
+            'status' => '0',
+        ]);
+
+        return redirect('/pengaduan/me')->with('success','Pengaduan berhasil di update');
+    }
+
+    public function destroypengaduan($id_pengaduan)
+    {
+        $pengaduan = Pengaduan::findOrFail($id_pengaduan);
+
+        $pengaduan->delete();
+
+        return redirect('/pengaduan/me')->with('success','Laporan berhasil dihapus'); 
+    }
 }

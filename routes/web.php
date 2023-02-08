@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DashboardAdminController;
-use App\Http\Controllers\PetugasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +68,10 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::get('/home', [UserController::class, 'dashboard']);
     Route::post('/store', [UserController::class, 'storePengaduan'])->name('pekat.store');
     Route::get('/profile', [UserController::class, 'profile']);
-    Route::get('/pengaduan', [UserController::class, 'pengaduan'])->name('pekat.laporan');
+    Route::get('/pengaduan/me', [UserController::class, 'pengaduan'])->name('pekat.laporan');
+    Route::get('/pengaduan/me/edit/{id_pengaduan}', [UserController::class, 'editpengaduan']);
+    Route::put('/pengaduan/me/update/{id_pengaduan}', [UserController::class, 'updatepengaduan']);
+    Route::delete('/pengaduan/me/delete/{id_pengaduan}', [UserController::class,'destroypengaduan']);
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
 });
@@ -80,11 +84,15 @@ Route::middleware(['isMasyarakat'])->group(function() {
 */
 Route::middleware(['guest'])->group(function() {    
     
-    Route::post('/login/auth', [UserController::class, 'login'])->name('pekat.login');
+    Route::post('/login/auth', [UserController::class, 'loginPost'])->name('pekat.login');
+    Route::get('/login', [UserController::class, 'login']);
 
     Route::get('/register', [UserController::class, 'formRegister'])->name('pekat.formRegister');
     Route::post('/register/auth', [UserController::class, 'register'])->name('pekat.register');
     Route::get('/loginadmin', [AdminController::class,'formLogin'])->name('admin.formLogin');
     Route::post('/login', [AdminController::class,'login'])->name('admin.login');
+    Route::get('/password/reset',[ForgotPasswordController::class,'showLinkRequestForm']);
+    Route::post('/password/email',[ForgotPasswordController::class,'sendResetLinkEmail']);
+
 });
 

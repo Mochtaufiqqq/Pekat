@@ -3,7 +3,7 @@
 
 @section('content')
 
-@section('title','Dashboard')
+@section('title','Edit Pengaduan')
     
 
 {{-- Section Header --}}
@@ -90,8 +90,9 @@
             <div class="alert alert-{{ Session::get('type') }}">{{ Session::get('pengaduan') }}</div>
             @endif
 
-            <div class="card mb-3">Tulis Laporan Disini</div>
-            <form action="{{ route('pekat.store') }}" method="POST" enctype="multipart/form-data">
+            <div class="card mb-3">Edit Pengaduan</div>
+            <form action="/pengaduan/me/update/{{ $pengaduan->id_pengaduan }}" method="POST" enctype="multipart/form-data">
+                @method('put')
                 @csrf
 
                 <div class="form-group">
@@ -116,12 +117,11 @@
                 <div class="form-check">
                     <div class="row text-center mb-3">
                     <div class="col-6">
-                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish">
+                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input" id="exampleCheck1" data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish">
                     <label class="form-check-label" for="exampleCheck1">Anonymous</label>
-                    
                 </div>
                 <div class="col-6">
-                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Laporan anda tidak dapat dilihat publik">
+                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input" id="exampleCheck1" data-toggle="tooltip" data-placement="top" title="Laporan anda tidak dapat dilihat publik">
                     <label class="form-check-label" for="exampleCheck1">Rahasia</label>
                 </div>
                 </div>

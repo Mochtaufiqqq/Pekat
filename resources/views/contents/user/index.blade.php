@@ -8,8 +8,8 @@
         <div class="container">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
-                    <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
+                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
+                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
 
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -38,10 +38,17 @@
                             <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#loginModal">Hubungi kami</button>
                         </li>
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Masuk</button>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link ml-2 dropdown-toggle text-white" href="/profile" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             Masuk
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/login">Masuk sebagai masyarakat</a>
+                              <a class="dropdown-item" href="/loginadmin">Masuk sebagai admin</a>
+                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+                             
+                            </div>
+                          </li>
                         <li class="nav-item">
                             <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>
                         </li>
@@ -53,7 +60,7 @@
     </nav>
 
     <div class="text-center">
-        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Rancamanyar</h2>
+        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Sangkanhurip</h2>
         <p class="italic text-white mb-5">Sampaikan laporan anda</p>
     </div>
 
