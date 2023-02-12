@@ -20,8 +20,8 @@ class Petugas extends Authenticatable
     'level'
 ];
 
-    // public function tanggapan()
-    // {
-    //     return $this->belongsTo(Tanggapan::class,'nama_petugas');
-    // }
+    public function tanggapan()
+    {
+        return $this->belongsTo(Tanggapan::class,'id_petugas','id_petugas');
+    }
 }

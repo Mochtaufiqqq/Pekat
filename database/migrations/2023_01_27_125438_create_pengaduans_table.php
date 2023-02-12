@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('id_pengaduan');
             $table->dateTime('tgl_pengaduan');
             $table->char('nik',16);
+            $table->string('judul_laporan');
             $table->text('isi_laporan');
             $table->text('foto')->nullable();
             $table->string('lokasi_kejadian')->nullable();

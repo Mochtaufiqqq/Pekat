@@ -40,11 +40,36 @@ class UserController extends Controller
             $path = $request->file('foto_ktp')->storeAs('ktp-society', $fileName);
             $validatedData['foto_ktp'] = '/storage/' .$path;
         }
+        
 
         Masyarakat::where('nik',$nik)->update($validatedData);
 
-        return redirect()->back()->with('success','Profile berhasil di update');
+        return redirect()->back()->with('success','Profile berhasil di perbarui');
 
+    }
+
+    public function updateInfoPublic(Request $request , $nik)
+    {
+        $username = Masyarakat::where('username'. $request->username);
+
+        $validatedData = $request->validate([
+            // 'username' => 'required',
+            'username' => 'required',
+            'nama' => 'required',
+            'email' => 'required',
+        ]);
+
+        if($request['username'] === $username) {
+            Masyarakat::where('nik',$nik)->update([
+                'nama' => $request['nama'],
+                'email' => $request['email'] ?? '',
+    
+            ]);
+        } else {
+            Masyarakat::where('nik',$nik)->update($validatedData);
+        }
+
+        return redirect('/profile')->with('success','Profil Berhasil Diperbarui');             
     }
 
     public function login()
@@ -193,6 +218,7 @@ class UserController extends Controller
         $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
 
         return view('contents.user.report.pengaduan',compact('pengaduan','active'));
+        // dd($pengaduan);
     }
 
     public function editpengaduan($id_pengaduan)

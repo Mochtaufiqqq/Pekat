@@ -24,9 +24,9 @@
                             @endif
                             <div class="form-group">
                                 <label>Username</label>
-                                <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
+                                <div class="input-group"><span class="input-group-text"><i class="icon-user" ></i></span>
                                     <input class="form-control" type="text" name="username" required=""
-                                        placeholder="Test@gmail.com">
+                                        placeholder="Username">
                                 </div>
                             </div>
                             <div class="form-group">

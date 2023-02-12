@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama_petugas',35);
             $table->string('username',25)->unique();
             $table->string('email');
-            $table->string('alamat');
+            $table->text('alamat');
             $table->string('password');
             $table->string('telp',13);
             $table->enum('level',['admin','petugas']);

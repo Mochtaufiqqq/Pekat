@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ForgotPasswordControllerAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +75,7 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::delete('/pengaduan/me/delete/{id_pengaduan}', [UserController::class,'destroypengaduan']);
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
+    Route::put('/update/publik/{nik}', [UserController::class, 'updateInfoPublic']);
 });
 
 /*
@@ -91,8 +93,19 @@ Route::middleware(['guest'])->group(function() {
     Route::post('/register/auth', [UserController::class, 'register'])->name('pekat.register');
     Route::get('/loginadmin', [AdminController::class,'formLogin'])->name('admin.formLogin');
     Route::post('/login', [AdminController::class,'login'])->name('admin.login');
-    Route::get('/password/reset',[ForgotPasswordController::class,'showLinkRequestForm']);
-    Route::post('/password/email',[ForgotPasswordController::class,'sendResetLinkEmail']);
 
+    // forgot password society
+    Route::get('/password/reset/',[ForgotPasswordController::class,'showLinkRequestForm']);
+    Route::post('/password/email',[ForgotPasswordController::class,'sendEmail']);
+    Route::get('/password/reset/email/{token}',[ForgotPasswordController::class,'showResetForm']);
+    Route::post('/password/reset/email',[ForgotPasswordController::class,'reset'])->name('password.update');
+    // end
+
+    // forgot password officer
+    Route::get('/admin/password/reset/',[ForgotPasswordControllerAdmin::class,'showLinkRequestForm']);
+    Route::post('/password/email',[ForgotPasswordControllerAdmin::class,'sendEmail']);
+    Route::get('/password/reset/email/{token}',[ForgotPasswordControllerAdmin::class,'showResetForm']);
+    Route::post('/password/reset/email',[ForgotPasswordControllerAdmin::class,'reset'])->name('password.update.admin');
+    // end
 });
 

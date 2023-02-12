@@ -3,7 +3,7 @@
 
 @section('content')
 
-@section('title','Login')
+@section('title','Ubah Password')
     
     
     <!-- page-wrapper Start-->
@@ -12,40 +12,45 @@
             <div class="row">
                 <div class="col-12">
                     <div class="login-card">
-                        <form class="theme-form login-form" action="{{ route('pekat.login') }}" method="POST">
+                        <form class="theme-form login-form" action="{{ route('password.update') }}" method="POST">
                             @csrf
-                            <h4>Login</h4>
-                            <h6>Selamat Datang ! Silahkan masuk dengan akun yang sudah terdaftar.</h6>
+                            <input type="hidden" name="token" value="{{ $token }}">
+                            {{-- <input type="email" name="email" id="" value="{{ $email }}"> --}}
+            
+                            <h4>Ubah Password</h4>
+                            <h6>Ubah password anda.</h6>
                            
                             @if (Session::has('pesan'))
                             <div class="alert alert-danger mt-2">
                                 {{ Session::get('pesan') }}
                             </div>
                             @endif
+                          
                             <div class="form-group">
-                                <label>Username</label>
-                                <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
-                                    <input class="form-control" type="text" name="username" required=""
-                                        placeholder="Test@gmail.com">
+                                <label>Email</label>
+                                <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
+                                    <input class="form-control" type="email" name="email"
+                                        placeholder="Masukan email anda" value="{{ $email }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
-                                    <input class="form-control" type="password" name="password" required=""
+                                    <input class="form-control" type="password" name="password"
                                         placeholder="*********">
                                     <div class="show-hide"><span class="show"> </span></div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox">
-                                    <input id="checkbox1" type="checkbox">
-                                    <label for="checkbox1">Ingatkan password</label>
+                                <label>Konfirmasi Password</label>
+                                <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
+                                    <input class="form-control" type="password" name="password_confirmation"
+                                        placeholder="*********">
+                                    <div class="show-hide"><span class="show"> </span></div>
                                 </div>
-                                <a class="link" href="/password/reset">Lupa password?</a>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary form-control text-white" type="submit">Log in</button>
+                                <button class="btn btn-primary form-control text-white" type="submit">Ubah</button>
                             </div>
                             {{-- <div class="login-social-title">
                                 <h5>Sign in with</h5>
@@ -62,7 +67,6 @@
                                                 data-feather="instagram"> </i></a></li>
                                 </ul>
                             </div> --}}
-                            <p>Belum punya akun ?<a class="ms-2" href="{{ route('pekat.formRegister') }}">Register</a></p>
                         </form>
                     </div>
                 </div>

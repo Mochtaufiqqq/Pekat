@@ -40,6 +40,17 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
+        \App\Models\Petugas::create([
+            'nama_petugas' => 'Administrator',
+            'username' => 'petugas',
+            'email' => 'exmp3@gmail.com',
+            'alamat' => 'california',
+            'password' => Hash::make('password'),
+            'telp' => '089790908',
+            'level' => 'petugas',
+
+        ]);
+
         Masyarakat::create([
             'nik' => '32091031',
             'username' => 'user2',
@@ -50,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'telp' => '0897909012',
 
         ]);
+        
         Masyarakat::create([
             'nik' => '32091030',
             'username' => 'user',

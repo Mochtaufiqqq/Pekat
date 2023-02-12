@@ -78,19 +78,20 @@ class AdminController extends Controller
 
             $tanggapan->update([
                 'tgl_tanggapan' => date('Y-m-d'),
-                'tanggapan' => $request->tanggapan,
+                'tanggapan' => $request->tanggapan ?? '',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             // dd($request);
 
-            return redirect('/admin/detailpengaduan/'. $pengaduan->id_pengaduan)->with('success','Tanggapan berhasil diubah');
+            return redirect('/admin/pengaduan/detail/'. $pengaduan->id_pengaduan)->with('success','Tanggapan berhasil diubah');
+
         } else {
             $pengaduan->update(['status' => $request->status]);
 
             $tanggapan = Tanggapan::create([
                 'id_pengaduan' => $request->id_pengaduan,
                 'tgl_tanggapan' => date('Y-m-d'),
-                'tanggapan' => $request->tanggapan,
+                'tanggapan' => $request->tanggapan ?? '',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             
@@ -137,25 +138,30 @@ class AdminController extends Controller
 
     public function updatesociety(Request $request, $nik)
     {
-        $username = Masyarakat::where('username'. $request->username);
-        if ($username) {
-            return redirect()->back()->with(['pesan' => 'Username sudah ada!']);
-        }
+        // $username = Masyarakat::where('username'. $request->username);
+        // if ($username) {
+        //     return redirect()->back()->with(['pesan' => 'Username sudah ada!']);
+        // }
         $validatedData = $request->validate([
+            'nik' => 'required',
             'nama' => 'required',
-            'username' => 'required',
+            // 'username' => 'required',
+            'email'  => 'required',
             // 'confirmation' => 'required|same:password',
         ]);
 
-        Masyarakat::where('nik',$nik)->update([
-            'nama' => $request['nama'],
-            'username' => $request['username'],
-            'email' => $request['email'] ?? '',
-            'username' => $request['username'],
-            'password' => Hash::make($request['password']),
-
-        ]);
-
+        if($request['nik'] === $nik) {
+            Masyarakat::where('nik',$nik)->update([
+                'nama' => $request['nama'],
+                'email' => $request['email'] ?? '',
+                'password' => Hash::make($request['password']),
+    
+            ]);
+        
+        } else {
+            Masyarakat::where('nik',$nik)->update($validatedData);
+        }
+       
         return redirect('/admin/masyarakat')->with('success','Data berhasil di update');
 
     }

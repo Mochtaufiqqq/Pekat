@@ -10,8 +10,8 @@
         <div class="container">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('pekat.index') }}">
-                    <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
-                    <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
+                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
+                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,15 +21,15 @@
                     @if(Auth::guard('masyarakat')->check())
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
+                            <a class="nav-link ml-3 text-white" href="/home">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{ Auth::guard('masyarakat')->user()->nama }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="#">Profil Saya</a>
-                              <a class="dropdown-item" href="#">Laporan Saya</a>
+                              <a class="dropdown-item" href="/profile">Profil Saya</a>
+                              <a class="dropdown-item" href="/pengaduan/me">Laporan Saya</a>
                               {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
                               <div class="dropdown-divider"></div>
                               <a class="dropdown-item" href="/logout">Keluar</a>
@@ -68,16 +68,25 @@
                     
                     <hr>
                     <div class="alert alert-danger">Lengkapi profil anda agar laporan cepat dikonfirmasi</div>
+                   <i class="fa fa-camera"></i>
                     <img src="{{ asset('images/user_default.svg') }}" alt="user profile" class="photo">
-                    <i class="fas fa-camera"></i>
+                    
                     
                     <div class="self-align">
-                        <h5><a style="color: #6a70fc" href="#">{{ Auth::guard('masyarakat')->user()->nama }}</a></h5>
+                        <h5><a style="color: #6a70fc; text-decoration: none;" href="/profile">{{ Auth::guard('masyarakat')->user()->nama }}</a>
+                            @if (Auth::guard('masyarakat')->user()->foto_ktp == '' || Auth::guard('masyarakat')->user()->tgl_lahir == '' || Auth::guard('masyarakat')->user()->alamat == '')
+                            <img class="circle ml-0" src="/images/unverified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Belum Diverifikasi">
+                            @else
+                            <img class="circle ml-0" src="/images/verified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Sudah Diverifikasi">
+                            @endif
+                        </h5> 
+                            
+                           
                         <p class="text-dark">{{ Auth::guard('masyarakat')->user()->username }}</p>
                         
                     </div>
                 </div>
-                <div class="mt-5">
+                <div class="mt-4">
                     <a class="d-inline tab" id="tab1" onclick="showForm('form1')">
                         Informasi Publik
                     </a>
@@ -90,21 +99,29 @@
                     <small>Bagian <small style="color: red"> (*) </small>Dibutuhkan</small>
                 </div>
                 <div class="form mb-2" id="content1">
-                    <form action="" id="form1" style="display: block">
+                    <form action="/update/publik/{{ Auth::guard('masyarakat')->user()->nik }}" id="form1" style="display: block" method="POST">
+                        @method('put')
+                        @csrf
                         <div class="form-group">
                             <small class="text-muted">Username <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="text" placeholder="username"
-                                value="{{ Auth::guard('masyarakat')->user()->username }}">
+                                value="{{ Auth::guard('masyarakat')->user()->username }}" name="username">
+                                @error('username')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                               
                         </div>
                         <div class="form-group">
                             <small class="text-muted">Nama lengkap <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="text" placeholder="asasd"
-                                value="{{ Auth::guard('masyarakat')->user()->nama }}">
+                                value="{{ Auth::guard('masyarakat')->user()->nama }}" name="nama">
                         </div>
                         <div class="form-group">
                             <small class="text-muted">Email <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="email" placeholder="asasd"
-                                value="{{ Auth::guard('masyarakat')->user()->email }}">
+                                value="{{ Auth::guard('masyarakat')->user()->email }}" name="email">
                         </div>
                         {{-- <div class="form-check">
                             <div class="row text-center mb-3">
@@ -129,6 +146,11 @@
                         style="display: none;" enctype="multipart/form-data">
                         @csrf
                         @method('put')
+                        {{-- <div class="form-group">
+                            <small class="text-muted">NIK <small style="color: red"> (*) </small></small>
+                            <input class="form-control" type="number" id="inputNumber" name="nik"
+                                value="{{ Auth::guard('masyarakat')->user()->nik }}">
+                        </div> --}}
                         <div class="form-group">
                             <small class="text-muted">Alamat <small style="color: red"> (*) </small></small>
                             <textarea class="form-control" name="alamat" value="{{ Auth::guard('masyarakat')->user()->alamat }}" id="" rows="2">{{ Auth::guard('masyarakat')->user()->alamat }}</textarea>
@@ -154,7 +176,7 @@
                             <img class="img-preview img-fluid mb-2">
                             
                             <input type="file" name="foto_ktp" id="image"
-                                class="form-control @error('foto') is-invalid @enderror" onchange="previewImage()">
+                                class="form-control @error('foto') is-invalid @enderror" onchange="previewImage()" value="{{ Auth::guard('masyarakat')->user()->foto_ktp }}">
                         </div>
                         <div class="mt-3">
                             <button type="submit" class="btn btn-custom mt-2">Update</button>
@@ -199,4 +221,16 @@
 </script>
 
 @endif
+
+@if (Session::has('success'))
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
 @endsection

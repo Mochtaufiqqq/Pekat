@@ -74,6 +74,7 @@
     }
 </script>
 
+
 {{-- <script>
         document.getElementById("profile-photo-input").addEventListener("change", function() {
         document.getElementById("profile-photo-form").submit();
@@ -175,3 +176,35 @@
     });
 });
 </script> --}}
+
+<script>
+    const buttons = document.querySelectorAll(".myTanggapan");
+  const contents = document.querySelectorAll(".tanggapanContent");
+
+    buttons.forEach((button, index) => {
+    button.addEventListener("click", function() {
+      const content = contents[index];
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    });
+  });
+  </script>
+
+  
+<script>
+    document.getElementById("myButton").addEventListener("click", function() {
+  var content = document.getElementById("myContent");
+  content.style.display = (content.style.display === "block") ? "none" : "block";
+});
+  </script>
+
+<script>
+    var count = 0;
+    
+    window.addEventListener("scroll", function() {
+      var scrollPosition = window.pageYOffset;
+      if (scrollPosition > count) {
+        count++;
+        document.getElementById("count").innerHTML = count;
+      }
+    });
+    </script>

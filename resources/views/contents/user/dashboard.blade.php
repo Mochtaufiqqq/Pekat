@@ -12,8 +12,8 @@
         <div class="container">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
-                    <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
+                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
+                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
 
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -65,7 +65,7 @@
     </nav>
 
     <div class="text-center">
-        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Rancamanyar</h2>
+        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Sangkanhurip</h2>
         <p class="italic text-white mb-5">Sampaikan laporan anda</p>
     </div>
 
@@ -89,29 +89,42 @@
             @if (Session::has('pengaduan'))
             <div class="alert alert-{{ Session::get('type') }}">{{ Session::get('pengaduan') }}</div>
             @endif
-
-            <div class="card mb-3">Tulis Laporan Disini</div>
+            <div class="alert alert-danger" role="alert">
+                *Lengkapi profil anda sebelum mengirim pengaduan
+              </div>
+            {{-- <div class="card mb-3">Tulis Laporan Disini</div> --}}
             <form action="{{ route('pekat.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
+                
                 <div class="form-group">
+                    <label class="text-sm" for="judul_laporan">Judul Laporan</label>
+                    <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan">
+                </div>
+                <div class="form-group">
+                    <label class="text-sm" for="judul_laporan">Isi Laporan</label>
                     <textarea name="isi_laporan" placeholder="Masukkan Isi Laporan" class="form-control"
                         rows="4">{{ old('isi_laporan') }}</textarea>
                 </div>
                 <div class="form-group">
+                    <label class="text-sm" for="tgl_pengaduan">Tanggal Kejadian</label>
                     <input name="tgl_pengaduan" type="date" id="datepicker" class="form-control"
                         placeholder="Tanggal laporan">
                 </div>
                 <div class="form-group">
-                    <textarea name="lokasi_kejadian" placeholder="Masukan lokasi kejadian" class="form-control"
+                    <label class="text-sm" for="lokasi_kejadian">Lokasi Kejadian</label>
+                    <textarea name="lokasi_kejadian" placeholder="Tulis lokasi kejadian" class="form-control"
                     rows="2">{{ old('lokasi_kejadian') }}</textarea>
                 </div>
-                <div class="form-group">
-                    <label for="images" class="drop-container">
-                        <span class="drop-title">Drag files here</span>
-                        or
-                        <input type="file" name="images[]" id="images" accept="image/*" multiple>
-                    </label>
+                <div class="mb-3">
+                <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
+            </div>
+                <div class="form-group" id="myContent" style="display: none;">
+                    <div class="drop-container">
+                        <span class="drop-title">Seret file ke sini</span>
+                        atau
+                        <input type="file" id="images" name="image[]" accept="image/*" multiple>
+                    </div>
+                      
                 </div>
                 <div class="form-check">
                     <div class="row text-center mb-3">
@@ -125,10 +138,10 @@
                     <label class="form-check-label" for="exampleCheck1">Rahasia</label>
                 </div>
                 </div>
+                
                 </div>
                   <div class="text-center mt-3">
-                    <button type="submit" class="btn btn-custom mt-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                        data-bs-title="Tooltip on top">Kirim</button>
+                    <button type="submit" class="btn btn-custom mt-2">Kirim</button>
                 </div>
             </form>
         </div>

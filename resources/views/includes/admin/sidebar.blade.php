@@ -1,11 +1,11 @@
 <header class="main-nav">
-    <div class="sidebar-user text-center"><a class="setting-primary" href="javascript:void(0)"><i
+    <div class="sidebar-user text-center"><a class="setting-primary" href="/"><i
                 data-feather="settings"></i></a><img class="img-90 rounded-circle" src="/admins/images/dashboard/1.png"
             alt="">
-        <div class="badge-bottom"><span class="badge badge-primary">New</span></div><a href="user-profile.html">
+        <div class="badge-bottom"><span class="badge badge-primary">{{ Auth::guard('admin')->user()->level }}</span></div><a href="user-profile.html">
             <h6 class="mt-3 f-14 f-w-600">{{ Auth::guard('admin')->user()->nama_petugas }}</h6>
         </a>
-        <p class="mb-0 font-roboto">{{ Auth::guard('admin')->user()->level }}</p>
+        <p class="mb-0 font-roboto">{{ Auth::guard('admin')->user()->username }}</p>
     </div>
     <nav>
         <div class="main-navbar">
@@ -48,7 +48,7 @@
                     </li>
                     <li class="dropdown"><a class="nav-link menu-title link-nav" href="/admin/sampah"><i
                         data-feather="trash"></i><span>Sampah</span></a>
-            </li>
+                     </li>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
         </div>

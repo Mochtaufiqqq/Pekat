@@ -100,26 +100,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <a class="d-inline tab mr-4" href="">
-                                        Semua Pengaduan
-                                    </a>
+                                <div class="mb-3 mt-4 ml-3">
+                                    <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 active" href="">Semua Pengaduan</a>
+                                    <a class="btn btn-outline-primary mb-2 mr-2" href="">Proses</a>
+                                    <a class="btn btn-outline-primary mb-2 mr-2" href="">Selesai</a>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <a class="d-inline tab mr-4" href="">
-                                        Semua Pengaduan
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <a class="d-inline tab mr-4" href="">
-                                        Semua Pengaduan
-                                    </a>
-                                </div>
-                                    <hr>
-                                
 
                                 @foreach ($pengaduan as $k => $v)
-                                <div class="col-lg-12" >
+                                <div class="col-lg-12">
                                     <div class="laporan-top">
                                         <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
                                         <div class="d-flex justify-content-between">
@@ -161,7 +149,7 @@
 
                                         @endif
                                         @if ($v->status == 0)
-                                        <p class="mt-3 mb-1">
+                                        <p class="mt-3 mb-2">
                                             <a href="/pengaduan/me/edit/{{ $v->id_pengaduan }}">Edit</a>
                                             <a class="ml-3" data-toggle="modal"
                                                 data-target="#modalDelete{{ $v->id_pengaduan }}"
@@ -169,9 +157,19 @@
                                         </p>
                                         @endif
 
-                                        <p class="mt-3 mb-1">opik
+
+                                        @if ($v->tanggapan != null)
+                                        <p>
+                                            <button class="myTanggapan"><i class="far fa-comment"></i></button>
                                         </p>
-                                        <p class="light">Petugas sudah turun ke lapangan</p>
+                                        <div class="tanggapanContent" style="display: none;">
+
+                                            <p class=" mb-1">
+                                                {{ '*Tanggapan dari '. $v->tanggapan->petugas->nama_petugas }}</p>
+                                            <p class="light">{{ $v->tanggapan->tanggapan }}</p>
+
+                                        </div>
+                                        @endif
 
                                     </div>
                                     <hr>
@@ -227,6 +225,17 @@
 </div>
 {{-- end modal image --}}
 
+
+@endsection
+
+@section('js')
+@if (Session::has('pesan'))
+<script>
+    $('#loginModal').modal('show');
+</script>
+
+@endif
+
 {{-- modal delete --}}
 <div class="modal fade" id="modalDelete{{ $v->id_pengaduan }}" tabindex="-1" role="dialog"
     aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -254,13 +263,4 @@
 </div>
 
 {{-- end modal delete --}}
-@endsection
-
-@section('js')
-@if (Session::has('pesan'))
-<script>
-    $('#loginModal').modal('show');
-</script>
-
-@endif
 @endsection

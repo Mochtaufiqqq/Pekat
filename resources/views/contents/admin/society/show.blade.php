@@ -55,10 +55,11 @@
                                     <td>{{ $s->username }}</td>
                                     <td>{{ $s->email }}</td>
                                     <td>
-                                        <a class="btn mb-3" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->nik }}">Detail</a>
-                                        <a class="btn btn-warning mb-3" href="/admin/masyarakat/edit/{{ $s->nik }}">Edit</a>
-                                        <a class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/delete/{{ $s->nik }}">Hapus</a>
-
+                                      <div class="mx-auto">
+                                        <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->nik }}">Detail</a>
+                                        <a class="btn btn-warning mb-2" href="/admin/masyarakat/edit/{{ $s->nik }}">Edit</a>
+                                        <a class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/delete/{{ $s->nik }}">Hapus</a>
+                                      </div>
                                          {{-- modal delete --}}
                                    <div class="modal fade" id="modalDelete{{ $s->nik }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">

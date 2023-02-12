@@ -16,14 +16,14 @@ class Tanggapan extends Model
     protected $fillable = ['id_pengaduan','tgl_tanggapan','tanggapan','id_petugas'];
 
 
-    // public function pengaduan()
-    // {
-    //     return $this->belongsTo(Pengaduan::class,);
-    // }
+    public function pengaduan()
+    {
+        return $this->hasMany(Pengaduan::class,'id_pengaduan','id_pengaduan');
+    }
 
-    // public function petugas()
-    // {
-    //     return $this->belongsTo(Petugas::class,);
-    // }
+    public function petugas()
+    {
+        return $this->hasOne(Petugas::class,'id_petugas','id_petugas');
+    }
 
 }

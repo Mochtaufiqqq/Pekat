@@ -30,10 +30,10 @@
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#loginModal">Tentang kami</button>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#loginModal">Hubungi kami</button>
@@ -72,18 +72,27 @@
 {{-- Section Card Pengaduan --}}
 
 <div class="row justify-content-center">
-    <div class="col-lg-8 col-10 col">
+    <div class="col-lg-10 col-10 col">
         <div class="content shadow mb-5">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-subtitle mb-2">Jumlah Akun Terdaftar</h5>
-                            <h2 class="mb-3">450</h2>
+                            <div class="row">
+                                <div class="col-sm-6">
+                            <h2 class="mb-2">450</h2>
+                            <p class="mb-0 text-muted">Terverifikasi</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h2 class="mb-2">450</h2>
+                            <p class="mb-0 text-muted">Belum Terverifikasi</p>
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-subtitle mb-2">Pengaduan</h4>
@@ -92,11 +101,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-subtitle mb-2 ">Ditanggapi</h4>
-                            <h2 class="mb-2">450</h2>
+                            <h2 class="mb-2" id="count" value="20">20</h2>
                             <p class="mb-0 text-muted">Sudah Ditanggapi</p>
                         </div>
                     </div>
@@ -104,14 +113,13 @@
             </div>
         </div>
         <div class="col-lg-12">
-            <a class="d-inline tab mr-4" href="">
-                Semua Laporan
-            </a>
+            <h5>Semua Laporan</h5>
             <hr>
         </div>
         @foreach ($pengaduan as $k => $v)
         <div class="col-lg-12">
             <div class="laporan-top">
+                <h6 class="mb-3">Penebangan Pohon</h6>
                 <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -140,15 +148,31 @@
                 <p>{{ $v->isi_laporan }}</p>
             </div>
             <div class="laporan-bottom">
+                
                 @if ($v->foto != null)
-                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}" class="gambar-lampiran">
+                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}" class="gambar-lampiran mb-2">
                 @endif
-                @if ($v->tanggapan != null)
-                <p class="mt-3 mb-1">{{ '*Tanggapan dari '. $v->tanggapan->petugas->nama_petugas }}</p>
-                <p class="light">{{ $v->tanggapan->tanggapan }}</p>
+                @if ($v->lokasi_kejadian != '')
+                <p>
+                    <i class="fas fa-map-marker-alt"></i> <small class="text-muted">{{ $v->lokasi_kejadian }}</small>
+                </p>
                 @endif
+                <hr>
+                @if ($v->tanggapan->tanggapan != null)
+                <p>
+                    <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan Petugas</small></button>
+                </p>
+                <div class="tanggapanContent" style="display: none;">
+
+                    <p class=" mb-1">
+                        {{ '*Tanggapan dari '. $v->tanggapan->petugas->nama_petugas }}</p>
+                    <p class="light">{{ $v->tanggapan->tanggapan }}</p>
+
+                </div>
+                
             </div>
             <hr>
+            @endif
         </div>
         @endforeach
     </div>
