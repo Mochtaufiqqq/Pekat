@@ -91,19 +91,22 @@
             @endif
             <div class="alert alert-danger" role="alert">
                 *Lengkapi profil anda sebelum mengirim pengaduan
-              </div>
+            </div>
             {{-- <div class="card mb-3">Tulis Laporan Disini</div> --}}
             <form action="{{ route('pekat.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
+                <input type="hidden" name="longitude" value="longitude" id="longitude">
+                <input type="hidden" name="latitude" value="latitude" id="latitude">
+
                 <div class="form-group">
                     <label class="text-sm" for="judul_laporan">Judul Laporan</label>
                     <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan">
                 </div>
                 <div class="form-group">
-                    <label class="text-sm" for="judul_laporan">Isi Laporan</label>
+                    <label class="text-sm" for="isi_laporan">Isi Laporan</label>
                     <textarea name="isi_laporan" placeholder="Masukkan Isi Laporan" class="form-control"
-                        rows="4">{{ old('isi_laporan') }}</textarea>
+                        rows="4"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Tanggal Kejadian</label>
@@ -111,13 +114,17 @@
                         placeholder="Tanggal laporan">
                 </div>
                 <div class="form-group">
-                    <label class="text-sm" for="lokasi_kejadian">Lokasi Kejadian</label>
-                    <textarea name="lokasi_kejadian" placeholder="Tulis lokasi kejadian" class="form-control"
-                    rows="2">{{ old('lokasi_kejadian') }}</textarea>
+                    <label class="text-sm" for="tgl_pengaduan">Lokasi Kejadian</label>
+                    <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2" placeholder="Lokasi kejadian"></textarea>
                 </div>
-                <div class="mb-3">
-                <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
+                <div id="locationContent" class="mb-3">
+                <div id="leafletMap-registration" style=""></div>
             </div>
+                   
+                <div class="mb-3">
+                    <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
+                </div>
+                
                 <div class="form-group" id="myContent" style="display: none;">
                     <div class="drop-container">
                         <span class="drop-title">Seret file ke sini</span>
@@ -126,11 +133,13 @@
                     </div>
                       
                 </div>
+                
+               <hr>
                 <div class="form-check">
                     <div class="row text-center mb-3">
                     <div class="col-6">
                     <input type="checkbox" name="hide_identitas" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish">
-                    <label class="form-check-label" for="exampleCheck1">Anonymous</label>
+                    <label class="form-check-label" for="exampleCheck1">Anonim</label>
                     
                 </div>
                 <div class="col-6">
@@ -143,48 +152,15 @@
                   <div class="text-center mt-3">
                     <button type="submit" class="btn btn-custom mt-2">Kirim</button>
                 </div>
-            </form>
-        </div>
-    </div>
-</div>
-{{-- Section Hitung Pengaduan --}}
-<div class="pengaduan mt-5">
-    <div class="bg-purple">
-        <div class="text-center">
-            <h5 class="medium text-white mt-3">JUMLAH LAPORAN SEKARANG</h5>
-            <h2 class="medium text-white">10</h2>
+                {{-- <form action="/upload" class="dropzone" id="my-dropzone"></form>
+                
+            </form> --}}
         </div>
     </div>
 </div>
 
-{{-- Modal --}}
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3 class="mt-3">Masuk terlebih dahulu</h3>
-                <p>Silahkan masuk menggunakan akun yang sudah didaftarkan.</p>
-                <form action="{{ route('pekat.login') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" id="username" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-purple text-white mt-3" style="width: 100%">MASUK</button>
-                </form>
-                @if (Session::has('pesan'))
-                <div class="alert alert-danger mt-2">
-                    {{ Session::get('pesan') }}
-                </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
+
+
 @endsection
 
 @section('js')
@@ -193,6 +169,13 @@
     $('#loginModal').modal('show');
 </script>
 @endif
+
+
+
+<!-- Button trigger modal -->
+
+  
+  
 {{-- <script>
     $('#datepicker').datepicker({
         uiLibrary: 'bootstrap4'

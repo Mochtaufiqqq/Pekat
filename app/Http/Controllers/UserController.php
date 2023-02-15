@@ -108,19 +108,27 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'nik' => ['required','min:16'],
+            'nik' => ['required','min:16','max:16'],
             'nama' => ['required'],
             'username' => ['required','min:3'],
             'email' => ['required'],
             'password' => ['required','min:8'],
             'confirmation' => ['required','min:8','same:password'],
 
+            ],[
+                'nik.required' => 'NIK dibutuhkan',
+                'nik.min' => 'NIK minimal 16 angka',
+                'nik.max' => 'NIK tidak boleh lebih dari 16 angka',
+                'nama.required' => 'Nama lengkap dibutuhkan',
+                'username.required' => 'Username dibutuhkan',
+                'username.min' => 'Username minimal 3 karakter',
+                'email.required' => 'Email harus diisi',
+                'password.min' => 'Password minimal 8 karakter'
             ]);
 
         if ($validate->fails()) {
             return redirect()->back()->with(['pesan' => $validate->errors()]);
         }
-
 
         $username = Masyarakat::where('username', $request->username)->first();
         $nik = Masyarakat::where('nik', $request->nik)->first();
@@ -138,7 +146,7 @@ class UserController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        return redirect()->route('pekat.index');
+        return redirect('/login')->with('success','Registrasi Berhasil');
     }
 
     public function logout()
@@ -179,8 +187,11 @@ class UserController extends Controller
         $pengaduan = Pengaduan::create([
             'tgl_pengaduan' => date('Y-m-d h:i:s'),
             'nik' => Auth::guard('masyarakat')->user()->nik,
+            'judul_laporan' => $data['judul_laporan'],
             'isi_laporan' => $data['isi_laporan'],
             'lokasi_kejadian' => $data['lokasi_kejadian'],
+            'longitude' => $data['longitude'] ?? '',
+            'latitude' => $data['latitude'] ?? '',
             'hide_identitas' => $data['hide_identitas'] ?? '1',
             'hide_laporan' => $data['hide_laporan'] ?? '1',
             'foto' => implode('|', $image) ??'',
@@ -254,8 +265,11 @@ class UserController extends Controller
         Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
             'tgl_pengaduan' => date('Y-m-d h:i:s'),
             'nik' => Auth::guard('masyarakat')->user()->nik,
+            'judul_laporan' => $data['judul_laporan'],
             'isi_laporan' => $data['isi_laporan'],
             'lokasi_kejadian' => $data['lokasi_kejadian'],
+            'longitude' => $data['longitude'] ?? '',
+            'latitude' => $data['latitude'] ?? '',
             'hide_identitas' => $data['hide_identitas'] ?? '1',
             'hide_laporan' => $data['hide_laporan'] ?? '1',
             'foto' => implode('|', $image) ??'',
@@ -265,6 +279,7 @@ class UserController extends Controller
         return redirect('/pengaduan/me')->with('success','Pengaduan berhasil di update');
     }
 
+    
     public function destroypengaduan($id_pengaduan)
     {
         $pengaduan = Pengaduan::findOrFail($id_pengaduan);
@@ -272,5 +287,39 @@ class UserController extends Controller
         $pengaduan->delete();
 
         return redirect('/pengaduan/me')->with('success','Laporan berhasil dihapus'); 
+    }
+    
+    public function changepassword($active = ''){
+        
+        return view('contents.user.changepassword',compact('active'));
+    }
+
+    public function changePwPost(Request $request, $nik)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ], [
+            'old_password.required' => 'Field ini harus diisi', 
+            'new_password.confirmed' => 'Konfirmasi password tidak sesuai',
+            'new_password.min' => 'Password minimal harus memiliki 8 karakter'
+        ]);
+
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $society = Auth::guard('masyarakat')->user();
+
+        if (!Hash::check($request->old_password, $society->password)) {
+            return back()->withErrors(['old_password' => 'Password lama salah']);
+        }
+
+        Masyarakat::where('nik', $nik)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with('success','Password berhasil diubah');
     }
 }

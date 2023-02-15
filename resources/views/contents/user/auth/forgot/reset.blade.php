@@ -14,7 +14,7 @@
                     <div class="login-card">
                         <form class="theme-form login-form" action="{{ route('password.update') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="token" value="{{ $token }}">
+                            <input type="text" name="token" value="{{ $token }}">
                             {{-- <input type="email" name="email" id="" value="{{ $email }}"> --}}
             
                             <h4>Ubah Password</h4>
@@ -30,7 +30,7 @@
                                 <label>Email</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                     <input class="form-control" type="email" name="email"
-                                        placeholder="Masukan email anda" value="{{ $email }}">
+                                        placeholder="Masukan email anda" value="{{ old('email', $email) }}">
                                 </div>
                             </div>
                             <div class="form-group">

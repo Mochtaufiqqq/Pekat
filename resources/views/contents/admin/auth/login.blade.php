@@ -24,8 +24,9 @@
                             @endif
                             <div class="form-group">
                                 <label>Username</label>
-                                <div class="input-group"><span class="input-group-text"><i class="icon-user" ></i></span>
-                                    <input class="form-control" type="text" name="username" required=""
+                                <div class="input-group"><span class="input-group-text"><i class="icon-user" >
+                                    </i></span>
+                                    <input class="form-control" type="text" name="username"
                                         placeholder="Username">
                                 </div>
                             </div>
@@ -34,7 +35,7 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input class="form-control" type="password" name="password" required=""
                                         placeholder="*********">
-                                    <div class="show-hide"><span class="show"> </span></div>
+                                    <div class="show-hide"><span class="show"></span></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -42,7 +43,7 @@
                                     <input id="checkbox1" type="checkbox">
                                     <label for="checkbox1">Ingatkan password</label>
                                 </div>
-                                <a class="link" href="forget-password.html">Lupa password?</a>
+                                <a class="link" href="/admin/password/reset">Lupa password?</a>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary form-control text-white" type="submit">Log in</button>

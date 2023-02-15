@@ -1,5 +1,5 @@
 <header class="main-nav">
-    <div class="sidebar-user text-center"><a class="setting-primary" href="/"><i
+    <div class="sidebar-user text-center"><a class="setting-primary" href="/admin/profile/me"><i
                 data-feather="settings"></i></a><img class="img-90 rounded-circle" src="/admins/images/dashboard/1.png"
             alt="">
         <div class="badge-bottom"><span class="badge badge-primary">{{ Auth::guard('admin')->user()->level }}</span></div><a href="user-profile.html">

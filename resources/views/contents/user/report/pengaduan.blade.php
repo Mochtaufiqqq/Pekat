@@ -5,55 +5,7 @@
 
 @section('content')
 {{-- Section Header --}}
-<section class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <div class="container">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('pekat.index') }}">
-                    <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
-                    <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    @if(Auth::guard('masyarakat')->check())
-                    <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown"
-                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::guard('masyarakat')->user()->nama }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/profile">Profil Saya</a>
-                                <a class="dropdown-item" href="/pengaduan/me">Laporan Saya</a>
-                                {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout">Keluar</a>
-                            </div>
-                        </li>
-                    </ul>
-                    @else
-                    <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Masuk</button>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>
-                        </li>
-                    </ul>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-</section>
+@include('contents.user.nav')
 
 {{-- Section Card --}}
 
@@ -101,7 +53,8 @@
                                     </div>
                                 </div>
                                 <div class="mb-3 mt-4 ml-3">
-                                    <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 active" href="">Semua Pengaduan</a>
+                                    <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 active" href="">Semua
+                                        Pengaduan</a>
                                     <a class="btn btn-outline-primary mb-2 mr-2" href="">Proses</a>
                                     <a class="btn btn-outline-primary mb-2 mr-2" href="">Selesai</a>
                                 </div>
@@ -152,11 +105,10 @@
                                         <p class="mt-3 mb-2">
                                             <a href="/pengaduan/me/edit/{{ $v->id_pengaduan }}">Edit</a>
                                             <a class="ml-3" data-toggle="modal"
-                                                data-target="#modalDelete{{ $v->id_pengaduan }}"
+                                                data-target="#modalDelete"
                                                 href="/pengaduan/me/delete/{{ $v->id_pengaduan }}">Hapus</a>
                                         </p>
                                         @endif
-
 
                                         @if ($v->tanggapan != null)
                                         <p>
@@ -196,7 +148,7 @@
                         <small class="ml-2">Laporan saya</small>
                     </a>
                     <hr>
-                    <a class="menu-right" href="/laporan"><i class="fa fa-lock my-2"></i>
+                    <a class="menu-right" href="/ubah/password"><i class="fa fa-lock my-2"></i>
                         <small class="ml-2">Ubah Password</small>
                     </a>
                     <hr>
@@ -225,6 +177,29 @@
 </div>
 {{-- end modal image --}}
 
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDelete">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Hapus Pengaduan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Apakah anda yakin ingin menghapus pengaduan ini ? </p>
+        </div>
+        <div class="modal-footer">
+            <form action="/pengaduan/me/delete/{{ $v->id_pengaduan }}" method="POST">
+                @csrf
+                @method('delete')
+          <button type="submit" class="btn btn-primary">Yakin</button>
+        </form>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @endsection
 
@@ -237,30 +212,7 @@
 @endif
 
 {{-- modal delete --}}
-<div class="modal fade" id="modalDelete{{ $v->id_pengaduan }}" tabindex="-1" role="dialog"
-    aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus
-                    Pengaduan</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah anda yakin ingin menghapus laporan ini ?</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                <form action="/pengaduan/me/delete/{{ $v->id_pengaduan }}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-primary" type="submit">Yakin</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 {{-- end modal delete --}}
 @endsection

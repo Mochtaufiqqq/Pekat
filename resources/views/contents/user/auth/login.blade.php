@@ -22,6 +22,12 @@
                                 {{ Session::get('pesan') }}
                             </div>
                             @endif
+                            @if (Session::has('success'))
+                            <div class="alert alert-success mt-2">
+                                {{ Session::get('success') }}
+                            </div>
+                            @endif
+                            
                             <div class="form-group">
                                 <label>Username</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>

@@ -7,6 +7,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ForgotPasswordControllerAdmin;
+use App\Http\Controllers\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,9 @@ use App\Http\Controllers\ForgotPasswordControllerAdmin;
 Route::prefix('admin')->group(function () {
   
     Route::middleware(['isAdmin'])->group(function () {
-        Route::get('/dashboard', [DashboardAdminController::class,'index'])->name('dashboard.index');
+        Route::get('/', [DashboardAdminController::class,'index'])->name('dashboard.index');
 
-        // officer
+        // officer 
         Route::get('/petugas', [PetugasController::class,'show']);
         Route::get('/petugas/tambah', [PetugasController::class,'add']);
         Route::post('/petugas/store', [PetugasController::class,'store']);
@@ -45,6 +46,9 @@ Route::prefix('admin')->group(function () {
         Route::delete('/masyarakat/delete/{nik}', [AdminController::class,'destroysociety']);
         // Route::get('/masyarakat/sampah',[AdminController::class,'societytrash']);
         // Route::put('/masyarakat/restore/{nik}',[AdminController::class,'restoresociety']);
+
+        // profile
+        Route::get('/profile/me',[AdminController::class,'profile']);
     });
     
 
@@ -76,6 +80,8 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
     Route::put('/update/publik/{nik}', [UserController::class, 'updateInfoPublic']);
+    Route::get('/ubah/password',[UserController::class,'changepassword']);
+    Route::get('/ubah/password/post/{nik}',[UserController::class,'changePwPost']);
 });
 
 /*
@@ -91,7 +97,7 @@ Route::middleware(['guest'])->group(function() {
 
     Route::get('/register', [UserController::class, 'formRegister'])->name('pekat.formRegister');
     Route::post('/register/auth', [UserController::class, 'register'])->name('pekat.register');
-    Route::get('/loginadmin', [AdminController::class,'formLogin'])->name('admin.formLogin');
+    Route::get('/admin/login', [AdminController::class,'formLogin'])->name('admin.formLogin');
     Route::post('/login', [AdminController::class,'login'])->name('admin.login');
 
     // forgot password society
@@ -103,9 +109,12 @@ Route::middleware(['guest'])->group(function() {
 
     // forgot password officer
     Route::get('/admin/password/reset/',[ForgotPasswordControllerAdmin::class,'showLinkRequestForm']);
-    Route::post('/password/email',[ForgotPasswordControllerAdmin::class,'sendEmail']);
-    Route::get('/password/reset/email/{token}',[ForgotPasswordControllerAdmin::class,'showResetForm']);
-    Route::post('/password/reset/email',[ForgotPasswordControllerAdmin::class,'reset'])->name('password.update.admin');
+    Route::post('/admin/password/email',[ForgotPasswordControllerAdmin::class,'sendEmail']);
+    Route::get('/admin/password/reset/email/{token}',[ForgotPasswordControllerAdmin::class,'showResetForm']);
+    Route::post('/admin/password/reset/email',[ForgotPasswordControllerAdmin::class,'reset'])->name('admin.password.update');
     // end
+
+    Route::get('locations/create',[LocationController::class,'create'])->name('locations.create');
+    Route::post('locations', [LocationController::class,'store'])->name('locations.store');
 });
 

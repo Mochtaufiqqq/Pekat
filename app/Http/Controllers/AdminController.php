@@ -182,4 +182,9 @@ class AdminController extends Controller
 
         return redirect('/admin/masyarakat')->with('success','Masyarakat berhasil dihapus');
     }
+
+    public function profile()
+    {
+        return view('contents.admin.profile.detail');
+    }
 }

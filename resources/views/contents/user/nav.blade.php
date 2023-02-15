@@ -3,8 +3,8 @@
         <div class="container">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('pekat.index') }}">
-                    <h4 class="semi-bold mb-0 text-white">PEKAT</h4>
-                    <p class="italic mt-0 text-white">Pengaduan Masyarakat</p>
+                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
+                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,12 +14,20 @@
                     @if(Auth::guard('masyarakat')->check())
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.laporan') }}">Laporan</a>
+                            <a class="nav-link ml-3 text-white" href="/home">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.logout') }}"
-                                style="text-decoration: underline">{{ Auth::guard('masyarakat')->user()->nama }}</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ Auth::guard('masyarakat')->user()->nama }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/profile">Profil Saya</a>
+                              <a class="dropdown-item" href="/pengaduan/me">Laporan Saya</a>
+                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="/logout">Keluar</a>
+                            </div>
+                          </li>
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">

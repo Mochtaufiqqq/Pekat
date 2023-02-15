@@ -12,6 +12,11 @@
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.umd.js"></script>
+
 
 {{-- <script>
     $(document).ready(function () {
@@ -33,21 +38,21 @@
                         url: '/pengaduan/me/delete/' + id_pengaduan,
                         data: {
                             '_token': "{{ csrf_token() }}",
-                            'id_pengaduan': id_pengaduan
-                        },
-                        success: function (data) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
-                                'success'
-                            );
-                            window.location.reload();
-                        }
-                    });
-                }
-            });
-        });
-    });
+'id_pengaduan': id_pengaduan
+},
+success: function (data) {
+Swal.fire(
+'Deleted!',
+'Your file has been deleted.',
+'success'
+);
+window.location.reload();
+}
+});
+}
+});
+});
+});
 </script> --}}
 
 
@@ -82,7 +87,7 @@
   </script> --}}
 
 
-  {{-- input number --}}
+{{-- input number --}}
 <script>
     document.getElementById("inputNumber").addEventListener("keypress", function (event) {
         if (event.key === "e") {
@@ -162,10 +167,10 @@
 </script>
 
 <script>
-    $('.gambar-lampiran').click(function() {
-  var imageSrc = $(this).attr('src');
-  $('#imagePreview').attr('src', imageSrc);
-});
+    $('.gambar-lampiran').click(function () {
+        var imageSrc = $(this).attr('src');
+        $('#imagePreview').attr('src', imageSrc);
+    });
 </script>
 
 {{-- <script>
@@ -179,32 +184,104 @@
 
 <script>
     const buttons = document.querySelectorAll(".myTanggapan");
-  const contents = document.querySelectorAll(".tanggapanContent");
+    const contents = document.querySelectorAll(".tanggapanContent");
 
     buttons.forEach((button, index) => {
-    button.addEventListener("click", function() {
-      const content = contents[index];
-      content.style.display = content.style.display === "block" ? "none" : "block";
+        button.addEventListener("click", function () {
+            const content = contents[index];
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        });
     });
-  });
-  </script>
+</script>
 
-  
+
 <script>
-    document.getElementById("myButton").addEventListener("click", function() {
-  var content = document.getElementById("myContent");
-  content.style.display = (content.style.display === "block") ? "none" : "block";
-});
-  </script>
+    document.getElementById("myButton").addEventListener("click", function () {
+        var content = document.getElementById("myContent");
+        content.style.display = (content.style.display === "block") ? "none" : "block";
+    });
+</script>
 
 <script>
     var count = 0;
-    
-    window.addEventListener("scroll", function() {
-      var scrollPosition = window.pageYOffset;
-      if (scrollPosition > count) {
-        count++;
-        document.getElementById("count").innerHTML = count;
-      }
+
+    window.addEventListener("scroll", function () {
+        var scrollPosition = window.pageYOffset;
+        if (scrollPosition > count) {
+            count++;
+            document.getElementById("count").innerHTML = count;
+        }
     });
-    </script>
+</script>
+
+
+
+<script>
+    // you want to get it of the window global
+    const providerOSM = new GeoSearch.OpenStreetMapProvider();
+
+    //leaflet map
+    var leafletMap = L.map('leafletMap-registration', {
+        fullscreenControl: true,
+        // OR
+        fullscreenControl: {
+            pseudoFullscreen: false // if true, fullscreen to page width and height
+        },
+        minZoom: 2
+    }).setView([0, 0], 2);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(leafletMap);
+
+    let theMarker = {};
+
+    
+
+    leafletMap.on('click', function (e) {
+        let latitude = e.latlng.lat.toString().substring(0, 15);
+        let longitude = e.latlng.lng.toString().substring(0, 15);
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+            .then(response => response.json())
+            .then(data => {
+                // Get address from response and update HTML
+                let address = data.display_name;
+                document.querySelector("#address").innerHTML = address;
+            })
+            .catch(error => console.error(error));
+
+        let popup = L.popup()
+            .setLatLng([latitude, longitude])
+            .setContent("Titik Lokasi")
+            .openOn(leafletMap);
+
+        if (theMarker != undefined) {
+            leafletMap.removeLayer(theMarker);
+        };
+
+        document.querySelector("#longitude").value = longitude;
+        document.querySelector("#latitude").value = latitude;
+
+
+        theMarker = L.marker([latitude, longitude]).addTo(leafletMap);
+
+    });
+
+
+    const search = new GeoSearch.GeoSearchControl({
+        provider: providerOSM,
+        style: 'bar',
+        searchLabel: 'Cari',
+    });
+
+    leafletMap.addControl(search);
+    
+</script>
+
+<script>
+    document.getElementById("btnLocation").addEventListener("click", function () {
+        var content = document.getElementById("leafletMap-registration");
+        content.style.display = (content.style.display === "block") ? "none" : "block";
+    });
+</script>

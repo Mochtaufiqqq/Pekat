@@ -39,16 +39,17 @@
                                 data-target="#loginModal">Hubungi kami</button>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link ml-2 dropdown-toggle text-white" href="/profile" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             Masuk
+                            <a class="nav-link ml-2 dropdown-toggle text-white" href="/profile" id="navbarDropdown"
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Masuk
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="/login">Masuk sebagai masyarakat</a>
-                              <a class="dropdown-item" href="/loginadmin">Masuk sebagai admin</a>
-                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
-                             
+                                <a class="dropdown-item" href="/login">Masuk sebagai masyarakat</a>
+                                <a class="dropdown-item" href="/loginadmin">Masuk sebagai admin</a>
+                                {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+
                             </div>
-                          </li>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>
                         </li>
@@ -59,15 +60,8 @@
         </div>
     </nav>
 
-    <div class="text-center">
-        <h2 class="medium text-white mt-3">Layanan Pengaduan Masyarakat Desa Sangkanhurip</h2>
-        <p class="italic text-white mb-5">Sampaikan laporan anda</p>
-    </div>
+    @include('contents.user.wave')
 
-    <div class="wave wave1"></div>
-    <div class="wave wave2"></div>
-    <div class="wave wave3"></div>
-    <div class="wave wave4"></div>
 </section>
 {{-- Section Card Pengaduan --}}
 
@@ -81,14 +75,14 @@
                             <h5 class="card-subtitle mb-2">Jumlah Akun Terdaftar</h5>
                             <div class="row">
                                 <div class="col-sm-6">
-                            <h2 class="mb-2">450</h2>
-                            <p class="mb-0 text-muted">Terverifikasi</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <h2 class="mb-2">450</h2>
-                            <p class="mb-0 text-muted">Belum Terverifikasi</p>
-                        </div>
-                        </div>
+                                    <h2 class="mb-2">450</h2>
+                                    <p class="mb-0 text-muted">Terverifikasi</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h2 class="mb-2">450</h2>
+                                    <p class="mb-0 text-muted">Belum Terverifikasi</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,14 +106,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12">
-            <h5>Semua Laporan</h5>
-            <hr>
-        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+        <h5>Semua Laporan</h5>
+        <hr>
+
         @foreach ($pengaduan as $k => $v)
-        <div class="col-lg-12">
+
+        <div class="myShadow shadow">
             <div class="laporan-top">
-                <h6 class="mb-3">Penebangan Pohon</h6>
                 <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
                 <div class="d-flex justify-content-between">
                     <div>
@@ -137,7 +136,7 @@
                         @endif
                     </div>
                     <div>
-                        <p>{{ $v->tgl_pengaduan->format('d M, h:i') }}</p>
+                        <p>{{ $v->tgl_pengaduan->format('h:i, d M, Y ') }}</p>
                     </div>
                 </div>
             </div>
@@ -148,9 +147,10 @@
                 <p>{{ $v->isi_laporan }}</p>
             </div>
             <div class="laporan-bottom">
-                
+
                 @if ($v->foto != null)
-                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}" class="gambar-lampiran mb-2">
+                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}"
+                    class="gambar-lampiran mb-2">
                 @endif
                 @if ($v->lokasi_kejadian != '')
                 <p>
@@ -169,7 +169,7 @@
                     <p class="light">{{ $v->tanggapan->tanggapan }}</p>
 
                 </div>
-                
+
             </div>
             <hr>
             @endif
@@ -178,47 +178,6 @@
     </div>
 </div>
 
-
-
-
-{{-- Section Hitung Pengaduan --}}
-<div class="pengaduan mt-5">
-    <div class="bg-purple">
-        <div class="text-center">
-            <h5 class="medium text-white mt-3">JUMLAH LAPORAN SEKARANG</h5>
-            <h2 class="medium text-white">10</h2>
-        </div>
-    </div>
-</div>
-
-{{-- Modal --}}
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3 class="mt-3">Masuk terlebih dahulu</h3>
-                <p>Silahkan masuk menggunakan akun yang sudah didaftarkan.</p>
-                <form action="{{ route('pekat.login') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" id="username" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-purple text-white mt-3" style="width: 100%">MASUK</button>
-                </form>
-                @if (Session::has('pesan'))
-                <div class="alert alert-danger mt-2">
-                    {{ Session::get('pesan') }}
-                </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('js')

@@ -10,6 +10,7 @@
 
     @yield('content')
 
+    
     @include('includes.user.footer')
     
     @include('includes.user.script')
