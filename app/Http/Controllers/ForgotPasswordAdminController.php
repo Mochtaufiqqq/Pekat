@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 
-class ForgotPasswordControllerAdmin extends Controller
+class ForgotPasswordAdminController extends Controller
 {
 
     public function showLinkRequestForm()

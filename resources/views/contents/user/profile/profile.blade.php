@@ -21,7 +21,7 @@
                     
                     <hr>
                     <div class="alert alert-danger">Lengkapi profil anda agar laporan cepat dikonfirmasi</div>
-                   <i class="fa fa-camera"></i>
+                   {{-- <i class="fa fa-camera"></i> --}}
                     <img src="{{ asset('images/user_default.svg') }}" alt="user profile" class="photo">
                     
                     
@@ -39,7 +39,7 @@
                         
                     </div>
                 </div>
-                <div class="mt-4">
+                <div class="mt-5">
                     <a class="d-inline tab" id="tab1" onclick="showForm('form1')">
                         Informasi Publik
                     </a>
@@ -75,6 +75,11 @@
                             <small class="text-muted">Email <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="email" placeholder="asasd"
                                 value="{{ Auth::guard('masyarakat')->user()->email }}" name="email">
+                        </div>
+                        <div class="form-group">
+                            <small class="text-muted">Foto Profil <small style="color: red"> (*) </small></small>
+                            <input class="form-control" type="file" placeholder="asasd"
+                                 name="foto_profil">
                         </div>
                         {{-- <div class="form-check">
                             <div class="row text-center mb-3">

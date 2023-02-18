@@ -17,7 +17,9 @@
 
             <div class="menu menu-top shadow">
                 <div>
-                    <form action="/ubah/password/post/{{ Auth::guard('masyarakat')->user()->nik }}">
+                    <form action="/ubah/password/post/{{ Auth::guard('masyarakat')->user()->nik }}" method="POST">
+                        @csrf
+                        @method('put')
                         @if (Session::has('success'))
                             
                         <div class="alert alert-success">
@@ -94,6 +96,15 @@
 
 @endif
 
-
+@if (Session::has('success'))
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 
 @endsection

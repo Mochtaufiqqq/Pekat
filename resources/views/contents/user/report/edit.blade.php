@@ -80,7 +80,7 @@
     <div class="col-lg-6 col-10 col">
         <div class="content shadow">
 
-            @if ($errors->any())
+            {{-- @if ($errors->any())
             @foreach ($errors->all() as $error)
             <div class="alert alert-danger">{{ $error }}</div>
             @endforeach
@@ -88,7 +88,7 @@
 
             @if (Session::has('pengaduan'))
             <div class="alert alert-{{ Session::get('type') }}">{{ Session::get('pengaduan') }}</div>
-            @endif
+            @endif --}}
             
             <div class="card mb-3">Edit Pengaduan</div>
             <form action="/pengaduan/me/update/{{ $pengaduan->id_pengaduan }}" method="POST" enctype="multipart/form-data">
@@ -101,20 +101,32 @@
                 <div class="form-group">
                     <label class="text-sm" for="judul_laporan">Judul Laporan</label>
                     <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan" value="{{ $pengaduan->judul_laporan }}">
+                    @if ($errors->has('judul_laporan'))
+                    <div class="text-danger-custom">{{ $errors->first('judul_laporan') }}</div>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="isi_laporan">Isi Laporan</label>
                     <textarea name="isi_laporan" placeholder="Masukkan Isi Laporan" class="form-control"
                         rows="4" value="{{ $pengaduan->isi_laporan }}">{{ $pengaduan->isi_laporan }}</textarea>
+                        @if ($errors->has('isi_laporan'))
+                        <div class="text-danger-custom">{{ $errors->first('isi_laporan') }}</div>
+                        @endif
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Tanggal Kejadian</label>
-                    <input class="form-control" type="date"  name="tgl_pengaduan" 
-                        placeholder="Tanggal laporan" value="{{ old('tgl_pengaduan', $pengaduan->tgl_pengaduan) }}">
+                    <input class="form-control" type="date" name="tgl_pengaduan" 
+                        placeholder="Tanggal laporan" value="{{ date('Y-m-d', strtotime($pengaduan->tgl_pengaduan)) }}">
+                        @if ($errors->has('tgl_pengaduan'))
+                        <div class="text-danger-custom">{{ $errors->first('tgl_pengaduan') }}</div>
+                        @endif
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Lokasi Kejadian</label>
                     <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2" placeholder="Lokasi kejadian" value="{{ $pengaduan->lokasi_kejadian }}">{{ $pengaduan->lokasi_kejadian }}</textarea>
+                    @if ($errors->has('lokasi_kejadian'))
+                    <div class="text-danger-custom">{{ $errors->first('lokasi_kejadian') }}</div>
+                    @endif
                 </div>
                 <div id="locationContent" class="mb-3">
                 <div id="leafletMap-registration" style=""></div>
@@ -128,7 +140,7 @@
                     <div class="drop-container">
                         <span class="drop-title">Seret file ke sini</span>
                         atau
-                        <input type="file" id="images" name="image[]" accept="image/*" value="{{ $pengaduan->foto }}" multiple>
+                        <input type="file" id="images" name="images[]" accept="image/*"  multiple>
                     </div>
                       
                 </div>
@@ -173,8 +185,6 @@
 
 <!-- Button trigger modal -->
 
-  
-  
 {{-- <script>
     $('#datepicker').datepicker({
         uiLibrary: 'bootstrap4'

@@ -18,6 +18,7 @@
 <script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.umd.js"></script>
 
 
+
 {{-- <script>
     $(document).ready(function () {
         $('a[data-id_pengaduan]').click(function (e) {
@@ -167,9 +168,11 @@ window.location.reload();
 </script>
 
 <script>
-    $('.gambar-lampiran').click(function () {
-        var imageSrc = $(this).attr('src');
-        $('#imagePreview').attr('src', imageSrc);
+    $(document).ready(function () {
+        $('.gambar-lampiran').click(function () {
+            var src = $(this).data('src');
+            $('#modalImage').attr('src', src);
+        });
     });
 </script>
 
@@ -228,7 +231,7 @@ window.location.reload();
             pseudoFullscreen: false // if true, fullscreen to page width and height
         },
         minZoom: 2
-    }).setView([0, 0], 2);
+    }).setView([-6.9983665,107.5636242], 13);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -236,13 +239,12 @@ window.location.reload();
 
     let theMarker = {};
 
-    
 
     leafletMap.on('click', function (e) {
         let latitude = e.latlng.lat.toString().substring(0, 15);
         let longitude = e.latlng.lng.toString().substring(0, 15);
 
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=id`)
             .then(response => response.json())
             .then(data => {
                 // Get address from response and update HTML

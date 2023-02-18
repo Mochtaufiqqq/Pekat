@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengaduan;
-use App\Models\Tanggapan;
 use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +32,12 @@ class UserController extends Controller
             'telp' => 'required',
             'tgl_lahir' => 'required',
             'foto_ktp' => 'image|mimes:jpg,png,jpeg|max:5000',
+            
+        ],[
+            'alamat.required' => 'Alamat dibutuhkan',
+            'telp.required' => 'No Telp dibutuhkan',
+            'tgl_lahir.required' => 'Tanggal lahir dibutuhkan',
+            'foto_ktp.required' => 'Foto KTP diperlukan'
         ]);
 
         if ($request->file()) {
@@ -57,12 +62,21 @@ class UserController extends Controller
             'username' => 'required',
             'nama' => 'required',
             'email' => 'required',
+            'foto_profil' => 'image|mimes:jpg,png,jpeg'
+
         ]);
+        
+        if ($request->file()) {
+            $fileName = time().$request->file('foto_profil')->getClientOriginalName();
+            $path = $request->file('foto_profil')->storeAs('profile-user', $fileName);
+            $validatedData['foto_profil'] = '/storage/' .$path;
+        }
 
         if($request['username'] === $username) {
             Masyarakat::where('nik',$nik)->update([
                 'nama' => $request['nama'],
                 'email' => $request['email'] ?? '',
+                // 'foto_profil' => $request['foto_profil'] ?? '',
     
             ]);
         } else {
@@ -165,8 +179,16 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
+            'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
-            'images.*' => 'required|mimes:jpg,png,jpeg|max:5000',
+            'lokasi_kejadian' => ['required'],
+            'tgl_pengaduan'=> ['required']
+            // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+        ],[
+            'judul_laporan.required' => 'Judul laporan harus diisi',
+            'isi_laporan.required' => 'Isi laporan dibutuhkan',
+            'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
+            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan'
         ]);
 
         if ($validate->fails()) {
@@ -199,9 +221,9 @@ class UserController extends Controller
         ]);
 
         if ($pengaduan) {
-            return redirect()->route('pekat.laporan', 'me')->with(['pengaduan' => 'Berhasil terkirim!', 'type' => 'success']);
+            return redirect('/pengaduan/me')->with('success','Pengaduan berhasil terkirim');
         } else {
-            return redirect()->back()->with(['pengaduan' => 'Gagal terkirim!', 'type' => 'danger']);
+            return redirect()->back();
         }
     }
 
@@ -227,8 +249,14 @@ class UserController extends Controller
     public function pengaduan($active = '')
     {
         $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
+        $pending = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','0')->orderBy('tgl_pengaduan', 'desc')->get();
+        $proses = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orderBy('tgl_pengaduan', 'desc')->get();
+        $selesai = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orderBy('tgl_pengaduan', 'desc')->get();
+        $report = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->first();
+        // card
+        $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orwhere('status','=','proses')->get();
 
-        return view('contents.user.report.pengaduan',compact('pengaduan','active'));
+        return view('contents.user.report.pengaduan',compact('pengaduan','active','verif','selesai','report'));
         // dd($pengaduan);
     }
 
@@ -243,8 +271,16 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
+            'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
-            'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+            'lokasi_kejadian' => ['required'],
+            'tgl_pengaduan'=> ['required']
+            // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+        ],[
+            'judul_laporan.required' => 'Judul laporan harus diisi',
+            'isi_laporan.required' => 'Isi laporan dibutuhkan',
+            'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
+            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan'
         ]);
 
         if ($validate->fails()) {
@@ -302,7 +338,7 @@ class UserController extends Controller
         ], [
             'old_password.required' => 'Field ini harus diisi', 
             'new_password.confirmed' => 'Konfirmasi password tidak sesuai',
-            'new_password.min' => 'Password minimal harus memiliki 8 karakter'
+            'new_password.min' => 'Password minimal 8 karakter'
         ]);
 
 

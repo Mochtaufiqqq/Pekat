@@ -29,8 +29,8 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">
-                    <h5>Data Petugas</h5><span>Dibawah Ini adalah table semua data user aktif dan user nonaktif kamu bisa mengelolanya. Terdapat Beberapa Button Untuk Mengelola</span>
+                <div class="card-header pb-0">
+                    <h5>Semua Petugas</h5>
                 </div>
                 <div class="card-body">
                   <a class="btn btn-success mb-2" href="/admin/petugas/tambah">Tambah Data</a>
@@ -55,7 +55,7 @@
                                     <td>{{ $p->telp }}</td>
                                     <td>{{ $p->level }}</td>
                                     <td>
-                                        <a class="btn btn-primary mb-3" href="/admin/petugas/detail/{{ $p->id_petugas }}">Detail</a>
+                                        <a class="btn mb-3" href="/admin/petugas/detail/{{ $p->id_petugas }}" style="color: white; background-color:#645CBB;">Detail</a>
                                         <a class="btn btn-warning mb-3" href="/admin/petugas/edit/{{ $p->id_petugas }}">Edit</a>
                                         <a class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_petugas }}" href="/admin/petugas/delete/{{ $p->id_petugas }}">Hapus</a>
 

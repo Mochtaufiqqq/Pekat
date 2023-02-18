@@ -29,11 +29,10 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header pb-0">
                     <h5>Data Masyarakat</h5>
                 </div>
                 <div class="card-body mb-4">
-                  <a class="btn btn-primary mb-2" href="/admin/masyarakat/sampah">Trash</a>
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>
@@ -57,7 +56,6 @@
                                     <td>
                                       <div class="mx-auto">
                                         <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->nik }}">Detail</a>
-                                        <a class="btn btn-warning mb-2" href="/admin/masyarakat/edit/{{ $s->nik }}">Edit</a>
                                         <a class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/delete/{{ $s->nik }}">Hapus</a>
                                       </div>
                                          {{-- modal delete --}}

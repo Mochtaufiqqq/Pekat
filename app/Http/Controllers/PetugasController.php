@@ -11,7 +11,7 @@ class PetugasController extends Controller
 {
     public function show()
     {
-        $petugas = Petugas::all();
+        $petugas = Petugas::latest()->get();
 
         return view ('contents.admin.officer.show',compact('petugas'));
     }
@@ -28,9 +28,22 @@ class PetugasController extends Controller
         $validate = Validator::make($data, [
             'nama_petugas' => 'required|string|max:255',
             'username' => 'required|string|unique:petugas',
-            'password' => 'required|string|min:6',
+            'alamat' => 'required',
+            'email'=> 'required',
+            'password' => 'required|min:8|confirmed',
             'telp' => 'required',
             'level' => 'required|in:admin,petugas'
+        ],[
+            'nama_petugas.required' => 'Field ini dibutuhkan',
+            'username.required' => 'Field ini dibutuhkan',
+            'username.unique' => 'Username sudah digunakan',
+            'alamat.required' => 'Field ini dibutuhkan',
+            'email.required' => 'Field ini dibutuhkan',
+            'password.required' => 'Password dibutuhkan',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai',
+            'password.min' => 'Password minimal 8 karakter',
+            'telp.required' => 'No telp dibutuhkan',
+            'level.required' => 'Field ini dibutuhkan',
         ]);
 
         if ($validate->fails()) {
@@ -46,6 +59,8 @@ class PetugasController extends Controller
         Petugas::create([
             'nama_petugas' => $data['nama_petugas'],
             'username' => $data['username'],
+            'alamat' => $data['alamat'],
+            'email' => $data['email'], 
             'password' => Hash::make($data['password']),
             'telp' => $data['telp'],
             'level' => $data['level'],
@@ -66,12 +81,24 @@ class PetugasController extends Controller
     {
         $data = $request->all();
 
-        $petugas = Petugas::find($id_petugas);
+        $validate = Validator::make($data, [
+            'nama_petugas' => 'required|string|max:255',
+            'alamat' => 'required',
+            'email'=> 'required',
+            'telp' => 'required',
+            'level' => 'required|in:admin,petugas'
+        ],[
+            'nama_petugas.required' => 'Field ini dibutuhkan',
+            'alamat.required' => 'Field ini dibutuhkan',
+            'email.required' => 'Field ini dibutuhkan',
+            'telp.required' => 'No telp dibutuhkan',
+            'level.required' => 'Field ini dibutuhkan',
+        ]);
 
-        $petugas->update([
+        Petugas::where('id_petugas',$id_petugas)->update([
             'nama_petugas' => $data['nama_petugas'],
-            'username' => $data['username'],
-            'password' => Hash::make($data['password']),
+            'alamat' => $data['alamat'],
+            'email' => $data['email'],
             'telp' => $data['telp'],
             'level' => $data['level'],
         ]);
@@ -94,4 +121,6 @@ class PetugasController extends Controller
 
         return view('contents.admin.officer.detail',compact('petugas'));
     }
+
+    
 }

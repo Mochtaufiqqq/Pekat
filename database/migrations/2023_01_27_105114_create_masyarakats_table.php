@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('username',25)->unique();
             $table->text('alamat')->nullable();
             $table->string('email')->nullable();
+            $table->string('foto_profil')->nullable();
             $table->string('password');
             $table->string('telp',13)->nullable();
             $table->string('tgl_lahir')->nullable();

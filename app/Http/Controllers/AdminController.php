@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Petugas;
+use PDF;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
 use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -76,9 +78,20 @@ class AdminController extends Controller
         if ($tanggapan) {
             $pengaduan->update(['status' => $request->status]);
 
+
+            $image = [];
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $path = $file->store('tanggapan-photo');
+                    $image[] = $path;
+                }
+            }
+
             $tanggapan->update([
                 'tgl_tanggapan' => date('Y-m-d'),
                 'tanggapan' => $request->tanggapan ?? '',
+                'foto_tanggapan' => implode('|', $image) ??'',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             // dd($request);
@@ -88,10 +101,20 @@ class AdminController extends Controller
         } else {
             $pengaduan->update(['status' => $request->status]);
 
+            $image = [];
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $path = $file->store('tanggapan-photo');
+                    $image[] = $path;
+                }
+            }
+
             $tanggapan = Tanggapan::create([
                 'id_pengaduan' => $request->id_pengaduan,
                 'tgl_tanggapan' => date('Y-m-d'),
                 'tanggapan' => $request->tanggapan ?? '',
+                'foto_tanggapan' => implode('|', $image) ??'',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             
@@ -185,6 +208,76 @@ class AdminController extends Controller
 
     public function profile()
     {
-        return view('contents.admin.profile.detail');
+        $petugas = Petugas::where('id_petugas',Auth::guard('admin')->user()->id_petugas)->first();
+        return view('contents.admin.profile.detail',compact('petugas'));
+    }
+
+    public function updateprofile(Request $request, $id_petugas)
+    {
+        $petugas = Petugas::where('id_petugas',$request->id_petugas)->first();
+
+        $validatedData = $request->validate([
+            'nama_petugas' => 'required',
+            'email' => 'required',
+            'telp' => 'required',
+            'alamat' => 'required'
+        ]);
+
+        Petugas::where('id_petugas', $id_petugas)->update($validatedData);
+
+        return redirect('/admin/profile/me')->with('success','Profil berhasil diperbarui');
+    }
+
+    public function changePwPost(Request $request, $id_petugas)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ], [
+            'old_password.required' => 'Field ini harus diisi', 
+            'new_password.required' => 'Field ini harus diisi',
+            'new_password.confirmed' => 'Konfirmasi password tidak sesuai',
+            'new_password.min' => 'Password minimal 8 karakter'
+        ]);
+
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $officer = Auth::guard('admin')->user();
+
+        if (!Hash::check($request->old_password, $officer->password)) {
+            return back()->withErrors(['old_password' => 'Password lama salah']);
+        }
+
+        Petugas::where('id_petugas', $id_petugas)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with('success','Password berhasil diubah');
+    }
+
+    public function report()
+    {
+        return view('contents.admin.showreport');
+    }
+
+    public function getReport(Request $request)
+    {
+        $from = $request->from . ' ' . '00:00:00';
+        $to = $request->to . ' ' . '23:59:59';
+
+        $pengaduan = Pengaduan::whereBetween('tgl_pengaduan',[$from, $to])->get();
+
+        return view('contents.admin.showreport',compact('pengaduan','from','to'));
+        
+    }
+
+    public function reportPdf($from, $to){
+        $pengaduan = Pengaduan::whereBetween('tgl_pengaduan', [$from,$to])->get();
+
+        $pdf = PDF::loadview('contents.admin.reportpdf', ['pengaduan' => $pengaduan ]);
+        return $pdf->download('Laporan-pengaduan.pdf');
     }
 }

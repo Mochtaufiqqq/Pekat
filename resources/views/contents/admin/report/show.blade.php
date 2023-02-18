@@ -29,8 +29,8 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">
-                    <h5>Semua Pengaduan</h5><span>Dibawah Ini adalah table semua data user aktif dan user nonaktif kamu bisa mengelolanya. Terdapat Beberapa Button Untuk Mengelola</span>
+                <div class="card-header pb-0">
+                    <h5>Semua Pengaduan</h5>
                 </div>
                 <div class="card-body">
                   {{-- <a class="btn btn-success mb-2" href="/admin/tambahpetugas">Tambah Data</a> --}}
@@ -66,9 +66,9 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="mx-auto">
-                                        <a class="btn " style="background-color: #645CBB; color: white;" href="/admin/pengaduan/detail/{{ $p->id_pengaduan }}">Detail</a>
-                                        <a class="btn btn-danger" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_pengaduan }}" href="/admin/pengaduan/hapus/{{ $p->id_pengaduan }}">Hapus</a>
+                                        
+                                        <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/pengaduan/detail/{{ $p->id_pengaduan }}">Detail</a>
+                                        <a class="btn btn-danger mb-2" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_pengaduan }}" href="/admin/pengaduan/hapus/{{ $p->id_pengaduan }}">Hapus</a>
 
                                         {{-- modal delete --}}
                                         <div class="modal fade" id="modalDelete{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,7 +93,7 @@
                                               </div>
                                             </div>
                                           </div>
-                                    </div>
+                                    
                                     </td>
                             </tr>
                             @endforeach

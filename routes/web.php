@@ -6,7 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\ForgotPasswordControllerAdmin;
+use App\Http\Controllers\ForgotPasswordAdminController;
 use App\Http\Controllers\LocationController;
 
 /*
@@ -49,6 +49,13 @@ Route::prefix('admin')->group(function () {
 
         // profile
         Route::get('/profile/me',[AdminController::class,'profile']);
+        Route::put('/profile/me/update/{id_petugas}',[AdminController::class,'updateprofile']);
+        Route::put('/profile/me/update/password/{id_petugas}',[AdminController::class,'changePwPost']);
+
+        //report
+        Route::get('/laporan',[AdminController::class,'report']);
+        Route::post('/laporan/getreport',[AdminController::class,'getReport']);
+        Route::get('/laporan/pdf/{from}/{to}',[AdminController::class,'reportPdf'])->name('laporan.cetak');
     });
     
 
@@ -81,7 +88,7 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
     Route::put('/update/publik/{nik}', [UserController::class, 'updateInfoPublic']);
     Route::get('/ubah/password',[UserController::class,'changepassword']);
-    Route::get('/ubah/password/post/{nik}',[UserController::class,'changePwPost']);
+    Route::put('/ubah/password/post/{nik}',[UserController::class,'changePwPost']);
 });
 
 /*
@@ -108,10 +115,10 @@ Route::middleware(['guest'])->group(function() {
     // end
 
     // forgot password officer
-    Route::get('/admin/password/reset/',[ForgotPasswordControllerAdmin::class,'showLinkRequestForm']);
-    Route::post('/admin/password/email',[ForgotPasswordControllerAdmin::class,'sendEmail']);
-    Route::get('/admin/password/reset/email/{token}',[ForgotPasswordControllerAdmin::class,'showResetForm']);
-    Route::post('/admin/password/reset/email',[ForgotPasswordControllerAdmin::class,'reset'])->name('admin.password.update');
+    Route::get('/admin/password/reset/',[ForgotPasswordAdminController::class,'showLinkRequestForm']);
+    Route::post('/admin/password/email',[ForgotPasswordAdminController::class,'sendEmail']);
+    Route::get('/admin/password/reset/email/{token}',[ForgotPasswordAdminController::class,'showResetForm']);
+    Route::post('/admin/password/reset/email',[ForgotPasswordAdminController::class,'reset'])->name('admin.password.update');
     // end
 
     Route::get('locations/create',[LocationController::class,'create'])->name('locations.create');

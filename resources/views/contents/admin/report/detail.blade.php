@@ -22,34 +22,46 @@
                                     <div class="media"><img class="img-70 rounded-circle" alt=""
                                             src="/admins/images/user/7.jpg">
                                         <div class="media-body">
-                                            <a href="/admin/masyarakat/detail/{{ $pengaduan->user->nik }}"><h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}</h3></a>
+                                            <a href="/admin/masyarakat/detail/{{ $pengaduan->user->nik }}">
+                                                <h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}</h3>
+                                            </a>
                                             <p class="f-12">({{ $pengaduan->user->nik }})</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <h6 class="form-label text-primary">Isi Laporan</h6>
-                               <small>{{ $pengaduan->isi_laporan }}</small>
+                                <label class="form-label text-primary">Nama Pelapor</label>
+                                <p>{{ $pengaduan->user->nama }}</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label text-primary">Nama Pelapor</label>
-                               <p>{{ $pengaduan->user->nama }}</p>
+                                <h6 class="form-label text-primary">Isi Laporan</h6>
+                                <small>{{ $pengaduan->isi_laporan }}</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Lokasi Kejadian</label>
+                                <p>{{ $pengaduan->lokasi_kejadian }}
+                                    {{ $pengaduan->latitude }},{{ $pengaduan->longitude }}</p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-primary">Tanggal Laporan</label>
                                 <p>{{ $pengaduan->tgl_pengaduan }}</p>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label text-primary">Foto Laporan</label>
-                                <div class="gallery my-gallery card-body row" itemscope="" data-pswp-uid="1" id="aniimated-thumbnials">
+                                <div class="gallery my-gallery card-body row" itemscope="" data-pswp-uid="1"
+                                    id="aniimated-thumbnials">
                                     @foreach (explode('|', $pengaduan->foto) as $img)
-                                    <figure class="col-xl-3 col-md-4 xl-33" itemprop="associatedMedia" itemscope="">
-                                        <a href="/storage/{{ $img }}" itemprop="contentUrl" data-size="1600x950"><img class="img-thumbnail" src="/storage/{{ $img }}" itemprop="thumbnail" alt="Image description"></a>
-                                      <figcaption itemprop="caption description">Image caption  1</figcaption>
-                                    </figure>
+                                    <div class="col-4">
+                                        <img src="/storage/{{ $img }}" 
+                                            class="gambar-lampiran" data-bs-toggle="modal" data-bs-target="#imageModal"
+                                            data-src="/storage/{{ $img }}">
+
+                                    </div>
                                     @endforeach
-                                  </div>
+                                </div>
                             </div>
 
                             <div class="mb-3">
@@ -67,15 +79,24 @@
                 </div>
             </div>
             <div class="col-xl-6">
-                <form action="/admin/tanggapan/createOrUpdate" class="card" method="POST">
+                <form action="/admin/tanggapan/createOrUpdate" class="card" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="id_pengaduan" value="{{ $pengaduan->id_pengaduan }}">
                     <div class="card-header pb-0">
                         <h4 class="card-title mb-0">Beri Tanggapan</h4>
-                        <div class="card-options"><a class="card-options-collapse" href="#"
+                        <div class="card-options mb-2"><a class="card-options-collapse" href="#"
                                 data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a
                                 class="card-options-remove" href="#" data-bs-toggle="card-remove"><i
                                     class="fe fe-x"></i></a></div>
+
+                        @if (session('success'))
+                        <div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>Selamat !
+                            </strong>
+                            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"
+                                data-bs-original-title="" title=""></button>
+                            {{ session('success') }}
+                        </div>
+                        @endif
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -102,20 +123,19 @@
                             </div>
 
                             <div class="col-md-12">
-                                <div>
+                                <div class="mb-3">
                                     <label class="form-label">Tanggapan</label>
                                     <textarea class="form-control" name="tanggapan" rows="5"
                                         placeholder="Beri tanggapan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
                                 </div>
                             </div>
-                            @if (session('success'))
-                            <div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>Selamat !
-                                </strong>
-                                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"
-                                    data-bs-original-title="" title=""></button>
-                                {{ session('success') }}
+                            <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">Foto Tanggapan</label>
+                                    <input type="file" name="images[]" class="form-control" value="{{ old('foto_tanggapan',$tanggapan->foto_tanggapan) }}" multiple>
+                                </div>
                             </div>
-                            @endif
+
                         </div>
                     </div>
                     <div class="card-footer">
@@ -126,4 +146,29 @@
         </div>
     </div>
 </div>
+
+{{-- modal image --}}
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-ctn">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('js')
+
+<script>
+    $(document).ready(function () {
+        $('.gambar-lampiran').click(function () {
+            var src = $(this).data('src');
+            $('#modalImage').attr('src', src);
+        });
+    });
+</script>
+
 @endsection

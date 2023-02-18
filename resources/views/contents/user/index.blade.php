@@ -149,8 +149,13 @@
             <div class="laporan-bottom">
 
                 @if ($v->foto != null)
-                <img src="{{ Storage::url($v->foto) }}" alt="{{ 'Gambar '.$v->judul_laporan }}"
-                    class="gambar-lampiran mb-2">
+                @foreach (explode('|', $v->foto) as $img)
+
+
+                <img src="/storage/{{ $img }}" alt="{{ 'Gambar '.$v->judul_laporan }}"
+                    class="gambar-lampiran mb-4" data-toggle="modal" data-target="#imageModal"
+                    data-src="/storage/{{ $img }}">
+                @endforeach
                 @endif
                 @if ($v->lokasi_kejadian != '')
                 <p>
@@ -178,6 +183,18 @@
     </div>
 </div>
 
+<!-- Modal image -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-ctn">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+{{-- end modal image --}}
 @endsection
 
 @section('js')

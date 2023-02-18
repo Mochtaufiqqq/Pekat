@@ -26,6 +26,8 @@
       </div>
     </div>
     @include('includes.admin.script')
+
+    @yield('js')
     
   </body>
 </html>
