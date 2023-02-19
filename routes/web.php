@@ -37,6 +37,7 @@ Route::prefix('admin')->group(function () {
         Route::delete('/pengaduan/delete/{id_pengaduan}', [AdminController::class,'destroypengaduan']);
         Route::get('/sampah',[AdminController::class,'pengaduantrash']);
         Route::put('/sampah/restore/{id_pengaduan}',[AdminController::class,'restorepengaduan']);
+        Route::delete('/sampah/hapus/{id_pengaduan}',[AdminController::class,'forcedeletepengaduan']);
 
         // society
         Route::get('/masyarakat',[AdminController::class,'showsociety']);
@@ -63,6 +64,10 @@ Route::prefix('admin')->group(function () {
     Route::middleware(['isPetugas'])->group(function () {
         Route::get('/dashboard', [DashboardAdminController::class,'index'])->name('dashboard.index');
         Route::get('/logout', [AdminController::class,'logout'])->name('admin.logout');
+        Route::get('/pengaduan', [AdminController::class,'pengaduan']);
+        Route::get('/pengaduan/detail/{id_pengaduan}', [AdminController::class,'detailpengaduan']);
+        Route::post('/tanggapan/createOrUpdate',[AdminController::class,'createOrUpdate']);
+        Route::delete('/pengaduan/delete/{id_pengaduan}', [AdminController::class,'destroypengaduan']);
     });
 
 });
@@ -80,11 +85,14 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::get('/home', [UserController::class, 'dashboard']);
     Route::post('/store', [UserController::class, 'storePengaduan'])->name('pekat.store');
     Route::get('/profile', [UserController::class, 'profile']);
+    // report
     Route::get('/pengaduan/me', [UserController::class, 'pengaduan'])->name('pekat.laporan');
     Route::get('/pengaduan/me/edit/{id_pengaduan}', [UserController::class, 'editpengaduan']);
     Route::put('/pengaduan/me/update/{id_pengaduan}', [UserController::class, 'updatepengaduan']);
     Route::delete('/pengaduan/me/delete/{id_pengaduan}', [UserController::class,'destroypengaduan']);
+    
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
+    // update profile
     Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
     Route::put('/update/publik/{nik}', [UserController::class, 'updateInfoPublic']);
     Route::get('/ubah/password',[UserController::class,'changepassword']);
@@ -99,6 +107,8 @@ Route::middleware(['isMasyarakat'])->group(function() {
 */
 Route::middleware(['guest'])->group(function() {    
     
+
+    // auth
     Route::post('/login/auth', [UserController::class, 'loginPost'])->name('pekat.login');
     Route::get('/login', [UserController::class, 'login']);
 
@@ -120,8 +130,6 @@ Route::middleware(['guest'])->group(function() {
     Route::get('/admin/password/reset/email/{token}',[ForgotPasswordAdminController::class,'showResetForm']);
     Route::post('/admin/password/reset/email',[ForgotPasswordAdminController::class,'reset'])->name('admin.password.update');
     // end
-
-    Route::get('locations/create',[LocationController::class,'create'])->name('locations.create');
-    Route::post('locations', [LocationController::class,'store'])->name('locations.store');
+    
 });
 

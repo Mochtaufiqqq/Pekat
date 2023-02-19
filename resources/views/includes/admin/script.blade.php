@@ -10,12 +10,12 @@
 <script src="/admins/js/bootstrap/popper.min.js"></script>
 <script src="/admins/js/bootstrap/bootstrap.min.js"></script>
 <!-- Plugins JS start-->
-<script src="/admins/js/chart/chartist/chartist.js"></script>
+{{-- <script src="/admins/js/chart/chartist/chartist.js"></script>
 <script src="/admins/js/chart/chartist/chartist-plugin-tooltip.js"></script>
 <script src="/admins/js/chart/knob/knob.min.js"></script>
 <script src="/admins/js/chart/knob/knob-chart.js"></script>
 <script src="/admins/js/chart/apex-chart/apex-chart.js"></script>
-<script src="/admins/js/chart/apex-chart/stock-prices.js"></script>
+<script src="/admins/js/chart/apex-chart/stock-prices.js"></script> --}}
 <script src="/admins/js/prism/prism.min.js"></script>
 <script src="/admins/js/clipboard/clipboard.min.js"></script>
 <script src="/admins/js/counter/jquery.waypoints.min.js"></script>
@@ -23,14 +23,14 @@
 <script src="/admins/js/counter/counter-custom.js"></script>
 <script src="/admins/js/custom-card/custom-card.js"></script>
 <script src="/admins/js/notify/bootstrap-notify.min.js"></script>
-<script src="/admins/js/vector-map/jquery-jvectormap-2.0.2.min.js"></script>
+{{-- <script src="/admins/js/vector-map/jquery-jvectormap-2.0.2.min.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-world-mill-en.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-us-aea-en.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-uk-mill-en.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-au-mill.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-chicago-mill-en.js"></script>
 <script src="/admins/js/vector-map/map/jquery-jvectormap-in-mill.js"></script>
-<script src="/admins/js/vector-map/map/jquery-jvectormap-asia-mill.js"></script>
+<script src="/admins/js/vector-map/map/jquery-jvectormap-asia-mill.js"></script> --}}
 <script src="/admins/js/dashboard/default.js"></script>
 <script src="/admins/js/notify/index.js"></script>
 <script src="/admins/js/datepicker/date-picker/datepicker.js"></script>
@@ -65,7 +65,5 @@
 <script src="/admins/js/datatable/datatable-extension/custom.js"></script>
 <script src="/admins/js/tooltip-init.js"></script>
 <!-- Plugins JS Ends-->
-<script src="/admins/js/photoswipe/photoswipe.min.js"></script>
-<script src="/admins/js/photoswipe/photoswipe-ui-default.min.js"></script>
-<script src="/admins/js/photoswipe/photoswipe.js"></script>
+
 

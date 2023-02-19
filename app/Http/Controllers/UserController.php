@@ -14,8 +14,11 @@ class UserController extends Controller
     public function index()
     {  
         $pengaduan = Pengaduan::where('status', '!=', '0')->where('hide_identitas','!=','0')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan','desc')->get();
+        $verif = Masyarakat::whereNotNull('foto_ktp')->whereNotNull('tgl_lahir')->whereNotNull('alamat')->whereNotNull('telp')->count();
+        $nonverif = Masyarakat::whereNull('foto_ktp')->whereNull('tgl_lahir')->count();
+        $cp = Pengaduan::all();
 
-        return view('contents.user.index', ['pengaduan' => $pengaduan, ]);
+        return view('contents.user.index',compact('pengaduan','verif','nonverif','cp'));
         
     }
 
@@ -31,7 +34,7 @@ class UserController extends Controller
             'alamat' => 'required',
             'telp' => 'required',
             'tgl_lahir' => 'required',
-            'foto_ktp' => 'image|mimes:jpg,png,jpeg|max:5000',
+            'foto_ktp' => 'required|image|mimes:jpg,png,jpeg|max:5000',
             
         ],[
             'alamat.required' => 'Alamat dibutuhkan',
@@ -62,15 +65,9 @@ class UserController extends Controller
             'username' => 'required',
             'nama' => 'required',
             'email' => 'required',
-            'foto_profil' => 'image|mimes:jpg,png,jpeg'
 
         ]);
         
-        if ($request->file()) {
-            $fileName = time().$request->file('foto_profil')->getClientOriginalName();
-            $path = $request->file('foto_profil')->storeAs('profile-user', $fileName);
-            $validatedData['foto_profil'] = '/storage/' .$path;
-        }
 
         if($request['username'] === $username) {
             Masyarakat::where('nik',$nik)->update([
@@ -122,7 +119,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'nik' => ['required','min:16','max:16'],
+            'nik' => ['required','min:16','max:16','unique:masyarakats'],
             'nama' => ['required'],
             'username' => ['required','min:3'],
             'email' => ['required'],
@@ -130,14 +127,16 @@ class UserController extends Controller
             'confirmation' => ['required','min:8','same:password'],
 
             ],[
-                'nik.required' => 'NIK dibutuhkan',
-                'nik.min' => 'NIK minimal 16 angka',
-                'nik.max' => 'NIK tidak boleh lebih dari 16 angka',
-                'nama.required' => 'Nama lengkap dibutuhkan',
-                'username.required' => 'Username dibutuhkan',
-                'username.min' => 'Username minimal 3 karakter',
-                'email.required' => 'Email harus diisi',
-                'password.min' => 'Password minimal 8 karakter'
+                'nik.required' => 'NIK dibutuhkan !',
+                'nik.unique' => 'NIK sudah terdaftar !',
+                'nik.min' => 'NIK minimal 16 angka !',
+                'nik.max' => 'NIK tidak boleh lebih dari 16 angka !',
+                'nama.required' => 'Nama lengkap dibutuhkan !',
+                'username.required' => 'Username dibutuhkan !',
+                'username.min' => 'Username minimal 3 karakter !',
+                'email.required' => 'Email harus diisi !',
+                'password.min' => 'Password minimal 8 karakter !',
+                'confirmation' => 'Konfirmasi password tidak sama',
             ]);
 
         if ($validate->fails()) {
@@ -148,7 +147,7 @@ class UserController extends Controller
         $nik = Masyarakat::where('nik', $request->nik)->first();
 
         if ($username) {
-            return redirect()->back()->with(['pesan' => 'Username sudah terdaftar!']);
+            return redirect()->back()->with(['pesan' => 'Username sudah digunakan! mohon gunakan username lain']);
         }
          
 
@@ -229,21 +228,7 @@ class UserController extends Controller
 
     public function profile($siapa = '')
     {
-        $terverifikasi = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->get()->count();
-        $proses = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'proses']])->get()->count();
-        $selesai = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'selesai']])->get()->count();
-
-        $hitung = [$terverifikasi, $proses, $selesai];
-
-        if ($siapa == 'me') {
-            $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
-
-            return view('contents.user.profile.profile', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
-        } else {
-            $pengaduan = Pengaduan::where([['nik', '!=', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->where('hide_identitas' ,'=', '2')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan', 'desc')->get();
-
-            return view('contents.user.profile.profile', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'siapa' => $siapa]);
-        }
+        return view('contents.user.profile.profile',compact('siapa'));
     }
 
     public function pengaduan($active = '')
@@ -254,7 +239,7 @@ class UserController extends Controller
         $selesai = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orderBy('tgl_pengaduan', 'desc')->get();
         $report = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->first();
         // card
-        $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orwhere('status','=','proses')->get();
+        $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orWhere('status','=','selesai')->count();
 
         return view('contents.user.report.pengaduan',compact('pengaduan','active','verif','selesai','report'));
         // dd($pengaduan);
@@ -312,7 +297,7 @@ class UserController extends Controller
             'status' => '0',
         ]);
 
-        return redirect('/pengaduan/me')->with('success','Pengaduan berhasil di update');
+        return redirect('/pengaduan/me')->with('success','Pengaduan berhasil diubah');
     }
 
     

@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'user',
             'nama' => 'claire',
             'alamat' => 'california',
-            'email' => 'exmp@gmail.com',
+            'email' => 'mhmdtaufiq3@gmail.com',
             'password' => Hash::make('123123123'),
             'telp' => '0897909042',
 

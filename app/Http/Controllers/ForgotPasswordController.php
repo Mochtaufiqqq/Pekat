@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 
 class ForgotPasswordController extends Controller
@@ -21,6 +22,16 @@ class ForgotPasswordController extends Controller
 
     public function sendEmail(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:masyarakats,email',
+        ],[
+            'email.unique' => 'Maaf kesempatan anda hanya 1 kali,mohon tunggu dalam 24 jam untuk mengirim kembali'
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $society = Masyarakat::where('email', $request->email)->first();
 
         if (!$society) {
@@ -56,7 +67,6 @@ class ForgotPasswordController extends Controller
             'email' => $request->email
         ]);
     }
-
 
     public function reset(Request $request)
     {

@@ -142,6 +142,13 @@ class AdminController extends Controller
         $pengaduan->restore();
         return redirect('/admin/pengaduan')->with('success', 'Berhasil mengembalikan laporan.');
     }
+    
+    public function forcedeletepengaduan($id_pengaduan)
+    {
+        $pengaduan = Pengaduan::onlyTrashed()->findOrFail($id_pengaduan);
+        $pengaduan->forceDelete();
+        return redirect('/admin/sampah')->with('success', 'Laporan berhasil dihapus secara permanen.');
+    }
 
 
     // Society EDIT,DETAIL,DELETE

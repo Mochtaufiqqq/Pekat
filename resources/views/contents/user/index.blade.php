@@ -1,68 +1,12 @@
 @extends('layouts.user.master')
 
 
+@section('title','Layanan Pengaduan Masyarakat')
+    
+
 @section('content')
 {{-- Section Header --}}
-<section class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <div class="container">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
-                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
-
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    @if(Auth::guard('masyarakat')->check())
-
-                    <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.laporan') }}">Laporan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="{{ route('pekat.logout') }}"
-                                style="text-decoration: underline">{{ Auth::guard('masyarakat')->user()->nama }}</a>
-                        </li>
-                    </ul>
-                    @else
-                    <ul class="navbar-nav text-center ml-auto">
-                        {{-- <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Tentang kami</button>
-                        </li> --}}
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Hubungi kami</button>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link ml-2 dropdown-toggle text-white" href="/profile" id="navbarDropdown"
-                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Masuk
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/login">Masuk sebagai masyarakat</a>
-                                <a class="dropdown-item" href="/loginadmin">Masuk sebagai admin</a>
-                                {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
-
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>
-                        </li>
-                    </ul>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    @include('contents.user.wave')
-
-</section>
+@include('contents.user.navwave')
 {{-- Section Card Pengaduan --}}
 
 <div class="row justify-content-center">
@@ -72,15 +16,15 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-subtitle mb-2">Jumlah Akun Terdaftar</h5>
+                            <h5 class="card-subtitle mb-3">Jumlah Akun Terdaftar</h5>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <h2 class="mb-2">450</h2>
-                                    <p class="mb-0 text-muted">Terverifikasi</p>
+                                    <h2 class="mb-2 counter" data-max="{{ $verif }}">0</h2>
+                                    <p class="mb-2 text-muted">Terverifikasi</p>
                                 </div>
                                 <div class="col-sm-6">
-                                    <h2 class="mb-2">450</h2>
-                                    <p class="mb-0 text-muted">Belum Terverifikasi</p>
+                                    <h2 class="mb-2 counter" data-max="{{ $nonverif }}">0</h2>
+                                    <p class="mb-2 text-muted">Belum Terverifikasi</p>
                                 </div>
                             </div>
                         </div>
@@ -89,18 +33,18 @@
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-subtitle mb-2">Pengaduan</h4>
-                            <h2 class="mb-2">450</h2>
-                            <p class="mb-0 text-muted">Total Pengaduan</p>
+                            <h4 class="card-subtitle text-center mb-3">Pengaduan</h4>
+                            <h2 class="mb-2 text-center counter" data-max="{{ $cp->count() }}" >0</h2>
+                            <p class="mb-0 text-muted text-center">Total Pengaduan</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-subtitle mb-2 ">Ditanggapi</h4>
-                            <h2 class="mb-2" id="count" value="20">20</h2>
-                            <p class="mb-0 text-muted">Sudah Ditanggapi</p>
+                            <h4 class="card-subtitle mb-3 text-center">Ditanggapi</h4>
+                            <h2 class="mb-2 counter text-center" data-max="10">0</h2>
+                            <p class="mb-0 text-muted text-center">Sudah Ditanggapi</p>
                         </div>
                     </div>
                 </div>
@@ -203,9 +147,6 @@
     $('#loginModal').modal('show');
 </script>
 @endif
-{{-- <script>
-    $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap4'
-    });
-</script> --}}
+
+
 @endsection

@@ -27,8 +27,7 @@
                                         <div class="card-header"></div>
                                         <div class="card-body text-dark">
                                             <span class="total">Total Pengaduan</span>
-                                            <h5 class="card-title">{{ $pengaduan->count() }}</h5>
-
+                                            <h5 class="card-title counter" data-max="{{ $pengaduan->count() }}">0</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -37,7 +36,7 @@
                                         <div class="card-header"></div>
                                         <div class="card-body text-dark">
                                             <span class="total">Terverifikasi</span>
-                                            <h5 class="card-title">{{ $verif->count() }}</h5>
+                                            <h5 class="card-title counter" data-max="{{ $verif }}">0</h5>
 
                                         </div>
                                     </div>
@@ -47,20 +46,29 @@
                                         <div class="card-header"></div>
                                         <div class="card-body text-dark">
                                             <span class="total">Selesai</span>
-                                            <h5 class="card-title">{{ $verif->count() }}</h5>
+                                            <h5 class="card-title counter" data-max="{{ $selesai->count() }}">0</h5>
 
                                         </div>
                                     </div>
                                 </div>
-                            
-                                
-                                <div class="mb-3 mt-4 ml-3">
-                                    <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 {{ (Request::url() == route('pekat.laporan')) && !request('status') ? 'active' : '' }}" href="{{ route('pekat.laporan') }}">Semua
+
+
+                                <div class="mb-5 mt-4 ml-3">
+                                    <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 {{ (Request::url() == route('pekat.laporan')) && !request('status') ? 'active' : '' }}"
+                                        href="{{ route('pekat.laporan') }}">Semua
                                         Pengaduan</a>
-                                    <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'proses' ? 'active' : '' }}" href="{{ route('pekat.laporan', ['status' => 'proses']) }}">Proses</a>
-                                    <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'selesai' ? 'active' : '' }}" href="{{ route('pekat.laporan', ['status' => 'selesai']) }}">Selesai</a>
+                                    <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'proses' ? 'active' : '' }}"
+                                        href="{{ route('pekat.laporan', ['status' => 'proses']) }}">Proses</a>
+                                    <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'selesai' ? 'active' : '' }}"
+                                        href="{{ route('pekat.laporan', ['status' => 'selesai']) }}">Selesai</a>
                                 </div>
-                            
+
+                                @if($pengaduan->isEmpty())
+                                <div class="col-lg-12">
+                                    <h6 class="text-center">Belum ada data</h6>
+                                </div>
+                                @else
+
                                 @foreach ($pengaduan as $k => $v)
                                 @if(request('status') && $v->status != request('status'))
                                 @continue
@@ -116,10 +124,11 @@
                                         @if ($v->status == 0)
                                         <p class="mt-3 mb-2">
                                             <a href="/pengaduan/me/edit/{{ $v->id_pengaduan }}">Edit</a>
-                                            <a class="ml-3" data-toggle="modal" data-target="#modalDelete{{ $v->id_pengaduan }}"
+                                            <a class="ml-3" data-toggle="modal"
+                                                data-target="#modalDelete{{ $v->id_pengaduan }}"
                                                 href="/pengaduan/me/delete/{{ $v->id_pengaduan }}">Hapus</a>
 
-                                               
+
                                         </p>
                                         @endif
 
@@ -141,12 +150,14 @@
                                     </div>
                                     <hr>
                                 </div>
-                               
+
                                 @endforeach
+                                @endif
                             </div>
 
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -208,7 +219,7 @@
 <!-- Modal image -->
 
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">
@@ -233,14 +244,15 @@
 @endif
 
 @if (Session::has('success'))
-    <script>
-        Swal.fire({
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    </script>
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: '{{ session('
+        success ') }}',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
 @endif
 
 {{-- modal delete --}}

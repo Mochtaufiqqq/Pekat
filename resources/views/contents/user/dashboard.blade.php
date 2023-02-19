@@ -7,65 +7,7 @@
     
 
 {{-- Section Header --}}
-<section class="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-        <div class="container">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <h4 class="semi-bold mb-0 text-white">LAPEKAT</h4>
-                    {{-- <p class="italic mt-0 text-white">Pengaduan Masyarakat</p> --}}
-
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    @if(Auth::guard('masyarakat')->check())
-
-                    <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link ml-4 dropdown-toggle text-white" href="/profile" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              {{ Auth::guard('masyarakat')->user()->nama }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="/profile">Profil Saya</a>
-                              <a class="dropdown-item" href="/laporan/me">Laporan Saya</a>
-                              {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
-                              <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="/logout">Keluar</a>
-                            </div>
-                          </li>
-                    </ul>
-                    @else
-                    <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Tentang kami</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Hubungi kami</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Masuk</button>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>
-                        </li>
-                    </ul>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    @include('contents.user.wave')
-</section>
+@include('contents.user.navwave')
 {{-- Section Card Pengaduan --}}
 
 <div class="row justify-content-center">
@@ -112,8 +54,8 @@
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Tanggal Kejadian</label>
-                    <input name="tgl_pengaduan" type="date" class="form-control"
-                        placeholder="Tanggal laporan">
+                    <input name="tgl_pengaduan" type="text" class="form-control"
+                    placeholder="Masukan tanggal" onfocusin="(this.type='date')" onfocusout="(this.type='text')">
                         @if ($errors->has('tgl_pengaduan'))
                         <div class="text-danger-custom">{{ $errors->first('tgl_pengaduan') }}</div>
                         @endif
@@ -160,9 +102,6 @@
                   <div class="text-center mt-3">
                     <button type="submit" class="btn btn-custom mt-2">Kirim</button>
                 </div>
-                <form action="/upload" class="dropzone" id="my-dropzone"></form>
-                
-            </form>
         </div>
     </div>
 </div>

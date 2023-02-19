@@ -21,10 +21,8 @@
 <link rel="stylesheet" type="text/css" href="/admins/css/feather-icon.css">
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="/admins/css/animate.css">
-<link rel="stylesheet" type="text/css" href="/admins/css/chartist.css">
 <link rel="stylesheet" type="text/css" href="/admins/css/date-picker.css">
 <link rel="stylesheet" type="text/css" href="/admins/css/prism.css">
-<link rel="stylesheet" type="text/css" href="/admins/css/vector-map.css">
 <!-- Plugins css Ends-->
 <!-- Bootstrap css-->
 <link rel="stylesheet" type="text/css" href="/admins/css/bootstrap.css">
@@ -36,7 +34,7 @@
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="/admins/css/datatables.css">
 <link rel="stylesheet" type="text/css" href="/admins/css/datatable-extension.css">
-<link rel="stylesheet" type="text/css" href="/admins/css/photoswipe.css">
+
 
 <!-- Plugins css Ends-->
 

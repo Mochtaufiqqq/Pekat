@@ -68,7 +68,7 @@
                                     <td>
                                         <div class="mx-auto">
                                         <a class="btn btn-secondary" href="/admin/sampah/restore/{{ $p->id_pengaduan }}" data-bs-toggle="modal" data-bs-target="#modalRestore{{ $p->id_pengaduan }}">Restore</a>
-                                        <a class="btn btn-danger" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_pengaduan }}" href="/admin/pengaduan/hapus/{{ $p->id_pengaduan }}">Hapus</a>
+                                        <a class="btn btn-danger" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalForce{{ $p->id_pengaduan }}" href="/admin/sampah/hapus/{{ $p->id_pengaduan }}">Hapus</a>
 
                                          {{-- modal restore --}}
                                          <div class="modal fade" id="modalRestore{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -95,7 +95,7 @@
                                           </div>
 
                                         {{-- modal delete --}}
-                                        <div class="modal fade" id="modalDelete{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="modalForce{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                               <div class="modal-content">
                                                 <div class="modal-header">
@@ -104,11 +104,11 @@
                                                   </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Apakah anda yakin ingin menghapus pengaduan dari user yang bernama {{ $p->user->nama }} ?</p>
+                                                    <p>Apakah anda yakin ingin menghapus pengaduan ini ? tindakan ini akan menghapus secara permanen</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                   <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                                                  <form action="/admin/pengaduan/delete/{{ $p->id_pengaduan }}" method="POST">
+                                                  <form action="/admin/sampah/hapus/{{ $p->id_pengaduan }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                   <button class="btn btn-primary" type="submit">Yakin</button>

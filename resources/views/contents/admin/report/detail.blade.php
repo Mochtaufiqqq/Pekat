@@ -49,6 +49,7 @@
                                 <p>{{ $pengaduan->tgl_pengaduan }}</p>
                             </div>
 
+                            @if ($pengaduan->foto != '')
                             <div class="mb-3">
                                 <label class="form-label text-primary">Foto Laporan</label>
                                 <div class="gallery my-gallery card-body row" itemscope="" data-pswp-uid="1"
@@ -63,6 +64,7 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
 
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
@@ -129,12 +131,7 @@
                                         placeholder="Beri tanggapan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div>
-                                    <label class="form-label">Foto Tanggapan</label>
-                                    <input type="file" name="images[]" class="form-control" value="{{ old('foto_tanggapan',$tanggapan->foto_tanggapan) }}" multiple>
-                                </div>
-                            </div>
+                            
 
                         </div>
                     </div>

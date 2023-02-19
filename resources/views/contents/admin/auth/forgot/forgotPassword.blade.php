@@ -22,10 +22,8 @@
                         </div>
                         @endif
 
-                        @if (Session::has('error'))
-                        <div class="alert alert-danger mt-2">
-                            {{ Session::get('error') }}
-                        </div>
+                        @if ($errors->has('email'))
+                        <div class="alert alert-danger">{{ $errors->first('email') }}</div>
                         @endif
 
                         <div class="form-group">
@@ -35,11 +33,7 @@
                                 </span>
                                 <input id="email" value="{{ old('email') }}" class="form-control" type="text"
                                     name="email" placeholder="contoh@gmail.com">
-                                @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                    
                             </div>
                         </div>
 
