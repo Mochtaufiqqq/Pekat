@@ -45,4 +45,8 @@
     box-shadow: none;
     opacity: 1;
   }
+
+  img {
+    cursor: pointer;
+  }
 </style>

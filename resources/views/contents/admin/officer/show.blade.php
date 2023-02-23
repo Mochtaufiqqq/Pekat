@@ -34,6 +34,7 @@
                 </div>
                 <div class="card-body">
                   <a class="btn btn-success mb-2" href="/admin/petugas/tambah">Tambah Data</a>
+                  <a class="btn btn-secondary mb-2" href="/admin/petugas/printpdf">Export PDF</a>
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>

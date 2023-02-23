@@ -41,7 +41,7 @@
                     @endif
                     @if (Auth::guard('admin')->user()->level == 'admin')
                     <li class="dropdown"><a class="nav-link menu-title link-nav" href="/admin/laporan"><i
-                                data-feather="file-text"></i><span>Laporan</span></a>
+                                data-feather="printer"></i><span>Laporan</span></a>
                     </li>
                     @endif
                     @if (Auth::guard('admin')->user()->level == 'admin')

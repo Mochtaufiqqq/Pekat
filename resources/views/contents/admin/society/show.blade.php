@@ -33,6 +33,7 @@
                     <h5>Data Masyarakat</h5>
                 </div>
                 <div class="card-body mb-4">
+                  <a href="/admin/masyarakat/printpdf" class="btn btn-secondary mb-2">Export PDF</a>
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>

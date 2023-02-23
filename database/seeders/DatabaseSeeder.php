@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Petugas::create([
             'nama_petugas' => 'Administrator',
             'username' => 'admin',
-            'email' => 'mhmdtaufiq3@gmail.com',
+            'email' => 'mochamadtaufiq2122@gmail.com',
             'alamat' => 'california',
             'password' => Hash::make('password'),
             'telp' => '08979090',

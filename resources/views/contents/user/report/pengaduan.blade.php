@@ -35,8 +35,8 @@
                                     <div class="card-pengaduan-2 text-white mb-3" style="max-width: 18rem;">
                                         <div class="card-header"></div>
                                         <div class="card-body text-dark">
-                                            <span class="total">Terverifikasi</span>
-                                            <h5 class="card-title counter" data-max="{{ $verif }}">0</h5>
+                                            <span class="total">Diproses</span>
+                                            <h5 class="card-title counter" data-max="{{ $proses->count() }}">0</h5>
 
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@
                                 </div>
 
 
-                                <div class="mb-5 mt-4 ml-3">
+                                <div class="mb-3 mt-4 ml-3">
                                     <a class="btn btn-outline-primary rounded-5 mb-2 mr-2 {{ (Request::url() == route('pekat.laporan')) && !request('status') ? 'active' : '' }}"
                                         href="{{ route('pekat.laporan') }}">Semua
                                         Pengaduan</a>
@@ -61,6 +61,8 @@
                                         href="{{ route('pekat.laporan', ['status' => 'proses']) }}">Proses</a>
                                     <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'selesai' ? 'active' : '' }}"
                                         href="{{ route('pekat.laporan', ['status' => 'selesai']) }}">Selesai</a>
+                                        {{-- <a class="btn btn-outline-primary mb-2 mr-2 "
+                                        href="">+ Laporan</a> --}}
                                 </div>
 
                                 @if($pengaduan->isEmpty())
@@ -127,8 +129,6 @@
                                             <a class="ml-3" data-toggle="modal"
                                                 data-target="#modalDelete{{ $v->id_pengaduan }}"
                                                 href="/pengaduan/me/delete/{{ $v->id_pengaduan }}">Hapus</a>
-
-
                                         </p>
                                         @endif
 
@@ -223,7 +223,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+                <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
             </div>
         </div>
     </div>
@@ -236,19 +236,12 @@
 @endsection
 
 @section('js')
-@if (Session::has('pesan'))
-<script>
-    $('#loginModal').modal('show');
-</script>
-
-@endif
 
 @if (Session::has('success'))
 <script>
     Swal.fire({
         title: 'Success!',
-        text: '{{ session('
-        success ') }}',
+        text: '{{ session('success') }}',
         icon: 'success',
         confirmButtonText: 'OK'
     });

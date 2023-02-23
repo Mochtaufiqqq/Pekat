@@ -67,8 +67,8 @@
                                     </td>
                                     <td>
                                         <div class="mx-auto">
-                                        <a class="btn btn-secondary" href="/admin/sampah/restore/{{ $p->id_pengaduan }}" data-bs-toggle="modal" data-bs-target="#modalRestore{{ $p->id_pengaduan }}">Restore</a>
-                                        <a class="btn btn-danger" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalForce{{ $p->id_pengaduan }}" href="/admin/sampah/hapus/{{ $p->id_pengaduan }}">Hapus</a>
+                                        <a class="btn btn-secondary mb-2" href="/admin/sampah/restore/{{ $p->id_pengaduan }}" data-bs-toggle="modal" data-bs-target="#modalRestore{{ $p->id_pengaduan }}">Restore</a>
+                                        <a class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#modalForce{{ $p->id_pengaduan }}" href="/admin/sampah/hapus/{{ $p->id_pengaduan }}">Hapus</a>
 
                                          {{-- modal restore --}}
                                          <div class="modal fade" id="modalRestore{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -104,7 +104,7 @@
                                                   </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Apakah anda yakin ingin menghapus pengaduan ini ? tindakan ini akan menghapus secara permanen</p>
+                                                    <p>Apakah anda yakin ingin menghapus pengaduan ini ? tindakan ini akan menghapus pengaduan secara permanen</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                   <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Masyarakat;
+use App\Models\PasswordReset;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,91 +16,91 @@ use Illuminate\Support\Facades\Validator;
 class ForgotPasswordController extends Controller
 {
 
-    public function showLinkRequestForm()
+    public function forgotPassword()
     {
         return view('contents.user.auth.forgot.forgotPassword');
     }
 
-    public function sendEmail(Request $request)
+    public function mailReset(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:masyarakats,email',
-        ],[
-            'email.unique' => 'Maaf kesempatan anda hanya 1 kali,mohon tunggu dalam 24 jam untuk mengirim kembali'
-        ]);
-    
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $society = Masyarakat::where('email', $request->email)->first();
-
-        if (!$society) {
-            return redirect()->back()->with('error','Maaf email yang anda masukan tidak terdaftar');
-        }
-
-        $token = Str::random(60);
-        DB::table('password_resets')->insert([
-            'email' => $request->email,
-            'token' => Hash::make($token),
-            'created_at' => Carbon::now(),
-        ]);
-
-        $data = [
-            'token' => $token,
-            'user' => $society,
-        ];
-
-        Mail::send('contents.user.auth.forgot.resetPassword', $data, function ($message) use ($society) {
-            $message->to($society->email);
-            $message->subject('Reset Password');
-        });
-
-        return redirect('/password/reset')->with('success','Link berhasil dikirim,mohon periksa email anda');
-
-    }
-
-    
-    public function showResetForm(Request $request ,$token)
-    {
-        return view('contents.user.auth.forgot.reset', [
-            'token' => $token, 
-            'email' => $request->email
-        ]);
-    }
-
-    public function reset(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-            'token' => 'required'
-        ]);
-
-
-        $society = Masyarakat::where('email', $request->email)->first();
-
-        if (!$society) {
-            return response()->json(['message' => 'We can\'t find a user with that e-mail address.'], 404);
-        }
-
-        $passwordReset = DB::table('password_resets')
-            ->where('email', $society->email)
-            ->where('token', $request->token)
-            ->first();
-
-        if (!$society) {
-            return response()->json(['message' => 'token salah.'], 404);
-        }
-
-        $society->password = Hash::make($request->password);
-        $society->save();
-
-        DB::table('password_resets')->where('email', $society->email)->delete();
-
-        return redirect('/login')->with('pesan', 'Password berhasil diperbarui');
+        $validatedData = $request->validate([
+            'email' => 'required',
+        ]);  
         
-    }
+        $society = Masyarakat::where('email', $request->email)->first();
+
+        $getData = Masyarakat::where('email', $request->email)->get();
+        if(!$society)
+        {
+           return redirect()->back()->with('error','Maaf email masyarakat tidak terdaftar !');
+        }
+        else
+        {
+            foreach($getData as $data){            
+            $generateToken = PasswordReset::create([
+                'nik_user'   =>  $data->nik,
+                'token'     =>  Str::random(16),
+            ]);
     
+            $token = $generateToken->token;
+            Mail::send('contents.user.auth.forgot.resetPassword', ['token' => $token, 'nama' => $data->nama], function($message) use($request){
+                $message->to($request->email)->subject('Atur Ulang Kata Sandi');
+            });
+    
+            return redirect('/login')->with('success', 'Atur ulang kata sandi berhasil
+                                            silahkan cek email anda!');
+        }
+        }
+    }
+
+    public function resetPassword($token)
+    {
+        $mytoken = $token;
+        $getData = PasswordReset::where('token', $mytoken)->get();
+        foreach($getData as $data)
+        if($data->token == $mytoken)
+        {
+            return view('contents.user.auth.forgot.reset', compact('mytoken'));
+        }
+
+        else
+        {
+            return abort(401);
+        }
+    }
+
+
+    public function changePassword(Request $request)
+    {
+        $password = Hash::make($request->password);
+        // dd($password);
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8|confirmed',
+        ], [
+            'password.required' => 'Field ini harus diisi',
+            'password.min' => 'Password minimal 8 karakter !' ,
+            'password.confirmed' => 'Konfirmasi password tidak sesuai',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $getUsers  = PasswordReset::where('token', $request->token)->get();
+        foreach($getUsers as $user)
+            // $validatedData['password'] = Hash::make($validatedData['password']);
+           Masyarakat::where('nik', $user->nik_user)->update([
+                'password' => Hash::make($request->password)
+            ]);
+        
+
+        $societies = Masyarakat::where('nik',$user->nik_user)->get();
+
+        foreach($societies as $society )
+
+
+        PasswordReset::where('nik_user', $society->nik)->delete();
+        return redirect('/login')->with('success', 'Kata sandi berhasil diatur ulang silahkan login!');
+    }
    
 }

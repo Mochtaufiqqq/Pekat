@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Petugas;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -122,5 +123,15 @@ class PetugasController extends Controller
         return view('contents.admin.officer.detail',compact('petugas'));
     }
 
-    
+    public function printpdf()
+    {
+        $officers = Petugas::all();
+        
+        $pdf = PDF::loadview('contents.admin.officer.reportpdf',[
+            'officers'=> $officers,
+            ])->setOptions(['defaultFont' => 'sans-serif']);
+            return $pdf->download('Laporan-petugas.pdf');
+            return redirect('/admin/petugas');
+    }
+
 }

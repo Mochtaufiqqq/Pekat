@@ -43,7 +43,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-subtitle mb-3 text-center">Ditanggapi</h4>
-                            <h2 class="mb-2 counter text-center" data-max="10">0</h2>
+                            <h2 class="mb-2 counter text-center" data-max="{{ $ditanggapi }}">0</h2>
                             <p class="mb-0 text-muted text-center">Sudah Ditanggapi</p>
                         </div>
                     </div>
@@ -56,8 +56,7 @@
 
 <div class="container">
     <div class="content">
-        <h5>Semua Laporan</h5>
-        <hr>
+        <h5 class="mb-4">Semua Laporan</h5>
 
         @foreach ($pengaduan as $k => $v)
 
@@ -74,13 +73,13 @@
                         @if ($v->status == '0')
                         <p class="text-danger">Pending</p>
                         @elseif($v->status == 'proses')
-                        <p class="text-warning">{{ ucwords($v->status) }}</p>
+                        <p class="text-warning">Diproses</p>
                         @else
-                        <p class="text-success">{{ ucwords($v->status) }}</p>
+                        <p class="text-success">Selesai</p>
                         @endif
                     </div>
                     <div>
-                        <p>{{ $v->tgl_pengaduan->format('h:i, d M, Y ') }}</p>
+                        <p>{{ $v->tgl_pengaduan->format('d,M,Y') }}</p>
                     </div>
                 </div>
             </div>
@@ -111,6 +110,7 @@
                 <p>
                     <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan Petugas</small></button>
                 </p>
+               
                 <div class="tanggapanContent" style="display: none;">
 
                     <p class=" mb-1">
@@ -133,7 +133,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+                <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
             </div>
         </div>
     </div>

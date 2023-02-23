@@ -20,20 +20,24 @@
                     <h5 class="mb-2">Profile saya</h5>
                     
                     <hr>
+                    @if (Auth::guard('masyarakat')->user()->foto_ktp = '' && Auth::guard('masyarakat')->user()->tgl_lahir == '' && Auth::guard('masyarakat')->user()->alamat == '' && Auth::guard('masyarakat')->user()->telp == '')
+
+                    
                     <div class="alert alert-danger">Lengkapi profil anda agar laporan cepat dikonfirmasi</div>
+                    @else
+                    @endif
                    {{-- <i class="fa fa-camera"></i> --}}
                     <img src="{{ asset('images/user_default.svg') }}" alt="user profile" class="photo">
                     
                     
                     <div class="self-align">
                         <h5><a style="color: #6a70fc; text-decoration: none;" href="/profile">{{ Auth::guard('masyarakat')->user()->nama }}</a>
-                            @if (Auth::guard('masyarakat')->user()->foto_ktp == '' || Auth::guard('masyarakat')->user()->tgl_lahir == '' || Auth::guard('masyarakat')->user()->alamat == '')
-                            <img class="circle ml-0" src="/images/unverified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Belum Diverifikasi">
+                            @if ($photo == '' || Auth::guard('masyarakat')->user()->tgl_lahir == '' || Auth::guard('masyarakat')->user()->alamat == '' || Auth::guard('masyarakat')->user()->telp == '')
+                            <img class="circle ml-0" src="/images/unverified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Belum verifikasi">
                             @else
-                            <img class="circle ml-0" src="/images/verified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Sudah Diverifikasi">
+                            <img class="circle ml-0" src="/images/verified.png" width="17" data-toggle="tooltip" data-placement="top" title="Akun Terverifikasi">
                             @endif
                         </h5> 
-                            
                            
                         <p class="text-dark">{{ Auth::guard('masyarakat')->user()->username }}</p>
                         
@@ -76,11 +80,7 @@
                             <input class="form-control" type="email" placeholder="asasd"
                                 value="{{ Auth::guard('masyarakat')->user()->email }}" name="email">
                         </div>
-                        <div class="form-group">
-                            <small class="text-muted">Foto Profil <small style="color: red"> (*) </small></small>
-                            <input class="form-control" type="file" placeholder="asasd"
-                                 name="foto_profil">
-                        </div>
+                       
                         {{-- <div class="form-check">
                             <div class="row text-center mb-3">
                                 <div class="col-6">
@@ -93,9 +93,8 @@
                                 </div>
                             </div>
                         </div> --}}
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-custom mt-2" data-bs-toggle="tooltip"
-                                data-bs-placement="top" data-bs-title="Tooltip on top">Update</button>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-custom mt-2">Update</button>
                         </div>
                     </form>
                 </div>
@@ -104,15 +103,7 @@
                         style="display: none;" enctype="multipart/form-data">
                         @csrf
                         @method('put')
-                        {{-- <div class="form-group">
-                            <small class="text-muted">NIK <small style="color: red"> (*) </small></small>
-                            <input class="form-control" type="number" id="inputNumber" name="nik"
-                                value="{{ Auth::guard('masyarakat')->user()->nik }}">
-                        </div> --}}
-                        <div class="form-group">
-                            <small class="text-muted">Alamat <small style="color: red"> (*) </small></small>
-                            <textarea class="form-control" name="alamat" value="{{ Auth::guard('masyarakat')->user()->alamat }}" id="" rows="2">{{ Auth::guard('masyarakat')->user()->alamat }}</textarea>
-                        </div>
+                      
                         <div class="form-group">
                             <small class="text-muted">No Handphone <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="number" id="inputNumber" name="telp" placeholder="No Telp"
@@ -125,18 +116,25 @@
                                 placeholder="asasd">
                         </div>
                         <div class="form-group">
+                            <small class="text-muted">Alamat <small style="color: red"> (*) </small></small>
+                            <textarea class="form-control" name="alamat" value="{{ Auth::guard('masyarakat')->user()->alamat }}" id="" rows="2">{{ Auth::guard('masyarakat')->user()->alamat }}</textarea>
+                        </div>
+                       
+                       
+                        <div class="form-group">
                             <small class="text-muted">Foto KTP <small style="color: red"> (*) </small></small>
-                            @if (Auth::guard('masyarakat')->user()->foto_ktp)
-                            <img src="{{ asset(Auth::guard('masyarakat')->user()->foto_ktp) }}" class="img-preview img-fluid mb-2 col-sm-5 d-block">
+                            @if ($photo)
+                                
+                            <img src="{{ asset($photo) }}" class="img-preview img-fluid mb-2 col-sm-5 d-block gambar-lampiran" data-toggle="modal" data-target="#imageModal" data-src="{{ asset($photo) }}">
                             @else
                             <img class="img-preview img-fluid mb-2 col-sm-5">
                             @endif
                             <img class="img-preview img-fluid mb-2">
                             
                             <input type="file" name="foto_ktp" id="image"
-                                class="form-control @error('foto') is-invalid @enderror" onchange="previewImage()" value="{{ Auth::guard('masyarakat')->user()->foto_ktp }}">
+                                  onchange="previewImage()" value="{{ Auth::guard('masyarakat')->user()->foto_ktp }}">
                         </div>
-                        <div class="mt-3">
+                        <div class="mt-2">
                             <button type="submit" class="btn btn-custom mt-2">Update</button>
                         </div>
                     </form>
@@ -166,9 +164,22 @@
         </div>
     </div>
 
-
-    
 </div>
+
+<!-- Modal image -->
+
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-ctn">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- end modal image --}}
 
 @endsection
 

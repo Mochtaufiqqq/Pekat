@@ -20,7 +20,7 @@
                             <div class="row mb-2">
                                 <div class="profile-title">
                                     <div class="media"><img class="img-70 rounded-circle" alt=""
-                                            src="/admins/images/user/7.jpg">
+                                            src="/admins/images/dashboard/1.png">
                                         <div class="media-body">
                                             <a href="">
                                                 <h3 class="mb-1 f-20 txt-primary">

@@ -20,10 +20,15 @@
                             <div class="row mb-2">
                                 <div class="profile-title">
                                     <div class="media"><img class="img-70 rounded-circle" alt=""
-                                            src="/admins/images/user/7.jpg">
+                                            src="/images/user_default.svg">
                                         <div class="media-body">
                                             <a href="/admin/masyarakat/detail/{{ $pengaduan->user->nik }}">
-                                                <h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}</h3>
+                                                <h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}  @if ($pengaduan->user->foto_ktp == '' || $pengaduan->user->alamat == '' || $pengaduan->user->email == '' || $pengaduan->user->telp == '')
+                                                    <small class="text-danger">!</small>
+                                                    
+                                                    @else
+                                                    <small class="text-succes">✓</small>
+                                                    @endif</h3>
                                             </a>
                                             <p class="f-12">({{ $pengaduan->user->nik }})</p>
                                         </div>
@@ -35,8 +40,12 @@
                                 <p>{{ $pengaduan->user->nama }}</p>
                             </div>
                             <div class="mb-3">
-                                <h6 class="form-label text-primary">Isi Laporan</h6>
-                                <small>{{ $pengaduan->isi_laporan }}</small>
+                                <label class="form-label text-primary">Judul Laporan</label>
+                                <p>{{ $pengaduan->judul_laporan }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Isi Laporan</label>
+                                <p>{{ $pengaduan->isi_laporan }}</p>
                             </div>
 
                             <div class="mb-3">
@@ -52,14 +61,12 @@
                             @if ($pengaduan->foto != '')
                             <div class="mb-3">
                                 <label class="form-label text-primary">Foto Laporan</label>
-                                <div class="gallery my-gallery card-body row" itemscope="" data-pswp-uid="1"
-                                    id="aniimated-thumbnials">
+                                <div class="row">
                                     @foreach (explode('|', $pengaduan->foto) as $img)
-                                    <div class="col-4">
+                                    <div class="col-sm-3 mb-2">
                                         <img src="/storage/{{ $img }}" 
                                             class="gambar-lampiran" data-bs-toggle="modal" data-bs-target="#imageModal"
-                                            data-src="/storage/{{ $img }}">
-
+                                            data-src="/storage/{{ $img }}" width="100">
                                     </div>
                                     @endforeach
                                 </div>
@@ -150,7 +157,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+                <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
             </div>
         </div>
     </div>

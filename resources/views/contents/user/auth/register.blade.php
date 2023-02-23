@@ -16,14 +16,14 @@
                             <h6>Masukkan data diri Anda untuk membuat Akun !</h6>
                             @if (Session::has('pesan'))
                             <div class="alert alert-danger" role="alert">
-                                {{ (Session::get('pesan')) }}
+                                {{ (Session::get('pesan')->first()) }}
                               </div>
                             @endif
                             <div class="form-group">
                                 <label>NIK</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
-                                    <input class="form-control @error('nisn') is-invalid @enderror" name="nik" type="text" required=""
-                                        placeholder="Test@gmail.com">
+                                    <input class="form-control @error('nisn') is-invalid @enderror" name="nik" type="text" 
+                                        placeholder="NIK">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -31,7 +31,7 @@
                                 <div class="small-group">
                                     <div class="input-group"><span class="input-group-text"><i
                                                 class="icon-user"></i></span>
-                                        <input class="form-control" name="nama" type="text" required=""
+                                        <input class="form-control" name="nama" type="text" 
                                             placeholder="Nama lengkap">
                                     </div>
                                 </div>
@@ -39,42 +39,36 @@
                             <div class="form-group">
                                 <label>Username</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
-                                    <input class="form-control @error('username') is-invalid @enderror" name="username" type="text" required=""
+                                    <input class="form-control @error('username') is-invalid @enderror" name="username" type="text" 
                                         placeholder="Username">
                                 </div>
-                                @error('username')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                    @enderror
+                        
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-group"><span class="input-group-text"><i
                                             class="icon-email"></i></span>
-                                    <input class="form-control" name="email" type="email" required=""
-                                        placeholder="Test@gmail.com">
+                                    <input class="form-control" name="email" type="email" 
+                                        placeholder="contoh@gmail.com">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
-                                    <input class="form-control" type="password" name="password" required=""
+                                    <input class="form-control" type="password" name="password" 
                                         placeholder="*********">
-                                    <div class="show-hide"><span class="show"></span></div>
+                                   
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Konfirmasi Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
-                                    <input class="form-control" type="password" name="confirmation" required=""
+                                    <input class="form-control" type="password" name="confirmation" 
                                         placeholder="*********">
-                                    <div class="show-hide"><span class="show"></span></div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary btn-block form-control text-white"
-                                    type="submit">Register</button>
+                                <button class="form-control btn text-white" type="submit" style="background-color:#0A2647;">Register</button>
                             </div>
                             {{-- <div class="login-social-title">                
                   <h5>signup with</h5>

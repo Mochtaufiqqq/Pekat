@@ -15,8 +15,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 <script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.umd.js"></script>
 
 {{-- tooltip --}}
@@ -28,25 +28,37 @@ crossorigin=""></script>
 
 {{-- counter --}}
 <script>
-    $(document).ready(function() {
-      var speed = 5; // the speed of animation in milliseconds
-  
-      $('.counter').each(function() {
-        var maxCount = parseInt($(this).data('max'));
-        var currentCount = 0;
-  
-        var interval = setInterval(function() {
-          if (currentCount >= maxCount) {
-            clearInterval(interval); // stop the interval when the count reaches the maximum value
-          } else {
-            currentCount++; // increment the current count
-            $(this).text(currentCount); // update the text of the h2 element
-          }
-        }.bind(this), speed);
-      });
-    });
-  </script>
+    $(document).ready(function () {
+        var speed = 5; // the speed of animation in milliseconds
 
+        $('.counter').each(function () {
+            var maxCount = parseInt($(this).data('max'));
+            var currentCount = 0;
+
+            var interval = setInterval(function () {
+                if (currentCount >= maxCount) {
+                    clearInterval(
+                        interval); // stop the interval when the count reaches the maximum value
+                } else {
+                    currentCount++; // increment the current count
+                    $(this).text(currentCount); // update the text of the h2 element
+                }
+            }.bind(this), speed);
+        });
+    });
+</script>
+
+<script>
+    const headers = document.querySelectorAll('.accordion-header');
+
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+</script>
 
 {{-- <script>
     // profile-photo.js
@@ -73,6 +85,62 @@ crossorigin=""></script>
     });
 </script>
 
+{{-- <script>
+    const tabs = document.querySelectorAll(".a-nav");
+    const forms = document.querySelectorAll(".acc");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", function () {
+            const id = this.id.replace("a-nav", "");
+            tabs.forEach(tab => {
+                tab.classList.remove("a-active");
+            });
+            this.classList.add("a-active");
+            contents.forEach(content => {
+                content.style.display = "none";
+            });
+            document.getElementById("acc" + id).style.display = "block";
+        });
+    });
+
+    document.getElementById("nav1").classList.add("a-active");
+    document.getElementById("accordioncontent1").style.display = "block";
+</script> --}}
+
+
+<script>
+    function showAccordion(AccordionId, linkId) {
+        var accordion1 = document.getElementById("accordion1");
+        var accordion2 = document.getElementById("accordion2");
+        var link1 = document.getElementById("nav1");
+        var link2 = document.getElementById("nav2");
+
+        if (AccordionId === "accordion1") {
+            accordion1.style.display = "block";
+            accordion2.style.display = "none";
+            link1.classList.add("a-active");
+            link2.classList.remove("a-active");
+        } else if (AccordionId === "accordion2") {
+            accordion2.style.display = "block";
+            accordion1.style.display = "none";
+            link2.classList.add("a-active");
+            link1.classList.remove("a-active");
+        }
+    }
+</script>
+
+<script>
+    function previewImage() {
+        const image = document.querySelector('#image');
+        const imgPreview = document.querySelector('.img-preview');
+        imgPreview.style.display = 'block';
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+        oFReader.onload = function (oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 {{-- <script>
     $(document).ready(function(){
     $('.menu-right').click(function(){
@@ -119,7 +187,8 @@ crossorigin=""></script>
         let longitude = e.latlng.lng.toString().substring(0, 15);
 
         fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=id`)
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=id`
+            )
             .then(response => response.json())
             .then(data => {
                 // Get address from response and update HTML

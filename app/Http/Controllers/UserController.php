@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Pengaduan;
+use App\Models\Tanggapan;
 use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +17,11 @@ class UserController extends Controller
     {  
         $pengaduan = Pengaduan::where('status', '!=', '0')->where('hide_identitas','!=','0')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan','desc')->get();
         $verif = Masyarakat::whereNotNull('foto_ktp')->whereNotNull('tgl_lahir')->whereNotNull('alamat')->whereNotNull('telp')->count();
-        $nonverif = Masyarakat::whereNull('foto_ktp')->whereNull('tgl_lahir')->count();
+        $nonverif = Masyarakat::whereNull('foto_ktp')->orwhereNull('tgl_lahir')->count();
         $cp = Pengaduan::all();
+        $ditanggapi = Tanggapan::get()->count();
 
-        return view('contents.user.index',compact('pengaduan','verif','nonverif','cp'));
+        return view('contents.user.index',compact('pengaduan','verif','nonverif','cp','ditanggapi'));
         
     }
 
@@ -30,17 +33,11 @@ class UserController extends Controller
     public function updateinfopribadi(Request $request ,$nik)
     {
         $validatedData = $request->validate([
-            // 'username' => 'required',
             'alamat' => 'required',
             'telp' => 'required',
             'tgl_lahir' => 'required',
-            'foto_ktp' => 'required|image|mimes:jpg,png,jpeg|max:5000',
+            'foto_ktp' => 'image|mimes:jpg,png,jpeg|max:5000',
             
-        ],[
-            'alamat.required' => 'Alamat dibutuhkan',
-            'telp.required' => 'No Telp dibutuhkan',
-            'tgl_lahir.required' => 'Tanggal lahir dibutuhkan',
-            'foto_ktp.required' => 'Foto KTP diperlukan'
         ]);
 
         if ($request->file()) {
@@ -48,11 +45,11 @@ class UserController extends Controller
             $path = $request->file('foto_ktp')->storeAs('ktp-society', $fileName);
             $validatedData['foto_ktp'] = '/storage/' .$path;
         }
-        
 
         Masyarakat::where('nik',$nik)->update($validatedData);
+        
 
-        return redirect()->back()->with('success','Profile berhasil di perbarui');
+        return redirect('/profile')->with('success','Profile berhasil di perbarui');
 
     }
 
@@ -93,13 +90,13 @@ class UserController extends Controller
         $username = Masyarakat::where('username', $request->username)->first();
 
         if (!$username) {
-            return redirect()->back()->with(['pesan' => 'Username tidak terdaftar']);
+            return redirect()->back()->with(['pesan' => 'Username / Password anda salah !']);
         }
 
         $password = Hash::check($request->password, $username->password);
 
         if (!$password) {
-            return redirect()->back()->with(['pesan' => 'Password tidak sesuai']);
+            return redirect()->back()->with(['pesan' => 'Username / Password anda salah !']);
         }
 
         if (Auth::guard('masyarakat')->attempt(['username' => $request->username, 'password' => $request->password])) {
@@ -228,7 +225,8 @@ class UserController extends Controller
 
     public function profile($siapa = '')
     {
-        return view('contents.user.profile.profile',compact('siapa'));
+        $photo = Auth::guard('masyarakat')->user()->foto_ktp;
+        return view('contents.user.profile.profile',compact('siapa','photo'));
     }
 
     public function pengaduan($active = '')
@@ -241,7 +239,7 @@ class UserController extends Controller
         // card
         $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orWhere('status','=','selesai')->count();
 
-        return view('contents.user.report.pengaduan',compact('pengaduan','active','verif','selesai','report'));
+        return view('contents.user.report.pengaduan',compact('pengaduan','active','verif','selesai','report','proses'));
         // dd($pengaduan);
     }
 
@@ -281,7 +279,7 @@ class UserController extends Controller
             }
         }
 
-        date_default_timezone_set('Asia/Bangkok');
+        date_default_timezone_set('Asia/Jakarta');
 
         Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
             'tgl_pengaduan' => date('Y-m-d h:i:s'),
@@ -321,7 +319,7 @@ class UserController extends Controller
             'old_password' => 'required',
             'new_password' => 'required|min:8|confirmed',
         ], [
-            'old_password.required' => 'Field ini harus diisi', 
+            'old_password.required' => 'Field harus diisi', 
             'new_password.confirmed' => 'Konfirmasi password tidak sesuai',
             'new_password.min' => 'Password minimal 8 karakter'
         ]);
@@ -343,4 +341,17 @@ class UserController extends Controller
 
         return back()->with('success','Password berhasil diubah');
     }
+
+    public function printpdf()
+    {
+        $socities = Masyarakat::all();
+        
+        $pdf = PDF::loadview('contents.admin.society.report-pdf',[
+            'socities'=> $socities,
+            ])->setOptions(['defaultFont' => 'sans-serif']);
+            return $pdf->download('laporan-masyarakat.pdf');
+            return redirect('/admin/masyarakat');
+        
+    }
+
 }

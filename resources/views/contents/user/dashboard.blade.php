@@ -30,7 +30,12 @@
             <div class="alert alert-danger" role="alert">
                 *Lengkapi profil anda sebelum mengirim pengaduan
             </div> --}}
+            @if (Auth::guard('masyarakat')->user()->foto_ktp == '' && Auth::guard('masyarakat')->user()->tgl_lahir == '' && Auth::guard('masyarakat')->user()->alamat == '' && Auth::guard('masyarakat')->user()->telp == '')
+            <div class="alert alert-danger">Mohon lengkapi profil anda sebelum mengirim laporan</div>
+            @else
             <div class="card mb-3">Tulis Laporan Disini</div>
+            @endif
+
             <form action="{{ route('pekat.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 

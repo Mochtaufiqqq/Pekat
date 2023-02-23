@@ -55,7 +55,7 @@
                                     <td>{{ $p->tgl_pengaduan->format('d-M-Y') }}</td>
                                     <td>{{ $p->nik }}</td>
                                     <td>{{ $p->user->nama }}</td>
-                                    <td>{{ $p->isi_laporan }}</td>
+                                    <td>{{ Str::limit($p->isi_laporan,100) }}</td>
                                     <td>
                                         @if ($p->status == '0')
                                             <span class="badge badge-danger">Pending</span>

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pengaduan');
             $table->dateTime('tgl_tanggapan');
             $table->text('tanggapan')->nullable();
-            $table->text('foto_tanggapan')->nullable();
             $table->unsignedBigInteger('id_petugas');
             $table->timestamps();
             $table->foreign('id_pengaduan')->references('id_pengaduan')->on('pengaduans');

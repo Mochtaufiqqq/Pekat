@@ -24,13 +24,13 @@ class AdminController extends Controller
         $username = Petugas::where('username', $request->username)->first();
 
         if (!$username) {
-            return redirect()->back()->with(['pesan' => 'Username tidak terdaftar!']);
+            return redirect()->back()->with(['pesan' => 'Username / Password anda salah!']);
         }
 
         $password = Hash::check($request->password, $username->password);
 
         if (!$password) {
-            return redirect()->back()->with(['pesan' => 'Password tidak sesuai!']);
+            return redirect()->back()->with(['pesan' => 'Username / Password anda salahi!']);
         }
 
         $auth = Auth::guard('admin')->attempt([
@@ -79,19 +79,9 @@ class AdminController extends Controller
             $pengaduan->update(['status' => $request->status]);
 
 
-            $image = [];
-
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $file) {
-                    $path = $file->store('tanggapan-photo');
-                    $image[] = $path;
-                }
-            }
-
             $tanggapan->update([
                 'tgl_tanggapan' => date('Y-m-d'),
                 'tanggapan' => $request->tanggapan ?? '',
-                'foto_tanggapan' => implode('|', $image) ??'',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             // dd($request);
@@ -101,20 +91,14 @@ class AdminController extends Controller
         } else {
             $pengaduan->update(['status' => $request->status]);
 
-            $image = [];
+      
 
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $file) {
-                    $path = $file->store('tanggapan-photo');
-                    $image[] = $path;
-                }
-            }
+            date_default_timezone_set('Asia/Jakarta');
 
             $tanggapan = Tanggapan::create([
                 'id_pengaduan' => $request->id_pengaduan,
-                'tgl_tanggapan' => date('Y-m-d'),
+                'tgl_tanggapan' => date('Y-m-d h:i:s'),
                 'tanggapan' => $request->tanggapan ?? '',
-                'foto_tanggapan' => implode('|', $image) ??'',
                 'id_petugas' => Auth::guard('admin')->user()->id_petugas,
             ]);
             

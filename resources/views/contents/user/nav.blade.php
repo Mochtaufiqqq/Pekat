@@ -14,8 +14,15 @@
                     @if(Auth::guard('masyarakat')->check())
                     <ul class="navbar-nav text-center ml-auto">
                         <li class="nav-item">
+                            <a class="nav-link ml-3 text-white" href="/contact-us">Hubungi Kami</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ml-3 text-white" href="/help">Bantuan</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link ml-3 text-white" href="/home">Home</a>
                         </li>
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{ Auth::guard('masyarakat')->user()->nama }}

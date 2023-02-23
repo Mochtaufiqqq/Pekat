@@ -12,9 +12,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="login-card">
-                        <form class="theme-form login-form" action="{{ route('password.update') }}" method="POST">
+                        <form class="theme-form login-form" action="/password/change/" method="POST">
                             @csrf
-                            <input type="hidden" name="token" value="{{ $token }}">
+                            <input type="hidden" name="token" value="{{ $mytoken }}">
                             {{-- <input type="email" name="email" id="" value="{{ $email }}"> --}}
             
                             <h4>Ubah Password</h4>
@@ -25,14 +25,17 @@
                                 {{ Session::get('pesan') }}
                             </div>
                             @endif
-                          
-                            <div class="form-group">
+                            
+                            @if ($errors->has('password'))
+                            <div class="alert alert-danger">{{ $errors->first('password') }}</div>
+                            @endif
+                            {{-- <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                     <input class="form-control" type="email" name="email"
                                         placeholder="Masukan email anda" value="{{ old('email', $email) }}">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label>Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
@@ -50,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary form-control text-white" type="submit">Ubah</button>
+                                <button class="btn text-white" type="submit" style="background-color:#0A2647;">Ubah</button>
                             </div>
                             {{-- <div class="login-social-title">
                                 <h5>Sign in with</h5>

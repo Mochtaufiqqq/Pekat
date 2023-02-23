@@ -32,7 +32,7 @@
                                 <label>Username</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input class="form-control" type="text" name="username" required=""
-                                        placeholder="Test@gmail.com">
+                                        placeholder="Username">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -51,7 +51,7 @@
                                 <a class="link" href="/password/reset">Lupa password?</a>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary form-control text-white" type="submit">Log in</button>
+                                <button class="form-control btn text-white" type="submit" style="background-color:#0A2647;">Log in</button>
                             </div>
                             {{-- <div class="login-social-title">
                                 <h5>Sign in with</h5>

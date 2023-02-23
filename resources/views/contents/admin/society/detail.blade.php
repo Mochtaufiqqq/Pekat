@@ -45,8 +45,7 @@
                                             <div class="media align-items-center">
 
                                                 <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0"
-                                                    src="{{ asset('/default/user.png') }}" alt="">
-
+                                                    src="/images/user_default.svg" alt="">
 
                                                 <input class="updateimg" type="file" name="img"
                                                     onchange="readURL(this,0)">
@@ -66,8 +65,8 @@
                                                     </h5>
                                                     <p class="email_add_0">{{ $society->nik }}</p>
                                                     <ul>
-                                                        <li><a href="/admin/masyarakat/delete/{{ $society->nik }}"
-                                                                onclick="editContact(0)">Edit</a></li>
+                                                        {{-- <li><a href="/admin/masyarakat/delete/{{ $society->nik }}"
+                                                                onclick="editContact(0)">Edit</a></li> --}}
                                                         <li><a href="/admin/masyarakat/delete/{{ $society->nik }}"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modalDelete{{ $society->nik }}">Hapus</a>
@@ -111,7 +110,6 @@
                                             </div>
 
                                             <div class="email-general">
-                                                <h6 class="mb-3">Profil</h6>
                                                 <ul>
                                                     <li>Email <span
                                                             class="font-primary first_name_0">{{ $society->email }}</span>
@@ -121,11 +119,11 @@
                                                             class="font-primary first_name_0">{{ $society->alamat }}</span>
                                                     </li>
                                                     <hr>
-                                                    <li>No Telp<span class="font-primary">
+                                                    <li>No Telepon<span class="font-primary">
                                                             {{ $society->telp }}</span>
                                                     </li>
                                                     <hr>
-                                                    <li>Tgl Lahir<span class="font-primary">
+                                                    <li>Tanggal Lahir<span class="font-primary">
                                                             {{ $society->tgl_lahir }}</span>
                                                     </li>
                                                     <hr>
@@ -368,7 +366,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="" style="max-width: 100%; height: auto;">
+                <img id="modalImage" src="" alt="" style="width: 100%; height: auto;">
             </div>
         </div>
     </div>

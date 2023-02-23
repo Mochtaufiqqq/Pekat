@@ -11,7 +11,7 @@
 
 <style>
     #scroll-to-top-btn {
-        background-color: #eb1d36;
+        background-color: #0a2647;
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -21,7 +21,13 @@
         border-radius: 20px 20px 20px 20px;
         color: white;
         z-index: 1001;
+        transition: background-color 0.5s ease;
+        
         /* opacity: 20px; */
+    }
+
+    #scroll-to-top-btn:hover {
+        background-color: #031a34;
     }
 </style>
 
