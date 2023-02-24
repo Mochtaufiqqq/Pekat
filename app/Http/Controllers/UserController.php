@@ -49,7 +49,17 @@ class UserController extends Controller
         Masyarakat::where('nik',$nik)->update($validatedData);
         
 
-        return redirect('/profile')->with('success','Profile berhasil di perbarui');
+        $options = [
+            'text' => 'Profil Berhasil diperbarui',
+            'duration' => 1560,
+            'newestOnTop' => true,
+            'gravity' => 'top',
+            'position' => 'right',
+            'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
+        ];
+    
+        return redirect()->back()->with('success','Profil berhasil diperbarui');
+
 
     }
 
@@ -77,7 +87,21 @@ class UserController extends Controller
             Masyarakat::where('nik',$nik)->update($validatedData);
         }
 
-        return redirect('/profile')->with('success','Profil Berhasil Diperbarui');             
+        // $options = [
+        //     'text' => 'Profil Berhasil diperbarui',
+        //     'duration' => 1560,
+        //     'newestOnTop' => true,
+        //     'gravity' => 'top',
+        //     'position' => 'right',
+        //     'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
+        // ];
+    
+        // $toast = new \stdClass();
+        // $toast->options = $options;
+        // $toast->message = 'Profil berhasil diperbarui';
+    
+        return redirect()->back()->with('success','Profil berhasil diperbarui');
+           
     }
 
     public function login()
@@ -133,7 +157,7 @@ class UserController extends Controller
                 'username.min' => 'Username minimal 3 karakter !',
                 'email.required' => 'Email harus diisi !',
                 'password.min' => 'Password minimal 8 karakter !',
-                'confirmation' => 'Konfirmasi password tidak sama',
+                'confirmation' => 'Konfirmasi password tidak sama !',
             ]);
 
         if ($validate->fails()) {
@@ -218,6 +242,7 @@ class UserController extends Controller
 
         if ($pengaduan) {
             return redirect('/pengaduan/me')->with('success','Pengaduan berhasil terkirim');
+
         } else {
             return redirect()->back();
         }
@@ -296,6 +321,7 @@ class UserController extends Controller
         ]);
 
         return redirect('/pengaduan/me')->with('success','Pengaduan berhasil diubah');
+
     }
 
     
@@ -305,7 +331,18 @@ class UserController extends Controller
 
         $pengaduan->delete();
 
-        return redirect('/pengaduan/me')->with('success','Laporan berhasil dihapus'); 
+        $options = [
+            'text' => 'Pengaduan anda berhasil dihapus',
+            'duration' => 1560,
+            'newestOnTop' => true,
+            'gravity' => 'top',
+            'position' => 'right',
+            'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
+        ];
+    
+        return redirect('/pengaduan/me')->with('success','Pengaduan berhasil dihapus');
+
+
     }
     
     public function changepassword($active = ''){
@@ -339,7 +376,8 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password)
         ]);
 
-        return back()->with('success','Password berhasil diubah');
+        return redirect()->back()->with('success','Password berhasil diubah');
+
     }
 
     public function printpdf()

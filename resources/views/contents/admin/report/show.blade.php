@@ -33,6 +33,7 @@
                     <h5>Semua Pengaduan</h5>
                 </div>
                 <div class="card-body">
+                    <a href="/admin/report/printpdf" class="btn btn-secondary mb-2">Export PDF</a>
                   {{-- <a class="btn btn-success mb-2" href="/admin/tambahpetugas">Tambah Data</a> --}}
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
@@ -42,7 +43,7 @@
                                 <th scope="col">Tanggal pengaduan</th>
                                 <th scope="col">NIK</th>
                                 <th scope="col">Nama Pelapor</th>
-                                <th scope="col">Isi Laporan</th>
+                                <th scope="col">Deskripsi Laporan</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Opsi</th>
 
@@ -55,7 +56,7 @@
                                     <td>{{ $p->tgl_pengaduan->format('d-M-Y') }}</td>
                                     <td>{{ $p->nik }}</td>
                                     <td>{{ $p->user->nama }}</td>
-                                    <td>{{ Str::limit($p->isi_laporan,100) }}</td>
+                                    <td>{{ Str::limit($p->isi_laporan,50) }}</td>
                                     <td>
                                         @if ($p->status == '0')
                                             <span class="badge badge-danger">Pending</span>

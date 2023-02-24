@@ -71,8 +71,8 @@
                                 <div class="mb-3 m-form__group">
                                     <label class="form-label">Telp</label>
                                     <div class="input-group">
-                                        <input class="form-control @error('telp') is-invalid @enderror" type="text"
-                                            name="telp" placeholder="contoh:08909890" value="{{ $petugas->telp }}">
+                                        <input class="form-control @error('telp') is-invalid @enderror" type="number"
+                                            name="telp" placeholder="contoh:08909890" value="{{ $petugas->telp }}" id="inputNumber">
                                     </div>
                                     @if ($errors->has('telp'))
                                     <div class="text-danger">{{ $errors->first('telp') }}</div>

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'nama_petugas' => 'Administrator',
             'username' => 'admin',
             'email' => 'mochamadtaufiq2122@gmail.com',
-            'alamat' => 'california',
+            'alamat' => 'JL.Rancamanyar',
             'password' => Hash::make('password'),
             'telp' => '08979090',
             'level' => 'admin',
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Petugas::create([
-            'nama_petugas' => 'Administrator',
+            'nama_petugas' => 'Administrator2',
             'username' => 'admin2',
             'email' => 'exmp@gmail.com',
             'alamat' => 'california',
@@ -41,9 +41,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Petugas::create([
-            'nama_petugas' => 'Administrator',
+            'nama_petugas' => 'Petugas',
             'username' => 'petugas',
-            'email' => 'exmp3@gmail.com',
+            'email' => 'exmp2@gmail.com',
+            'alamat' => 'california',
+            'password' => Hash::make('password'),
+            'telp' => '089790908',
+            'level' => 'petugas',
+
+        ]);
+
+        \App\Models\Petugas::create([
+            'nama_petugas' => 'Petugas2',
+            'username' => 'petugas',
+            'email' => 'exmp2@gmail.com',
             'alamat' => 'california',
             'password' => Hash::make('password'),
             'telp' => '089790908',
@@ -55,7 +66,7 @@ class DatabaseSeeder extends Seeder
             'nik' => '32091031',
             'username' => 'user2',
             'nama' => 'piqqq',
-            'alamat' => 'california',
+            'alamat' => 'Jl.Cibaduyut',
             'email' => 'exmp2@gmail.com',
             'password' => Hash::make('123123123'),
             'telp' => '0897909012',
@@ -66,8 +77,19 @@ class DatabaseSeeder extends Seeder
             'nik' => '32091030',
             'username' => 'user',
             'nama' => 'claire',
-            'alamat' => 'california',
+            'alamat' => 'Jl.Baleendah',
             'email' => 'mhmdtaufiq3@gmail.com',
+            'password' => Hash::make('123123123'),
+            'telp' => '0897909042',
+
+        ]);
+
+        Masyarakat::create([
+            'nik' => '32091030',
+            'username' => 'user3',
+            'nama' => 'Mochamad Taufiq',
+            'alamat' => 'Jl.cangkuang',
+            'email' => 'exmpuser@gmail.com',
             'password' => Hash::make('123123123'),
             'telp' => '0897909042',
 

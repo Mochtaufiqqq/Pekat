@@ -44,7 +44,7 @@
 
                 <div class="form-group">
                     <label class="text-sm" for="judul_laporan">Judul Laporan</label>
-                    <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan">
+                    <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan" value="{{ old('judul_laporan') }}">
                     @if ($errors->has('judul_laporan'))
                     <div class="text-danger-custom">{{ $errors->first('judul_laporan') }}</div>
                     @endif
@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="text-sm" for="isi_laporan">Isi Laporan</label>
                     <textarea name="isi_laporan" placeholder="Masukkan Isi Laporan" class="form-control"
-                        rows="4"></textarea>
+                        rows="4">{{ old('isi_laporan') }}</textarea>
                         @if ($errors->has('isi_laporan'))
                         <div class="text-danger-custom">{{ $errors->first('isi_laporan') }}</div>
                         @endif
@@ -60,14 +60,14 @@
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Tanggal Kejadian</label>
                     <input name="tgl_pengaduan" type="text" class="form-control"
-                    placeholder="Masukan tanggal" onfocusin="(this.type='date')" onfocusout="(this.type='text')">
+                    placeholder="Masukan tanggal" onfocusin="(this.type='date')" onfocusout="(this.type='text')" value="{{ old('tgl_pengaduan') }}">
                         @if ($errors->has('tgl_pengaduan'))
                         <div class="text-danger-custom">{{ $errors->first('tgl_pengaduan') }}</div>
                         @endif
                 </div>
                 <div class="form-group">
                     <label class="text-sm" for="tgl_pengaduan">Lokasi Kejadian</label>
-                    <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2" placeholder="Lokasi kejadian"></textarea>
+                    <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2" placeholder="Lokasi kejadian" value="{{ old('lokasi_kejadian') }}">{{ old('lokasi_kejadian') }}</textarea>
                     @if ($errors->has('lokasi_kejadian'))
                     <div class="text-danger-custom">{{ $errors->first('lokasi_kejadian') }}</div>
                     @endif
@@ -84,7 +84,7 @@
                     <div class="drop-container">
                         <span class="drop-title">Seret file ke sini</span>
                         atau
-                        <input type="file" name="images[]" multiple>
+                        <input type="file" name="images[]" multiple image>
                     </div>
                       
                 </div>
@@ -93,12 +93,12 @@
                 <div class="form-check">
                     <div class="row text-center mb-3">
                     <div class="col-6">
-                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish">
+                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish" value="{{ old('hide_identitas') }}">
                     <label class="form-check-label" for="exampleCheck1">Anonim</label>
                     
                 </div>
                 <div class="col-6">
-                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Laporan anda tidak dapat dilihat publik">
+                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input"  data-toggle="tooltip" data-placement="top" title="Laporan anda tidak dapat dilihat publik" value="{{ old('hide_laporan') }}">
                     <label class="form-check-label" for="exampleCheck1">Rahasia</label>
                 </div>
                 </div>

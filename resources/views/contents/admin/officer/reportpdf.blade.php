@@ -10,7 +10,7 @@
         <h4>Laporan Data Petugas</h4>
     </div>
     <div class="container">
-        <table class="table bordered">
+        <table class="table-bordered">
             <thead>
                 <tr>
                     <th>No</th>

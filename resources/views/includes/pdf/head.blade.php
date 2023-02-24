@@ -30,5 +30,5 @@
             padding: 5px;
         }
     </style>
-    <title>SIPMO - Sistem Informasi Pengaduan Masyarakat Online</title>
+    <title>LAPEKAT - Layanan Pengaduan Masyarakat</title>
 </head>

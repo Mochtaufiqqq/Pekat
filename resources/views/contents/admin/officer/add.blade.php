@@ -15,9 +15,7 @@
 
                 <h3>Tambah Data User</h3>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/semuauser">Semua User</a></li>
-                    <li class="breadcrumb-item"> <a href="/useraktif"></a> User Aktif</li>
-                    <li class="breadcrumb-item active"><a href="/usernonaktif"></a> User Nonaktif</li>
+                    <li class="breadcrumb-item"><a href="/admin/petugas">Semua Petugas</a></li>
                 </ol>
             </div>
         </div>
@@ -42,7 +40,7 @@
                                     <label class="form-label">Nama Petugas</label>
                                     <div class="input-group">
                                         <input class="form-control @error('nama_petugas') is-invalid @enderror"
-                                            type="text" name="nama_petugas" placeholder="Nama lengkap" >
+                                            type="text" name="nama_petugas" placeholder="Nama lengkap" value="{{ old('nama_petugas') }}">
                                     </div>
                                     @if ($errors->has('nama_petugas'))
                                     <div class="text-danger">{{ $errors->first('nama_petugas') }}</div>
@@ -61,7 +59,7 @@
                                 <div class="mb-3 m-form__group">
                                     <label class="form-label">Alamat</label>
                                     <div class="input-group">
-                                        <textarea class="form-control" name="alamat" id="" rows="2" placeholder="Alamat"></textarea >
+                                        <textarea class="form-control @error('email') is-invalid @enderror" name="alamat" id="" rows="2" placeholder="Alamat"></textarea >
                                     </div>
                                     @if ($errors->has('alamat'))
                                     <div class="text-danger">{{ $errors->first('alamat') }}</div>
@@ -80,8 +78,8 @@
                                 <div class="mb-3 m-form__group">
                                     <label class="form-label">Telp</label>
                                     <div class="input-group">
-                                        <input class="form-control @error('telp') is-invalid @enderror" type="text"
-                                            name="telp" placeholder="contoh:08909890">
+                                        <input class="form-control @error('telp') is-invalid @enderror" type="number"
+                                            name="telp" placeholder="contoh:08909890" id="inputNumber">
                                     </div>
                                     @if ($errors->has('telp'))
                                     <div class="text-danger">{{ $errors->first('telp') }}</div>
@@ -117,7 +115,7 @@
                                         <option value="admin">Admin</option>
                                     </select>
                                     @if ($errors->has('level'))
-                                    <div class="text-danger-custom">{{ $errors->first('level') }}</div>
+                                    <div class="text-danger">{{ $errors->first('level') }}</div>
                                     @endif
                                 </div>
 

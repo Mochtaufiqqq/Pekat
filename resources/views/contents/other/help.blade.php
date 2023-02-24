@@ -183,7 +183,7 @@
                 <div class="accordion" style="display: none;" id="accordion2">
                     <h5>Apakah setelah register saya bisa membuat pengaduan ?</h5>
                     <p class="italic text-secondary">Setelah melakukan Register, anda bisa langsung membuat pengaduan. Hanya saja pengaduan anda belum
-                        bisa langsung ditindaklanjuti selama akun ada belum diverifikasi. Maka setelah register,
+                        bisa langsung ditindaklanjuti selama akun anda belum diverifikasi. Maka setelah register,
                         lengkapi profile akun anda dengan menginput data:
                         <ul>
                             <li class="italic text-secondary">Alamat</li>

@@ -30,7 +30,7 @@ class AdminController extends Controller
         $password = Hash::check($request->password, $username->password);
 
         if (!$password) {
-            return redirect()->back()->with(['pesan' => 'Username / Password anda salahi!']);
+            return redirect()->back()->with(['pesan' => 'Username / Password anda salah!']);
         }
 
         $auth = Auth::guard('admin')->attempt([
@@ -249,26 +249,14 @@ class AdminController extends Controller
         return back()->with('success','Password berhasil diubah');
     }
 
-    public function report()
-    {
-        return view('contents.admin.showreport');
-    }
-
-    public function getReport(Request $request)
-    {
-        $from = $request->from . ' ' . '00:00:00';
-        $to = $request->to . ' ' . '23:59:59';
-
-        $pengaduan = Pengaduan::whereBetween('tgl_pengaduan',[$from, $to])->get();
-
-        return view('contents.admin.showreport',compact('pengaduan','from','to'));
+   public function reportpdf()
+   {
+    $complaint = Pengaduan::latest()->get();
         
-    }
-
-    public function reportPdf($from, $to){
-        $pengaduan = Pengaduan::whereBetween('tgl_pengaduan', [$from,$to])->get();
-
-        $pdf = PDF::loadview('contents.admin.reportpdf', ['pengaduan' => $pengaduan ]);
+    $pdf = PDF::loadview('contents.admin.report.export-pdf',[
+        'complaint'=> $complaint,
+        ])->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->download('Laporan-pengaduan.pdf');
-    }
+        return redirect('/admin/pengaduan');
+   }
 }

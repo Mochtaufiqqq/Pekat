@@ -41,8 +41,8 @@ Route::prefix('admin')->group(function () {
 
         // society
         Route::get('/masyarakat',[AdminController::class,'showsociety']);
-        Route::get('/masyarakat/edit/{nik}',[AdminController::class,'editsociety']);
-        Route::put('/masyarakat/update/{nik}',[AdminController::class,'updatesociety']);
+        // Route::get('/masyarakat/edit/{nik}',[AdminController::class,'editsociety']);
+        // Route::put('/masyarakat/update/{nik}',[AdminController::class,'updatesociety']);
         Route::get('/masyarakat/detail/{nik}',[AdminController::class,'detailsociety']);
         Route::delete('/masyarakat/delete/{nik}', [AdminController::class,'destroysociety']);
         // Route::get('/masyarakat/sampah',[AdminController::class,'societytrash']);
@@ -54,11 +54,10 @@ Route::prefix('admin')->group(function () {
         Route::put('/profile/me/update/password/{id_petugas}',[AdminController::class,'changePwPost']);
 
         //report
-        Route::get('/laporan',[AdminController::class,'report']);
-        Route::post('/laporan/getreport',[AdminController::class,'getReport']);
-        Route::get('/laporan/pdf/{from}/{to}',[AdminController::class,'reportPdf'])->name('laporan.cetak');
-        Route::get('/petugas/printpdf',[PetugasController::class,'printpdf']);
+       
+        Route::get('/report/printpdf',[AdminController::class,'reportpdf']);
         Route::get('/masyarakat/printpdf',[UserController::class,'printpdf']);
+        Route::get('/petugas/printpdf',[PetugasController::class,'printpdf']);
     });
     
 

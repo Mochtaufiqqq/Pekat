@@ -29,7 +29,7 @@
                             <a class="nav-link ml-3 text-white" href="/help">Bantuan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link ml-3 text-white" href="/dashboard">Home</a>
+                            <a class="nav-link ml-3 text-white" href="/home">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link ml-4 dropdown-toggle text-white" href="/profile" id="navbarDropdown"
@@ -103,9 +103,9 @@
                     width="500" height="400" style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-                   <p class="italic mb-0"><i class="fas fa-map-marker-alt"></i>Jl. Katapang Andir No.Km. 1, RW.5, Sangkanhurip, Kec. Katapang, Kabupaten Bandung, Jawa Barat 40921</p>
-                   <p class="italic"><i class="fas fa-call"></i> 0225893325</p>
-                   <p class="italic"><i class="fas fa-envelope"></i> kecamatankatapang@gmail.com</p>
+                   <p class="italic"><i class="fas fa-map-marker-alt"></i>Jl. Katapang Andir No.Km. 1, RW.5, Sangkanhurip, Kec. Katapang, Kabupaten Bandung, Jawa Barat 40921</p>
+                   <p class="italic"><i class="fas fa-phone-alt"></i> 0225893325</p>
+                   <p class="italic"><i class="fas fa-envelope alt"></i> kecamatankatapang@gmail.com</p>
                 
             </div>
 

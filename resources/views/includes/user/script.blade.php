@@ -4,9 +4,7 @@
 <script src="{{ asset('/user/js/previewimage.js') }}"></script>
 <script src="{{ asset('/user/js/tanggapan.js') }}"></script>
 <script src="{{ asset('/user/js/inputnumber.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
 </script>
@@ -18,6 +16,8 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
 <script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
 
 {{-- tooltip --}}
 <script>
@@ -25,7 +25,7 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
-
+  
 {{-- counter --}}
 <script>
     $(document).ready(function () {
@@ -59,6 +59,27 @@
         });
     });
 </script>
+
+{{-- <script>
+    // Add a listener for the file input change event
+    const fileInput = document.getElementById('images');
+    fileInput.addEventListener('change', function() {
+        // Get the selected images
+        const images = fileInput.files;
+        // Loop through the selected images and create a preview for each image
+        for(let i=0; i<images.length; i++) {
+            const image = images[i];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-preview');
+                document.getElementById('preview-container').appendChild(img);
+            }
+            reader.readAsDataURL(image);
+        }
+    });
+</script> --}}
 
 {{-- <script>
     // profile-photo.js

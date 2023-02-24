@@ -96,13 +96,18 @@
 
 @endif
 
-@if (Session::has('success'))
+@if(session()->has('success'))
     <script>
-        Swal.fire({
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            icon: 'success',
-            confirmButtonText: 'OK'
+        $(document).ready(function(){
+            $.toast({
+                heading: 'Success',
+                text: '{{ session()->get('success') }}',
+                position: 'top-right',
+                loaderBg:'#fff',
+                icon: 'success',
+                hideAfter: 3500,
+                stack: 6
+            });
         });
     </script>
 @endif

@@ -125,7 +125,7 @@ class PetugasController extends Controller
 
     public function printpdf()
     {
-        $officers = Petugas::all();
+        $officers = Petugas::latest()->get();
         
         $pdf = PDF::loadview('contents.admin.officer.reportpdf',[
             'officers'=> $officers,

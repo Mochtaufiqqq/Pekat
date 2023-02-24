@@ -93,7 +93,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Telp</label>
                                         <input type="number" class="form-control" name="telp"
-                                            value="{{ Auth::guard('admin')->user()->telp }}">
+                                            value="{{ Auth::guard('admin')->user()->telp }}" id="inputNumber">
                                     </div>
                                 </div>
                                 <div class="col-md-12">

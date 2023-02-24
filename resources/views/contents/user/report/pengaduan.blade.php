@@ -61,7 +61,7 @@
                                         href="{{ route('pekat.laporan', ['status' => 'proses']) }}">Proses</a>
                                     <a class="btn btn-outline-primary mb-2 mr-2 {{ request('status') == 'selesai' ? 'active' : '' }}"
                                         href="{{ route('pekat.laporan', ['status' => 'selesai']) }}">Selesai</a>
-                                        {{-- <a class="btn btn-outline-primary mb-2 mr-2 "
+                                    {{-- <a class="btn btn-outline-primary mb-2 mr-2 "
                                         href="">+ Laporan</a> --}}
                                 </div>
 
@@ -80,11 +80,7 @@
                                         <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                @if ($v->hide_laporan == 2)
-                                                <p>Anonymous</p>
-                                                @else
                                                 <p>{{ $v->user->nama }}</p>
-                                                @endif
                                                 @if ($v->status == '0')
                                                 <p class="text-danger">Pending</p>
                                                 @elseif($v->status == 'proses')
@@ -95,7 +91,7 @@
 
                                             </div>
                                             <div>
-                                                <p>{{ $v->tgl_pengaduan->format('d M, h:i') }}</p>
+                                                <p>{{ $v->tgl_pengaduan->format('d M Y, h:i') }}</p>
 
                                             </div>
                                         </div>
@@ -104,7 +100,9 @@
                                         <div class="judul-laporan">
                                             {{ $v->judul_laporan }}
                                         </div>
-                                        <p>{{ $v->isi_laporan }}</p>
+                                        <div>
+                                            <p>{{ $v->isi_laporan }}</p>
+                                        </div>
                                     </div>
                                     <div class="pengaduan-bottom">
                                         @if ($v->foto != null)
@@ -135,8 +133,7 @@
                                         @if ($v->tanggapan != null)
                                         <hr>
                                         <p>
-                                            <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan
-                                                    Petugas</small></button>
+                                            <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan Petugas</small></button>
                                         </p>
                                         <div class="tanggapanContent" style="display: none;">
 
@@ -237,19 +234,21 @@
 
 @section('js')
 
-@if (Session::has('success'))
+@if(session()->has('success'))
 <script>
-    Swal.fire({
-        title: 'Success!',
-        text: '{{ session('success') }}',
-        icon: 'success',
-        confirmButtonText: 'OK'
+    $(document).ready(function () {
+        $.toast({
+            heading: 'Success',
+            text: '{{ session()->get('
+            success ') }}',
+            position: 'top-right',
+            loaderBg: '#fff',
+            icon: 'success',
+            hideAfter: 3500,
+            stack: 6
+        });
     });
 </script>
 @endif
 
-{{-- modal delete --}}
-
-
-{{-- end modal delete --}}
 @endsection

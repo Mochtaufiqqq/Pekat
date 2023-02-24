@@ -22,8 +22,8 @@
                             <div class="form-group">
                                 <label>NIK</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
-                                    <input class="form-control @error('nisn') is-invalid @enderror" name="nik" type="text" 
-                                        placeholder="NIK">
+                                    <input class="form-control @error('nisn') is-invalid @enderror" name="nik" id="inputNumber" type="number" 
+                                        placeholder="NIK" value="{{ old('nik') }}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -32,7 +32,7 @@
                                     <div class="input-group"><span class="input-group-text"><i
                                                 class="icon-user"></i></span>
                                         <input class="form-control" name="nama" type="text" 
-                                            placeholder="Nama lengkap">
+                                            placeholder="Nama lengkap" value="{{ old('nama') }}">
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                 <label>Username</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input class="form-control @error('username') is-invalid @enderror" name="username" type="text" 
-                                        placeholder="Username">
+                                        placeholder="Username" value="{{ old('username') }}">
                                 </div>
                         
                             </div>
@@ -49,14 +49,14 @@
                                 <div class="input-group"><span class="input-group-text"><i
                                             class="icon-email"></i></span>
                                     <input class="form-control" name="email" type="email" 
-                                        placeholder="contoh@gmail.com">
+                                        placeholder="contoh@gmail.com" value="{{ old('email') }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input class="form-control" type="password" name="password" 
-                                        placeholder="*********">
+                                        placeholder="*********" value="{{ old('password') }}">
                                    
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 <label>Konfirmasi Password</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input class="form-control" type="password" name="confirmation" 
-                                        placeholder="*********">
+                                        placeholder="*********" value="{{ old('confirmation') }}">
                                 </div>
                             </div>
                             <div class="form-group">

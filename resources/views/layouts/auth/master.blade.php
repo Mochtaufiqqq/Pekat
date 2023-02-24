@@ -44,6 +44,19 @@
     <link id="color" rel="stylesheet" href="/admins/css/color-1.css" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="/admins/css/responsive.css">
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,7 +68,7 @@
     </div>
     <!-- Loader ends-->
     <!-- page-wrapper Start-->
-   @yield('content')
+    @yield('content')
     <!-- page-wrapper end-->
     <!-- latest jquery-->
     <script src="/admins/js/jquery-3.5.1.min.js"></script>
@@ -73,6 +86,13 @@
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="/admins/js/script.js"></script>
+    <script>
+        document.getElementById("inputNumber").addEventListener("keypress", function (event) {
+            if (event.key === "e") {
+                event.preventDefault();
+            }
+        });
+    </script>
     <!-- login js-->
     <!-- Plugin used-->
 </body>
