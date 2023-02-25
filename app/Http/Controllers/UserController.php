@@ -202,13 +202,16 @@ class UserController extends Controller
             'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
             'lokasi_kejadian' => ['required'],
-            'tgl_pengaduan'=> ['required']
+            'tgl_pengaduan'=> ['required'],
+            'images.*' => ['image','mimes:jpg,png,jpeg'],
             // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
         ],[
             'judul_laporan.required' => 'Judul laporan harus diisi',
             'isi_laporan.required' => 'Isi laporan dibutuhkan',
             'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
-            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan'
+            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan',
+            'images.image' => 'Lampiran harus berupa foto',
+            
         ]);
 
         if ($validate->fails()) {
@@ -240,12 +243,10 @@ class UserController extends Controller
             'status' => '0',
         ]);
 
-        if ($pengaduan) {
+       
             return redirect('/pengaduan/me')->with('success','Pengaduan berhasil terkirim');
 
-        } else {
-            return redirect()->back();
-        }
+        
     }
 
     public function profile($siapa = '')
@@ -282,13 +283,14 @@ class UserController extends Controller
             'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
             'lokasi_kejadian' => ['required'],
-            'tgl_pengaduan'=> ['required']
-            // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+            'tgl_pengaduan'=> ['required'],
+            'images.*' => ['image','mimes:jpg,png,jpeg'],
         ],[
             'judul_laporan.required' => 'Judul laporan harus diisi',
             'isi_laporan.required' => 'Isi laporan dibutuhkan',
             'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
-            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan'
+            'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan',
+            'images.image' => 'Lampiran harus berupa foto',
         ]);
 
         if ($validate->fails()) {

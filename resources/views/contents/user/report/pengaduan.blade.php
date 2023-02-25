@@ -235,20 +235,19 @@
 @section('js')
 
 @if(session()->has('success'))
-<script>
-    $(document).ready(function () {
-        $.toast({
-            heading: 'Success',
-            text: '{{ session()->get('
-            success ') }}',
-            position: 'top-right',
-            loaderBg: '#fff',
-            icon: 'success',
-            hideAfter: 3500,
-            stack: 6
+    <script>
+        $(document).ready(function(){
+            $.toast({
+                heading: 'Success',
+                text: '{{ session()->get('success') }}',
+                position: 'top-right',
+                loaderBg:'#fff',
+                icon: 'success',
+                hideAfter: 3500,
+                stack: 6
+            });
         });
-    });
-</script>
+    </script>
 @endif
 
 @endsection

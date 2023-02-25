@@ -78,6 +78,9 @@
                    
                 <div class="mb-3">
                     <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
+                    @if ($errors->has('images'))
+                        <div class="text-danger-custom">{{ $errors->first('images') }}</div>
+                        @endif
                 </div>
                 
                 <div class="form-group" id="myContent" style="display: none;">
@@ -85,6 +88,7 @@
                         <span class="drop-title">Seret file ke sini</span>
                         atau
                         <input type="file" name="images[]" multiple image>
+                        
                     </div>
                       
                 </div>

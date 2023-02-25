@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Petugas::create([
             'nama_petugas' => 'Petugas2',
-            'username' => 'petugas',
+            'username' => 'petugas2',
             'email' => 'exmp2@gmail.com',
             'alamat' => 'california',
             'password' => Hash::make('password'),
@@ -85,7 +85,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Masyarakat::create([
-            'nik' => '32091030',
+            'nik' => '32091032',
             'username' => 'user3',
             'nama' => 'Mochamad Taufiq',
             'alamat' => 'Jl.cangkuang',
