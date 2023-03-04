@@ -33,7 +33,9 @@
                     <h5>Semua Pengaduan</h5>
                 </div>
                 <div class="card-body">
+                    @if (Auth::guard('admin')->user()->level == 'admin')
                     <a href="/admin/report/printpdf" class="btn btn-secondary mb-2">Export PDF</a>
+                    @endif
                   {{-- <a class="btn btn-success mb-2" href="/admin/tambahpetugas">Tambah Data</a> --}}
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">

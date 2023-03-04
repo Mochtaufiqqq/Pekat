@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\FotoLaporan;
 
 class Pengaduan extends Model
 {
@@ -18,6 +19,7 @@ class Pengaduan extends Model
     protected $fillable = [
     'tgl_pengaduan',
     'nik',
+    'id_kategori',
     'judul_laporan',
     'isi_laporan',
     'lokasi_kejadian',
@@ -25,7 +27,7 @@ class Pengaduan extends Model
     'latitude',
     'hide_identitas',
     'hide_laporan',
-    'foto',
+    'report_main_image',
     'status'
 ];
 
@@ -40,6 +42,22 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(Tanggapan::class,'id_pengaduan','id_pengaduan');
     }
+
+    public function Images()
+    {
+        return $this->hasMany(FotoLaporan::class,'pengaduan_id');
+    }
+
+    public function Location()
+    {
+        return $this->hasOne(Location::class,'id_pengaduan');
+    }
+
+    public function Kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
 
     // public function petugas()
     // {

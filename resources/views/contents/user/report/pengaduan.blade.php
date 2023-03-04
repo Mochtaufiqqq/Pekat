@@ -105,22 +105,23 @@
                                         </div>
                                     </div>
                                     <div class="pengaduan-bottom">
-                                        @if ($v->foto != null)
-                                        @foreach (explode('|', $v->foto) as $img)
+                                       
+                                        @if ($v->Images != '')
+                                        @foreach ($v->Images as $key => $item)
 
+                                        <img src="{{ asset('storage/posts/' .$item->folder. '/' .$item->image) ?? ''}}" 
+                                        class="gambar-lampiran mb-4" data-toggle="modal" data-target="#imageModal"
+                                            data-src="{{ asset('/storage/posts/' .$item->folder. '/' .$item->image) ?? '' }}">
 
-                                        <img src="/storage/{{ $img }}" alt="{{ 'Gambar '.$v->judul_laporan }}"
-                                            class="gambar-lampiran mb-4" data-toggle="modal" data-target="#imageModal"
-                                            data-src="/storage/{{ $img }}">
                                         @endforeach
-
                                         @endif
-                                        @if ($v->lokasi_kejadian != '')
+
+                                        @if ($v->Location && $v->Location->location != '')
                                         <p>
-                                            <i class="fas fa-map-marker-alt"></i> <small
-                                                class="text-muted">{{ $v->lokasi_kejadian }}</small>
+                                            <i class="fas fa-map-marker-alt"></i> <small class="text-muted">{{ $v->Location->location ?? '' }}</small>
                                         </p>
                                         @endif
+
                                         @if ($v->status == 0)
                                         <p class="mt-3 mb-2">
                                             <a href="/pengaduan/me/edit/{{ $v->id_pengaduan }}">Edit</a>
@@ -133,7 +134,8 @@
                                         @if ($v->tanggapan != null)
                                         <hr>
                                         <p>
-                                            <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan Petugas</small></button>
+                                            <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan
+                                                    Petugas</small></button>
                                         </p>
                                         <div class="tanggapanContent" style="display: none;">
 
@@ -249,5 +251,6 @@
         });
     </script>
 @endif
+
 
 @endsection

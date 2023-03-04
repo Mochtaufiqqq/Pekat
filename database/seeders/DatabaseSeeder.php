@@ -7,6 +7,8 @@ namespace Database\Seeders;
 use App\Models\Masyarakat;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\ComplaintSeeder;
+use Database\Seeders\CommentSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'email' => 'mochamadtaufiq2122@gmail.com',
             'alamat' => 'JL.Rancamanyar',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'telp' => '08979090',
             'level' => 'admin',
 
@@ -34,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin2',
             'email' => 'exmp@gmail.com',
             'alamat' => 'california',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'telp' => '08979090',
             'level' => 'admin',
 
@@ -45,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'petugas',
             'email' => 'exmp2@gmail.com',
             'alamat' => 'california',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'telp' => '089790908',
             'level' => 'petugas',
 
@@ -56,7 +58,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'petugas2',
             'email' => 'exmp2@gmail.com',
             'alamat' => 'california',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'telp' => '089790908',
             'level' => 'petugas',
 
@@ -94,5 +96,9 @@ class DatabaseSeeder extends Seeder
             'telp' => '0897909042',
 
         ]);
+
+        $this->call(ComplaintSeeder::class);
+        $this->call(CommentSeeder::class);
+        $this->call(KategoriSeeder::class);
     }
 }

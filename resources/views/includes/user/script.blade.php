@@ -18,6 +18,48 @@
 <script src="https://unpkg.com/leaflet-geosearch@3.1.0/dist/geosearch.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script>
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src='https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js'></script>
+<script src='https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js'>
+</script>
+<script
+    src='https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js'>
+</script>
+
+
+{{-- this delete image before upload --}}
+<script>
+    // Register plugin for preview image
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+
+    const inputElement = document.querySelector('input[type="file"]');
+
+    // Create a FilePond instance
+    const pond = FilePond.create(inputElement, {
+        labelIdle: 'Tarik file ke sini atau <span class="filepond--label-action">Pilih file</span>',
+        labelButtonRemoveItem: 'Hapus',
+        labelTapToUndo: 'Tekan untuk membatalkan',
+        labelTapToCancel: 'Tekan untuk membatalkan',
+        labelFileProcessing: 'Mengupload',
+        labelFileProcessingComplete: 'Upload selesai',
+        labelFileProcessingAborted: 'Upload dibatalkan',
+        labelFileProcessingError: 'Terjadi kesalahan saat upload',
+        allowMultiple: true, // enable multiple file upload
+    });
+
+    FilePond.setOptions({
+        server: {
+            process: '/tmp/upload',
+            revert: '/tmp/revert',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+    });
+</script>
+
 
 {{-- tooltip --}}
 <script>
@@ -48,6 +90,7 @@
     });
 </script>
 
+{{-- this accordion for help (FAQ) --}}
 <script>
     const headers = document.querySelectorAll('.accordion-header');
 
@@ -60,40 +103,6 @@
     });
 </script>
 
-{{-- <script>
-    // Add a listener for the file input change event
-    const fileInput = document.getElementById('images');
-    fileInput.addEventListener('change', function() {
-        // Get the selected images
-        const images = fileInput.files;
-        // Loop through the selected images and create a preview for each image
-        for(let i=0; i<images.length; i++) {
-            const image = images[i];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('img-preview');
-                document.getElementById('preview-container').appendChild(img);
-            }
-            reader.readAsDataURL(image);
-        }
-    });
-</script> --}}
-
-{{-- <script>
-    // profile-photo.js
-
-    document.getElementById("profile-photo-input").addEventListener("change", function () {
-        document.getElementById("profile-photo-form").submit();
-    });
-</script> --}}
-
-{{-- <script>
-        document.getElementById("profile-photo-input").addEventListener("change", function() {
-        document.getElementById("profile-photo-form").submit();
-    }); 
-  </script> --}}
 
 
 {{-- modal image --}}
@@ -106,29 +115,10 @@
     });
 </script>
 
-{{-- <script>
-    const tabs = document.querySelectorAll(".a-nav");
-    const forms = document.querySelectorAll(".acc");
-
-    tabs.forEach(tab => {
-        tab.addEventListener("click", function () {
-            const id = this.id.replace("a-nav", "");
-            tabs.forEach(tab => {
-                tab.classList.remove("a-active");
-            });
-            this.classList.add("a-active");
-            contents.forEach(content => {
-                content.style.display = "none";
-            });
-            document.getElementById("acc" + id).style.display = "block";
-        });
-    });
-
-    document.getElementById("nav1").classList.add("a-active");
-    document.getElementById("accordioncontent1").style.display = "block";
-</script> --}}
 
 
+
+{{-- this for button accordion show --}}
 <script>
     function showAccordion(AccordionId, linkId) {
         var accordion1 = document.getElementById("accordion1");
@@ -162,14 +152,6 @@
         }
     }
 </script>
-{{-- <script>
-    $(document).ready(function(){
-    $('.menu-right').click(function(){
-        $('.menu-right').removeClass('active');
-        $(this).addClass('active');
-    });
-});
-</script> --}}
 
 
 {{-- lampiran --}}
@@ -181,12 +163,12 @@
 </script>
 
 
-{{-- map --}}
+{{-- this API map --}}
 <script>
     // you want to get it of the window global
     const providerOSM = new GeoSearch.OpenStreetMapProvider();
 
-    //leaflet map
+    //leaflet map registration
     var leafletMap = L.map('leafletMap-registration', {
         fullscreenControl: true,
         // OR

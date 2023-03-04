@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use App\Models\Kategori;
+use App\Models\Location;
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
 use App\Models\Masyarakat;
+use App\Models\FotoLaporan;
 use Illuminate\Http\Request;
+use App\Models\TemporaryImages;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -27,7 +34,12 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        return view('contents.user.dashboard');
+        $categories = Kategori::get();
+        if (Session::has('folder')) {
+            Session::remove('folder');
+            Session::remove('filename');
+        }
+        return view('contents.user.dashboard',compact('categories'));
     }
 
     public function updateinfopribadi(Request $request ,$nik)
@@ -192,25 +204,22 @@ class UserController extends Controller
 
     public function storePengaduan(Request $request)
     {
-        if (!Auth::guard('masyarakat')->user()) {
-            return redirect()->back()->with(['pesan' => 'Login dibutuhkan!'])->withInput();
-        }
 
-        $data = $request->all();
+        // $data = $request;
 
-        $validate = Validator::make($data, [
+        $validate = Validator::make($request->all(), [
             'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
             'lokasi_kejadian' => ['required'],
             'tgl_pengaduan'=> ['required'],
-            'images.*' => ['image','mimes:jpg,png,jpeg'],
+            'image.*' => ['image','mimes:jpg,png,jpeg'],
             // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
         ],[
             'judul_laporan.required' => 'Judul laporan harus diisi',
             'isi_laporan.required' => 'Isi laporan dibutuhkan',
             'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
             'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan',
-            'images.image' => 'Lampiran harus berupa foto',
+            'image.image' => 'Lampiran harus berupa foto',
             
         ]);
 
@@ -218,36 +227,56 @@ class UserController extends Controller
             return redirect()->back()->withInput()->withErrors($validate);
         }
 
-        $image = [];
-
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('foto-laporan');
-                $image[] = $path;
-            }
-        }
 
         date_default_timezone_set('Asia/Bangkok');
 
-        $pengaduan = Pengaduan::create([
-            'tgl_pengaduan' => date('Y-m-d h:i:s'),
-            'nik' => Auth::guard('masyarakat')->user()->nik,
-            'judul_laporan' => $data['judul_laporan'],
-            'isi_laporan' => $data['isi_laporan'],
-            'lokasi_kejadian' => $data['lokasi_kejadian'],
-            'longitude' => $data['longitude'] ?? '',
-            'latitude' => $data['latitude'] ?? '',
-            'hide_identitas' => $data['hide_identitas'] ?? '1',
-            'hide_laporan' => $data['hide_laporan'] ?? '1',
-            'foto' => implode('|', $image) ??'',
-            'status' => '0',
-        ]);
+       // Begin a transaction
+        DB::transaction(function () use ($request) {
+            // Create the pengaduan record and associate it with the location
+            $pengaduan = Pengaduan::create([
+                'tgl_pengaduan' => date('Y-m-d h:i:s'),
+                'nik' => Auth::guard('masyarakat')->user()->nik,
+                'id_kategori' => $request['id_kategori'] ?? '',
+                'judul_laporan' => $request['judul_laporan'],
+                'isi_laporan' => $request['isi_laporan'],
+                'hide_identitas' => $request['hide_identitas'] ?? '1',
+                'hide_laporan' => $request['hide_laporan'] ?? '1',
+                // 'report_main_image' => implode('|', $image) ??'',
+                'status' => '0',
+                // 'location_id' => $location->id,
+            ]);
 
-       
-            return redirect('/pengaduan/me')->with('success','Pengaduan berhasil terkirim');
+            $temporaryFolder = Session::get('folder');
+            $namefile = Session::get('filename');
 
+            for ($i = 0; $i < count($temporaryFolder); $i++) {
+            $tmp_file = TemporaryImages::where('folder', $temporaryFolder[$i])->where('file', $namefile[$i])->first();
+            if ($tmp_file) {
+              Storage::copy('posts/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/posts/' .$tmp_file->folder . '/' . $tmp_file->file);
+
+                FotoLaporan::create([
+                    'pengaduan_id' => $pengaduan->id_pengaduan,
+                    'folder' => $temporaryFolder[$i],
+                    'image' => $namefile[$i],
+                ]);
+                Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
+                $tmp_file->delete();
+            }
+        }
+            // Create the location record
+           Location::create([
+                'id_pengaduan' =>  $pengaduan->id_pengaduan,
+                'location' => $request['lokasi_kejadian'],
+                'latitude' => $request['latitude'] ?? '',
+                'longitude' => $request['longitude'] ?? '',
+            ]);
+
+        });
+
+        return redirect('/pengaduan/me')->with('success','Pengaduan berhasil terkirim');
         
     }
+
 
     public function profile($siapa = '')
     {
@@ -257,13 +286,15 @@ class UserController extends Controller
 
     public function pengaduan($active = '')
     {
-        $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
+        $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->latest()->get();
         $pending = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','0')->orderBy('tgl_pengaduan', 'desc')->get();
         $proses = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orderBy('tgl_pengaduan', 'desc')->get();
         $selesai = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orderBy('tgl_pengaduan', 'desc')->get();
         $report = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->first();
         // card
         $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orWhere('status','=','selesai')->count();
+        
+        // $data = FotoLaporan::all();
 
         return view('contents.user.report.pengaduan',compact('pengaduan','active','verif','selesai','report','proses'));
         // dd($pengaduan);
@@ -272,55 +303,79 @@ class UserController extends Controller
     public function editpengaduan($id_pengaduan)
     {
         $pengaduan = Pengaduan::where('id_pengaduan',$id_pengaduan)->first();
-        return view('contents.user.report.edit',compact('pengaduan'));
+        $categories = Kategori::get();
+        return view('contents.user.report.edit',compact('pengaduan','categories'));
     }
 
     public function updatepengaduan(Request $request, $id_pengaduan)
     {
-        $data = $request->all();
+        // $data = $request;
 
-        $validate = Validator::make($data, [
+        $validate = Validator::make($request->all(), [
             'judul_laporan' => ['required'],
             'isi_laporan' => ['required'],
             'lokasi_kejadian' => ['required'],
             'tgl_pengaduan'=> ['required'],
-            'images.*' => ['image','mimes:jpg,png,jpeg'],
+            'image.*' => ['image','mimes:jpg,png,jpeg'],
+            // 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
         ],[
             'judul_laporan.required' => 'Judul laporan harus diisi',
             'isi_laporan.required' => 'Isi laporan dibutuhkan',
             'lokasi_kejadian.required' => 'Lokasi kejadian dibutuhkan',
             'tgl_pengaduan.required' => 'Tanggal laporan dibutuhkan',
-            'images.image' => 'Lampiran harus berupa foto',
+            'image.image' => 'Lampiran harus berupa foto',
+            
         ]);
 
         if ($validate->fails()) {
             return redirect()->back()->withInput()->withErrors($validate);
         }
 
-        $image = [];
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('foto-laporan');
-                $image[] = $path;
+        date_default_timezone_set('Asia/Bangkok');
+
+      
+            $pengaduan = Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
+                'tgl_pengaduan' => date('Y-m-d h:i:s'),
+                'nik' => Auth::guard('masyarakat')->user()->nik,
+                'id_kategori' => $request['id_kategori'] ?? '',
+                'judul_laporan' => $request['judul_laporan'],
+                'isi_laporan' => $request['isi_laporan'],
+                'hide_identitas' => $request['hide_identitas'] ?? '1',
+                'hide_laporan' => $request['hide_laporan'] ?? '1',
+                // 'report_main_image' => implode('|', $image) ??'',
+                'status' => '0',
+                // 'location_id' => $location->id,
+            ]);
+
+            $temporaryFolder = Session::get('folder');
+            $namefile = Session::get('filename');
+
+            if(!is_null($temporaryFolder) && !is_null($namefile)){
+            for ($i = 0; $i < count($temporaryFolder); $i++) {
+            $tmp_file = TemporaryImages::where('folder', $temporaryFolder[$i])->where('file', $namefile[$i])->first();
+            if ($tmp_file) {
+              Storage::copy('posts/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/posts/' .$tmp_file->folder . '/' . $tmp_file->file);
+
+                FotoLaporan::create([
+                    'pengaduan_id' => $id_pengaduan,
+                    'folder' => $temporaryFolder[$i],
+                    'image' => $namefile[$i],
+                ]);
+                Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
+                $tmp_file->delete();
+
+                }
             }
         }
-
-        date_default_timezone_set('Asia/Jakarta');
-
-        Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
-            'tgl_pengaduan' => date('Y-m-d h:i:s'),
-            'nik' => Auth::guard('masyarakat')->user()->nik,
-            'judul_laporan' => $data['judul_laporan'],
-            'isi_laporan' => $data['isi_laporan'],
-            'lokasi_kejadian' => $data['lokasi_kejadian'],
-            'longitude' => $data['longitude'] ?? '',
-            'latitude' => $data['latitude'] ?? '',
-            'hide_identitas' => $data['hide_identitas'] ?? '1',
-            'hide_laporan' => $data['hide_laporan'] ?? '1',
-            'foto' => implode('|', $image) ??'',
-            'status' => '0',
+         
+          // Update the location record
+          Location::where('id_pengaduan', $id_pengaduan)->update([
+            'location' => $request['lokasi_kejadian'],
+            'latitude' => $request['latitude'] ?? '',
+            'longitude' => $request['longitude'] ?? '',
         ]);
+
 
         return redirect('/pengaduan/me')->with('success','Pengaduan berhasil diubah');
 

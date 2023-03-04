@@ -79,7 +79,7 @@
                         @endif
                     </div>
                     <div>
-                        <p>{{ $v->tgl_pengaduan->format('d,M,Y') }}</p>
+                        <p>{{ $v->tgl_pengaduan->format('d,M,Y')  }}</p>
                     </div>
                 </div>
             </div>

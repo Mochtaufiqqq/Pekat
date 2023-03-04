@@ -9,6 +9,9 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ForgotPasswordAdminController;
+use App\Http\Controllers\FotoController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\UploadController;
 /*
 |--------------------------------------------------------------------------
 | Admin & Officer
@@ -69,6 +72,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/pengaduan/detail/{id_pengaduan}', [AdminController::class,'detailpengaduan']);
         Route::post('/tanggapan/createOrUpdate',[AdminController::class,'createOrUpdate']);
         Route::delete('/pengaduan/delete/{id_pengaduan}', [AdminController::class,'destroypengaduan']);
+
+        // profile
+        Route::get('/profile/me',[AdminController::class,'profile']);
+        Route::put('/profile/me/update/{id_petugas}',[AdminController::class,'updateprofile']);
+        Route::put('/profile/me/update/password/{id_petugas}',[AdminController::class,'changePwPost']);
     });
 
 });
@@ -91,6 +99,8 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::get('/pengaduan/me/edit/{id_pengaduan}', [UserController::class, 'editpengaduan']);
     Route::put('/pengaduan/me/update/{id_pengaduan}', [UserController::class, 'updatepengaduan']);
     Route::delete('/pengaduan/me/delete/{id_pengaduan}', [UserController::class,'destroypengaduan']);
+    Route::delete('/pengaduan/image/delete', [UploadController::class, 'deleteImage']);
+
     
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     // update profile
@@ -134,6 +144,24 @@ Route::middleware(['guest'])->group(function() {
     Route::get('/help',[OthersController::class,'help']);
     Route::get('/contact-us', [OthersController::class, 'showForm']);
     Route::post('/contact-us', [OthersController::class, 'sendEmail']);
+
+
+    Route::get('/dropzone', [FotoController::class, 'store']);
+    Route::post('/dropzone/post', [FotoController::class, 'store'])->name('images.store');
+    Route::delete('/dropzone/{id}', [FotoController::class, 'destroy'])->name('images.destroy');
+
+    Route::controller(ImageController::class)->group(function () {
+        Route::get('/image', 'index');
+        Route::post('/submit', 'store')->name('submitImage');
+    });
     
+
+    Route::post('/tmp/upload', [UploadController::class, 'tmpUpload']);
+    Route::delete('/tmp/revert', [UploadController::class, 'tmpDelete']);
+    //route filepond
+    // Route::controller(UploadController::class)->group(function () {
+    //     Route::post('/upload', 'store')->name('upload');
+    //     Route::delete('/hapus', 'destroy')->name('hapus');
+    // });
 });
 
