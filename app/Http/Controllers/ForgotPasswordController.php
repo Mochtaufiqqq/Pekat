@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
         {
             foreach($getData as $data){            
             $generateToken = PasswordReset::create([
-                'nik_user'   =>  $data->nik,
+                'id_masyarakat'   =>  $data->id,
                 'token'     =>  Str::random(16),
             ]);
     
@@ -89,17 +89,17 @@ class ForgotPasswordController extends Controller
         $getUsers  = PasswordReset::where('token', $request->token)->get();
         foreach($getUsers as $user)
             // $validatedData['password'] = Hash::make($validatedData['password']);
-           Masyarakat::where('nik', $user->nik_user)->update([
+           Masyarakat::where('id', $user->id_masyarakat)->update([
                 'password' => Hash::make($request->password)
             ]);
         
 
-        $societies = Masyarakat::where('nik',$user->nik_user)->get();
+        $societies = Masyarakat::where('id',$user->id_masyarakat)->get();
 
         foreach($societies as $society )
 
 
-        PasswordReset::where('nik_user', $society->nik)->delete();
+        PasswordReset::where('id_masyarakat', $society->id)->delete();
         return redirect('/login')->with('success', 'Kata sandi berhasil diatur ulang silahkan login!');
     }
    

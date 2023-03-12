@@ -14,6 +14,8 @@
                 {{ session('success') }}
               </div>
               @endif
+
+             
             <div class="col-sm-6">
               
                 <h3>Pengaduan</h3>
@@ -56,8 +58,8 @@
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $p->tgl_pengaduan->format('d-M-Y') }}</td>
-                                    <td>{{ $p->nik }}</td>
-                                    <td>{{ $p->user->nama }}</td>
+                                    <td>{{ $p->user->nik ?? ''}}</td>
+                                    <td>{{ $p->user->nama ?? '' }}</td>
                                     <td>{{ Str::limit($p->isi_laporan,50) }}</td>
                                     <td>
                                         @if ($p->status == '0')
@@ -71,8 +73,10 @@
                                     <td>
                                         
                                         <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/pengaduan/detail/{{ $p->id_pengaduan }}">Detail</a>
+                                       
                                         <a class="btn btn-danger mb-2" style="background-color: #645CBB; color: white;" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $p->id_pengaduan }}" href="/admin/pengaduan/hapus/{{ $p->id_pengaduan }}">Hapus</a>
-
+                                
+                                      
                                         {{-- modal delete --}}
                                         <div class="modal fade" id="modalDelete{{ $p->id_pengaduan }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -83,7 +87,7 @@
                                                   </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Apakah anda yakin ingin menghapus pengaduan dari user yang bernama {{ $p->user->nama }} ?</p>
+                                                    <p>Apakah anda yakin ingin menghapus pengaduan dari user yang bernama {{ $p->user->nama ?? '' }} ?</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                   <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>

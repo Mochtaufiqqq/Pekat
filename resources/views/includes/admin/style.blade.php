@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="/admins/css/bootstrap.css">
 <!-- App css-->
 <link rel="stylesheet" type="text/css" href="/admins/css/style.css">
+<link rel="stylesheet" type="text/css" href="/admins/css/register.css">
 <link id="color" rel="stylesheet" href="/admins/css/color-1.css" media="screen">
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="/admins/css/responsive.css">

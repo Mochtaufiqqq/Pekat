@@ -16,20 +16,15 @@ return new class extends Migration
         Schema::create('pengaduans', function (Blueprint $table) {
             $table->id('id_pengaduan');
             $table->dateTime('tgl_pengaduan')->nullable();
-            $table->char('nik',16);
+            $table->foreignId('id_masyarakat');
             $table->foreignId('id_kategori')->nullable();
             $table->string('judul_laporan');
             $table->longText('isi_laporan');
-            // $table->longText('report_main_image')->nullable();
-            // $table->longText('lokasi_kejadian')->nullable();
-            // $table->string('latitude')->nullable();
-            // $table->string('longitude')->nullable();
             $table->enum('status', ['0','proses','selesai']);
             $table->string('hide_identitas')->default('1');
             $table->string('hide_laporan')->default('1');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('nik')->references('nik')->on('masyarakats');
         });
     }
 

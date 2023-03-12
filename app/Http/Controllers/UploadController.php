@@ -16,8 +16,8 @@ class UploadController extends Controller
        if ($request->hasFile('image')) { 
             $image = $request->file('image');
             $file_name = $image->getClientOriginalName();
-            $folder = uniqid('post', true);
-            $image->storeAs('posts/tmp/' . $folder, $file_name);
+            $folder = uniqid('complaint-image', true);
+            $image->storeAs('complaint-images/tmp/' . $folder, $file_name);
             TemporaryImages::create([
                 'folder' => $folder,
                 'file' => $file_name
@@ -35,18 +35,19 @@ class UploadController extends Controller
     {
        $tmp_file = TemporaryImages::where('folder', request()->getContent())->first();
         if($tmp_file) {
-            Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
+            Storage::deleteDirectory('complaint-images/tmp/' . $tmp_file->folder);
             $tmp_file->delete();
             return response('success');
         }
     }
 
+    // this not for filepond
     public function deleteImage(Request $request) {
         
         $foto_laporan = FotoLaporan::find($request->id);
       
             if ($foto_laporan) {
-            Storage::delete('posts/'.$foto_laporan->folder.'/'.$foto_laporan->image);
+            Storage::delete('complaint-images/'.$foto_laporan->folder.'/'.$foto_laporan->image);
             $foto_laporan->delete();
             return response()->json(['success' => true]);
             } else {

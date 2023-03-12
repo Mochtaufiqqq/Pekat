@@ -48,7 +48,7 @@ class PetugasController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return back()->withErrors($validate);
+            return back()->withInput()->withErrors($validate);
         }
 
         $username = Petugas::where('username', $data['username'])->first();
@@ -129,7 +129,8 @@ class PetugasController extends Controller
         
         $pdf = PDF::loadview('contents.admin.officer.reportpdf',[
             'officers'=> $officers,
-            ])->setOptions(['defaultFont' => 'sans-serif']);
+            ])->setOptions(['defaultFont' => 'sans-serif'])
+            ->setPaper('a4','landscape');
             return $pdf->download('Laporan-petugas.pdf');
             return redirect('/admin/petugas');
     }

@@ -22,13 +22,15 @@ class UserController extends Controller
 {
     public function index()
     {  
-        $pengaduan = Pengaduan::where('status', '!=', '0')->where('hide_identitas','!=','0')->where('hide_laporan','=','1')->orderBy('tgl_pengaduan','desc')->get();
+        $pengaduan = Pengaduan::where('status', '!=', '0')->where('hide_identitas','!=','0')->where('hide_laporan','=','1')->latest()->get();
         $verif = Masyarakat::whereNotNull('foto_ktp')->whereNotNull('tgl_lahir')->whereNotNull('alamat')->whereNotNull('telp')->count();
         $nonverif = Masyarakat::whereNull('foto_ktp')->orwhereNull('tgl_lahir')->count();
         $cp = Pengaduan::all();
+        $categories = Kategori::get();
         $ditanggapi = Tanggapan::get()->count();
+        
 
-        return view('contents.user.index',compact('pengaduan','verif','nonverif','cp','ditanggapi'));
+        return view('contents.user.index',compact('pengaduan','verif','nonverif','cp','ditanggapi','categories'));
         
     }
 
@@ -42,40 +44,50 @@ class UserController extends Controller
         return view('contents.user.dashboard',compact('categories'));
     }
 
-    public function updateinfopribadi(Request $request ,$nik)
+    public function updateinfopribadi(Request $request ,$id)
     {
-        $validatedData = $request->validate([
-            'alamat' => 'required',
-            'telp' => 'required',
-            'tgl_lahir' => 'required',
-            'foto_ktp' => 'image|mimes:jpg,png,jpeg|max:5000',
-            
+        $validator = Validator::make($request->all(), [
+            'nik' => ['required','min:16','max:16'],
+            'telp' => ['required'],
+            'tgl_lahir' => ['required'],
+            'foto_ktp' => ['mimes:jpg,jpeg,png','max:5000']
+        ],[
+            'nik.required' => 'Field ini tidak boleh kosong',
+            'nik.min' => 'NIK minimal 16 angka',
+            'nik.max' => 'NIK maksimal 16 angka',
+            'nik.unique' => 'NIK sudah terdaftar !',
+            'foto_ktp.mimes' => 'Field ini harus berupa foto'
         ]);
 
-        if ($request->file()) {
-            $fileName = time().$request->file('foto_ktp')->getClientOriginalName();
-            $path = $request->file('foto_ktp')->storeAs('ktp-society', $fileName);
-            $validatedData['foto_ktp'] = '/storage/' .$path;
+        if ($validator->fails()) {
+        return back()->withErrors($validator);
         }
 
-        Masyarakat::where('nik',$nik)->update($validatedData);
+        if($request->has('foto_ktp')){
+            $fileName = time() . $request->file('foto_ktp')->getClientOriginalName();
+            $path = $request->file('foto_ktp')->storeAs('ktp-society', $fileName);
+            $foto = '/storage/' .$path;
         
 
-        $options = [
-            'text' => 'Profil Berhasil diperbarui',
-            'duration' => 1560,
-            'newestOnTop' => true,
-            'gravity' => 'top',
-            'position' => 'right',
-            'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
-        ];
-    
+            Masyarakat::where('id',$id)->update([
+                'foto_ktp' => $foto,
+                'telp' => $request['telp'],
+                'tgl_Lahir' => $request['tgl_lahir'],
+            ]);
+        }
+
+        Masyarakat::where('id',$id)->update([
+            'nik' => $request['nik'],
+            'telp' => $request['telp'],
+            'tgl_Lahir' => $request['tgl_lahir'],
+        ]);
+        
         return redirect()->back()->with('success','Profil berhasil diperbarui');
 
 
     }
 
-    public function updateInfoPublic(Request $request , $nik)
+    public function updateInfoPublic(Request $request , $id)
     {
         $username = Masyarakat::where('username'. $request->username);
 
@@ -88,29 +100,31 @@ class UserController extends Controller
         ]);
         
 
+        if($request->has('foto_profil')){
+            $fileName = time() . $request->file('foto_profil')->getClientOriginalName();
+            $path = $request->file('foto_profil')->storeAs('profil-society', $fileName);
+            $foto_profil = '/storage/' .$path;
+        
+
+            Masyarakat::where('id',$id)->update([
+                'username' => $request['username'],
+                'foto_profil' => $foto_profil,
+                'nama' => $request['nama'],
+                'email' => $request['email'] ?? '',
+            ]);
+        }
+
         if($request['username'] === $username) {
-            Masyarakat::where('nik',$nik)->update([
+            Masyarakat::where('id',$id)->update([
                 'nama' => $request['nama'],
                 'email' => $request['email'] ?? '',
                 // 'foto_profil' => $request['foto_profil'] ?? '',
     
             ]);
         } else {
-            Masyarakat::where('nik',$nik)->update($validatedData);
+            Masyarakat::where('id',$id)->update($validatedData);
         }
 
-        // $options = [
-        //     'text' => 'Profil Berhasil diperbarui',
-        //     'duration' => 1560,
-        //     'newestOnTop' => true,
-        //     'gravity' => 'top',
-        //     'position' => 'right',
-        //     'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
-        // ];
-    
-        // $toast = new \stdClass();
-        // $toast->options = $options;
-        // $toast->message = 'Profil berhasil diperbarui';
     
         return redirect()->back()->with('success','Profil berhasil diperbarui');
            
@@ -123,22 +137,25 @@ class UserController extends Controller
 
     public function loginPost(Request $request)
     {
-        $username = Masyarakat::where('username', $request->username)->first();
+        $user = Masyarakat::where('username', $request->username)
+        ->orWhere('email', $request->username)
+        ->first();
 
-        if (!$username) {
-            return redirect()->back()->with(['pesan' => 'Username / Password anda salah !']);
+        if (!$user) {
+        return redirect()->back()->with(['pesan' => 'Username / Email / Password anda salah !']);
         }
 
-        $password = Hash::check($request->password, $username->password);
+        $password = Hash::check($request->password, $user->password);
 
         if (!$password) {
-            return redirect()->back()->with(['pesan' => 'Username / Password anda salah !']);
+        return redirect()->back()->with(['pesan' => 'Username / Email / Password anda salah !']);
         }
 
-        if (Auth::guard('masyarakat')->attempt(['username' => $request->username, 'password' => $request->password])) {
-            return redirect('/home');
+        if (Auth::guard('masyarakat')->attempt(['username' => $user->username, 'password' => $request->password])
+        || Auth::guard('masyarakat')->attempt(['email' => $user->email, 'password' => $request->password])) {
+        return redirect('/home');
         } else {
-            return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
+        return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
         }
     }
 
@@ -173,7 +190,7 @@ class UserController extends Controller
             ]);
 
         if ($validate->fails()) {
-            return redirect()->back()->with(['pesan' => $validate->errors()]);
+            return redirect()->back()->withInput()->with(['error' => $validate->errors()]);
         }
 
         $username = Masyarakat::where('username', $request->username)->first();
@@ -235,13 +252,12 @@ class UserController extends Controller
             // Create the pengaduan record and associate it with the location
             $pengaduan = Pengaduan::create([
                 'tgl_pengaduan' => date('Y-m-d h:i:s'),
-                'nik' => Auth::guard('masyarakat')->user()->nik,
+                'id_masyarakat' => Auth::guard('masyarakat')->user()->id,
                 'id_kategori' => $request['id_kategori'] ?? '',
                 'judul_laporan' => $request['judul_laporan'],
                 'isi_laporan' => $request['isi_laporan'],
                 'hide_identitas' => $request['hide_identitas'] ?? '1',
                 'hide_laporan' => $request['hide_laporan'] ?? '1',
-                // 'report_main_image' => implode('|', $image) ??'',
                 'status' => '0',
                 // 'location_id' => $location->id,
             ]);
@@ -249,18 +265,21 @@ class UserController extends Controller
             $temporaryFolder = Session::get('folder');
             $namefile = Session::get('filename');
 
+            if(!is_null($temporaryFolder) && !is_null($namefile)){
             for ($i = 0; $i < count($temporaryFolder); $i++) {
             $tmp_file = TemporaryImages::where('folder', $temporaryFolder[$i])->where('file', $namefile[$i])->first();
             if ($tmp_file) {
-              Storage::copy('posts/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/posts/' .$tmp_file->folder . '/' . $tmp_file->file);
+              Storage::copy('complaint-images/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/complaint-images/' .$tmp_file->folder . '/' . $tmp_file->file);
 
                 FotoLaporan::create([
                     'pengaduan_id' => $pengaduan->id_pengaduan,
                     'folder' => $temporaryFolder[$i],
                     'image' => $namefile[$i],
                 ]);
-                Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
+                Storage::deleteDirectory('complaint-images/tmp/' . $tmp_file->folder);
                 $tmp_file->delete();
+
+                }
             }
         }
             // Create the location record
@@ -286,13 +305,13 @@ class UserController extends Controller
 
     public function pengaduan($active = '')
     {
-        $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->latest()->get();
-        $pending = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','0')->orderBy('tgl_pengaduan', 'desc')->get();
-        $proses = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orderBy('tgl_pengaduan', 'desc')->get();
-        $selesai = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','selesai')->orderBy('tgl_pengaduan', 'desc')->get();
-        $report = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->first();
+        $pengaduan = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->latest()->get();
+        $pending = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->where('status','=','0')->latest()->get();
+        $proses = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->where('status','=','proses')->latest()->get();
+        $selesai = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->where('status','=','selesai')->latest()->get();
+        $report = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->first();
         // card
-        $verif = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->where('status','=','proses')->orWhere('status','=','selesai')->count();
+        $verif = Pengaduan::where('id_masyarakat', Auth::guard('masyarakat')->user()->id)->where('status','=','proses')->orWhere('status','=','selesai')->count();
         
         // $data = FotoLaporan::all();
 
@@ -337,7 +356,7 @@ class UserController extends Controller
       
             $pengaduan = Pengaduan::where('id_pengaduan',$id_pengaduan)->update([
                 'tgl_pengaduan' => date('Y-m-d h:i:s'),
-                'nik' => Auth::guard('masyarakat')->user()->nik,
+                'id_masyarakat' => Auth::guard('masyarakat')->user()->id,
                 'id_kategori' => $request['id_kategori'] ?? '',
                 'judul_laporan' => $request['judul_laporan'],
                 'isi_laporan' => $request['isi_laporan'],
@@ -355,14 +374,14 @@ class UserController extends Controller
             for ($i = 0; $i < count($temporaryFolder); $i++) {
             $tmp_file = TemporaryImages::where('folder', $temporaryFolder[$i])->where('file', $namefile[$i])->first();
             if ($tmp_file) {
-              Storage::copy('posts/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/posts/' .$tmp_file->folder . '/' . $tmp_file->file);
+              Storage::copy('complaint-images/tmp/' . $tmp_file->folder . '/' .$tmp_file->file, '/complaint-images/' .$tmp_file->folder . '/' . $tmp_file->file);
 
                 FotoLaporan::create([
                     'pengaduan_id' => $id_pengaduan,
                     'folder' => $temporaryFolder[$i],
                     'image' => $namefile[$i],
                 ]);
-                Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
+                Storage::deleteDirectory('complaint-images/tmp/' . $tmp_file->folder);
                 $tmp_file->delete();
 
                 }
@@ -387,19 +406,15 @@ class UserController extends Controller
         $pengaduan = Pengaduan::findOrFail($id_pengaduan);
 
         $pengaduan->delete();
-
-        $options = [
-            'text' => 'Pengaduan anda berhasil dihapus',
-            'duration' => 1560,
-            'newestOnTop' => true,
-            'gravity' => 'top',
-            'position' => 'right',
-            'backgroundColor' => 'linear-gradient(to right, rgb(0, 176, 155), rgb(150, 201, 61))',
-        ];
     
         return redirect('/pengaduan/me')->with('success','Pengaduan berhasil dihapus');
 
+    }
 
+    public function detailpengaduan($id_pengaduan){
+        $pengaduan = Pengaduan::where('id_pengaduan',$id_pengaduan)->first();
+
+        return view('contents.user.report.detail',compact('pengaduan'));
     }
     
     public function changepassword($active = ''){
@@ -407,7 +422,7 @@ class UserController extends Controller
         return view('contents.user.changepassword',compact('active'));
     }
 
-    public function changePwPost(Request $request, $nik)
+    public function changePwPost(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'old_password' => 'required',
@@ -429,7 +444,7 @@ class UserController extends Controller
             return back()->withErrors(['old_password' => 'Password lama salah']);
         }
 
-        Masyarakat::where('nik', $nik)->update([
+        Masyarakat::where('id', $id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 

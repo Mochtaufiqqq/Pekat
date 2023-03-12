@@ -29,7 +29,11 @@
                     @else
                     @endif
                     {{-- <i class="fa fa-camera"></i> --}}
+                    @if (Auth::guard('masyarakat')->user()->foto_profil)
+                    <img src="{{ asset(Auth::guard('masyarakat')->user()->foto_profil) }}" alt="user profile" class="photo">
+                    @else
                     <img src="{{ asset('images/user_default.svg') }}" alt="user profile" class="photo">
+                    @endif
 
 
                     <div class="self-align">
@@ -63,19 +67,28 @@
                     <small>Bagian <small style="color: red"> (*) </small>Dibutuhkan</small>
                 </div>
                 <div class="form mb-2" id="content1">
-                    <form action="/update/publik/{{ Auth::guard('masyarakat')->user()->nik }}" id="form1"
-                        style="display: block" method="POST">
+                    <form action="/update/publik/{{ Auth::guard('masyarakat')->user()->id }}" id="form1"
+                        style="display: block" method="POST" enctype="multipart/form-data">
                         @method('put')
                         @csrf
+                        <div class="form-group">
+                            <small class="text-muted">Foto profil</small>
+                            <img class="preview-image-profile img-fluid mb-2" width="200" height="auto">
+        
+                            <p>
+                            <input type="file" name="foto_profil" id="profile-image" onchange="previewImageProfile()"
+                                value="{{ Auth::guard('masyarakat')->user()->foto_profil }}">
+                            </p>
+                                @if ($errors->has('foto_profil'))
+                                <p>
+                                <small class="text-danger">{{ $errors->first('foto_profil') }}</small>
+                            </p>
+                                @endif
+                        </div>
                         <div class="form-group">
                             <small class="text-muted">Username <small style="color: red"> (*) </small></small>
                             <input class="form-control" type="text" placeholder="username"
                                 value="{{ Auth::guard('masyarakat')->user()->username }}" name="username">
-                            @error('username')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
 
                         </div>
                         <div class="form-group">
@@ -107,7 +120,7 @@
                     </form>
                 </div>
                 <div class="form mb-2" id="content2">
-                    <form action="/update/{{ Auth::guard('masyarakat')->user()->nik }}" method="POST" id="form2"
+                    <form action="/update/{{ Auth::guard('masyarakat')->user()->id }}" method="POST" id="form2"
                         style="display: none;" enctype="multipart/form-data">
                         @csrf
                         @method('put')
@@ -117,6 +130,14 @@
                             <input class="form-control" type="number" id="inputNumber" name="nik" placeholder="No Telp"
                                 value="{{ Auth::guard('masyarakat')->user()->nik }}">
                 </div> --}}
+                <div class="form-group">
+                    <small class="text-muted">NIK <small style="color: red"> (*) </small></small>
+                    <input class="form-control" type="number" id="inputNumber" name="nik" placeholder="No Telp"
+                        value="{{ Auth::guard('masyarakat')->user()->nik }}">
+                        @if ($errors->has('nik'))
+                            <small class="text-danger">{{ $errors->first('nik') }}</small>
+                            @endif
+                </div>
                 <div class="form-group">
                     <small class="text-muted">No Handphone <small style="color: red"> (*) </small></small>
                     <input class="form-control" type="number" id="inputNumber" name="telp" placeholder="No Telp"
@@ -138,17 +159,24 @@
                     <small class="text-muted">Foto KTP <small style="color: red"> (*) </small></small>
                     @if ($photo)
 
-                    <img src="{{ asset($photo) }}" class="img-preview img-fluid mb-2 col-sm-5 d-block gambar-lampiran"
-                        data-toggle="modal" data-target="#imageModal" data-src="{{ asset($photo) }}">
+                    <img src="{{ asset($photo) }}" class="img-preview img-fluid mb-2 d-block gambar-lampiran"
+                        data-toggle="modal" data-target="#imageModal" data-src="{{ asset($photo) }}" width="100" height="auto">
                     @else
-                    <img class="img-preview img-fluid mb-2 col-sm-5">
+                    <img class="img-preview img-fluid mb-2" width="200" height="auto">
                     @endif
-                    <img class="img-preview img-fluid mb-2">
+                    <img class="img-preview img-fluid mb-2" width="200" height="auto">
 
+                    <p>
                     <input type="file" name="foto_ktp" id="image" onchange="previewImage()"
                         value="{{ Auth::guard('masyarakat')->user()->foto_ktp }}">
+                    </p>
+                        @if ($errors->has('foto_ktp'))
+                        <p>
+                        <small class="text-danger">{{ $errors->first('foto_ktp') }}</small>
+                    </p>
+                        @endif
                 </div>
-                <div class="mt-2">
+                <div class="mt-5">
                     <button type="submit" class="btn btn-custom mt-2">Update</button>
                 </div>
                 </form>

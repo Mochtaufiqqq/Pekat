@@ -17,7 +17,7 @@
 
             <div class="menu menu-top shadow">
                 <div>
-                    <form action="/ubah/password/post/{{ Auth::guard('masyarakat')->user()->nik }}" method="POST">
+                    <form action="/ubah/password/post/{{ Auth::guard('masyarakat')->user()->id }}" method="POST">
                         @csrf
                         @method('put')
                         @if (Session::has('success'))

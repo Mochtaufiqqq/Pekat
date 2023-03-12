@@ -14,7 +14,7 @@ class Masyarakat extends Authenticatable
 
     protected $table = 'masyarakats';
 
-    protected $primaryKey = 'nik';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
     'nik',
@@ -25,7 +25,13 @@ class Masyarakat extends Authenticatable
     'password',
     'telp',
     'tgl_lahir',
-    'foto_ktp'
+    'foto_ktp',
+    'foto_profil'
 ];
+
+    public function pengaduan()
+    {
+        return $this->belongsTo(Pengaduan::class);
+    }
 
 }

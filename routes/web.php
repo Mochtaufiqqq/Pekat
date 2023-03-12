@@ -44,12 +44,8 @@ Route::prefix('admin')->group(function () {
 
         // society
         Route::get('/masyarakat',[AdminController::class,'showsociety']);
-        // Route::get('/masyarakat/edit/{nik}',[AdminController::class,'editsociety']);
-        // Route::put('/masyarakat/update/{nik}',[AdminController::class,'updatesociety']);
-        Route::get('/masyarakat/detail/{nik}',[AdminController::class,'detailsociety']);
-        Route::delete('/masyarakat/delete/{nik}', [AdminController::class,'destroysociety']);
-        // Route::get('/masyarakat/sampah',[AdminController::class,'societytrash']);
-        // Route::put('/masyarakat/restore/{nik}',[AdminController::class,'restoresociety']);
+        Route::get('/masyarakat/detail/{id}',[AdminController::class,'detailsociety']);
+        Route::delete('/masyarakat/delete/{id}', [AdminController::class,'destroysociety']);
 
         // profile
         Route::get('/profile/me',[AdminController::class,'profile']);
@@ -59,6 +55,7 @@ Route::prefix('admin')->group(function () {
         //report
        
         Route::get('/report/printpdf',[AdminController::class,'reportpdf']);
+        Route::get('/sampah/print',[AdminController::class,'printTrashPdf']);
         Route::get('/masyarakat/printpdf',[UserController::class,'printpdf']);
         Route::get('/petugas/printpdf',[PetugasController::class,'printpdf']);
     });
@@ -100,14 +97,15 @@ Route::middleware(['isMasyarakat'])->group(function() {
     Route::put('/pengaduan/me/update/{id_pengaduan}', [UserController::class, 'updatepengaduan']);
     Route::delete('/pengaduan/me/delete/{id_pengaduan}', [UserController::class,'destroypengaduan']);
     Route::delete('/pengaduan/image/delete', [UploadController::class, 'deleteImage']);
+    Route::post('/tmp/upload', [UploadController::class, 'tmpUpload']);
+    Route::delete('/tmp/revert', [UploadController::class, 'tmpDelete']);
 
-    
     Route::get('/logout', [UserController::class, 'logout'])->name('pekat.logout');
     // update profile
-    Route::put('/update/{nik}', [UserController::class, 'updateinfopribadi']);
-    Route::put('/update/publik/{nik}', [UserController::class, 'updateInfoPublic']);
+    Route::put('/update/{id}', [UserController::class, 'updateinfopribadi']);
+    Route::put('/update/publik/{id}', [UserController::class, 'updateInfoPublic']);
     Route::get('/ubah/password',[UserController::class,'changepassword']);
-    Route::put('/ubah/password/post/{nik}',[UserController::class,'changePwPost']);
+    Route::put('/ubah/password/post/{id}',[UserController::class,'changePwPost']);
 });
 
 /*
@@ -144,20 +142,9 @@ Route::middleware(['guest'])->group(function() {
     Route::get('/help',[OthersController::class,'help']);
     Route::get('/contact-us', [OthersController::class, 'showForm']);
     Route::post('/contact-us', [OthersController::class, 'sendEmail']);
+    Route::get('/pengaduan/detail/{id_pengaduan}',[UserController::class,'detailpengaduan']);
 
 
-    Route::get('/dropzone', [FotoController::class, 'store']);
-    Route::post('/dropzone/post', [FotoController::class, 'store'])->name('images.store');
-    Route::delete('/dropzone/{id}', [FotoController::class, 'destroy'])->name('images.destroy');
-
-    Route::controller(ImageController::class)->group(function () {
-        Route::get('/image', 'index');
-        Route::post('/submit', 'store')->name('submitImage');
-    });
-    
-
-    Route::post('/tmp/upload', [UploadController::class, 'tmpUpload']);
-    Route::delete('/tmp/revert', [UploadController::class, 'tmpDelete']);
     //route filepond
     // Route::controller(UploadController::class)->group(function () {
     //     Route::post('/upload', 'store')->name('upload');

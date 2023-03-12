@@ -32,15 +32,7 @@
             <input type="hidden" name="longitude" id="longitude" value="{{ $pengaduan->Location ? $pengaduan->Location->longitude : '' }}">
             <input type="hidden" name="latitude" id="latitude" value="{{ $pengaduan->Location ? $pengaduan->Location->latitude : '' }}">
 
-            <div class="form-group">
-                <label for="id_kategori">Kategori</label>
-                <select name="id_kategori" class="form-control">
-                    <option disabled>Pilih kategori</option>
-                    @foreach ($categories as $k)
-                        <option value="{{ $k->id }}" {{ $pengaduan->id_kategori == $k->id ? 'selected' : '' }}>{{ $k->kategori }}</option>
-                    @endforeach
-                </select>
-            </div>
+    
             <div class="form-group">
                 <label class="text-sm" for="judul_laporan">Judul Laporan</label>
                 <input class="form-control" type="text" name="judul_laporan" placeholder="Masukan Judul Laporan"
@@ -67,6 +59,12 @@
             </div>
             <div class="form-group">
                 <label class="text-sm" for="tgl_pengaduan">Lokasi Kejadian</label>
+                <p>
+                <small class="text-muted">Tentukan titik lokasi</small>
+            </p>
+                <div id="locationContent" class="mb-3">
+                    <div id="leafletMap-registration" style=""></div>
+                </div>
                 <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2"
                     placeholder="Lokasi kejadian"
                     value="{{ $pengaduan->Location ? $pengaduan->Location->location : '' }}">{{ $pengaduan->Location ? $pengaduan->Location->location : '' }}</textarea>
@@ -74,12 +72,16 @@
                 <div class="text-danger-custom">{{ $errors->first('lokasi_kejadian') }}</div>
                 @endif
             </div>
-            <div id="locationContent" class="mb-3">
-                <div id="leafletMap-registration" style=""></div>
-            </div>
+            
 
-            <div class="div">
-
+            <div class="form-group">
+                <label for="id_kategori">Kategori</label>
+                <select name="id_kategori" class="form-control">
+                    <option disabled>Pilih kategori</option>
+                    @foreach ($categories as $k)
+                        <option value="{{ $k->id }}" {{ $pengaduan->id_kategori == $k->id ? 'selected' : '' }}>{{ $k->kategori }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
@@ -87,13 +89,13 @@
             </div>
 
             <div class="form-group" id="myContent" style="display: none;">
-                <input type="file" name="image" class='filepond' multiple data-allow-reorder="true" data-max-file-size="50MB">
+                <input type="file" name="image" class='filepond' multiple data-allow-reorder="true" data-max-file-size="50MB" id="filepond">
 
                 <div class="row mt-3">
                     @foreach($pengaduan->Images as $foto)
                     <div class="col-sm-4">
                         <div class="image-container" data-id="{{ $foto->id }}">
-                            <img src="{{ asset('storage/posts/'.$foto->folder.'/'.$foto->image) }}" width="200" height="auto">
+                            <img src="{{ asset('storage/complaint-images/'.$foto->folder.'/'.$foto->image) }}" width="200" height="auto">
                             <button class="btn btn-danger delete-btn"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </div>

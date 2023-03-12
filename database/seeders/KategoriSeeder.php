@@ -24,7 +24,31 @@ class KategoriSeeder extends Seeder
         ]);
 
         Kategori::create([
+            'kategori' => 'Lingkungan'
+        ]);
+
+        Kategori::create([
             'kategori' => 'Bencana Alam'
+        ]);
+
+        Kategori::create([
+            'kategori' => 'Fasilitas Umum'
+        ]);
+
+        Kategori::create([
+            'kategori' => 'Layanan Publik'
+        ]);
+
+        Kategori::create([
+            'kategori' => 'Permohonan Informasi'
+        ]);
+
+        Kategori::create([
+            'kategori' => 'Aspirasi'
+        ]);
+
+        Kategori::create([
+            'kategori' => 'Lainnya'
         ]);
     }
 }

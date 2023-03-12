@@ -77,7 +77,12 @@
                                 @endif
                                 <div class="col-lg-12">
                                     <div class="pengaduan-top">
+                                        @if (Auth::guard('masyarakat')->user()->foto_profil)
+                                        <img src="{{ asset(Auth::guard('masyarakat')->user()->foto_profil) }}" alt="profile" class="profile">
+                                            
+                                        @else
                                         <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
+                                        @endif
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <p>{{ $v->user->nama }}</p>
@@ -101,7 +106,8 @@
                                             {{ $v->judul_laporan }}
                                         </div>
                                         <div>
-                                            <p>{{ $v->isi_laporan }}</p>
+                                            <p>{{ Str::limit($v->isi_laporan,200) }} </p>
+                                           
                                         </div>
                                     </div>
                                     <div class="pengaduan-bottom">
@@ -109,27 +115,33 @@
                                         @if ($v->Images != '')
                                         @foreach ($v->Images as $key => $item)
 
-                                        <img src="{{ asset('storage/posts/' .$item->folder. '/' .$item->image) ?? ''}}" 
-                                        class="gambar-lampiran mb-4" data-toggle="modal" data-target="#imageModal"
-                                            data-src="{{ asset('/storage/posts/' .$item->folder. '/' .$item->image) ?? '' }}">
+                                        <img src="{{ asset('storage/complaint-images/' .$item->folder. '/' .$item->image) ?? ''}}" 
+                                        class="gambar-lampiran mb-1" data-toggle="modal" data-target="#imageModal"
+                                            data-src="{{ asset('/storage/complaint-images/' .$item->folder. '/' .$item->image) ?? '' }}">
 
                                         @endforeach
                                         @endif
 
                                         @if ($v->Location && $v->Location->location != '')
-                                        <p>
-                                            <i class="fas fa-map-marker-alt"></i> <small class="text-muted">{{ $v->Location->location ?? '' }}</small>
-                                        </p>
+                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $v->Location->latitude }},{{ $v->Location->longitude }}"> 
+                                            <p><i class="fas fa-map-marker-alt"></i> 
+                                            <small class="text-muted">{{ $v->Location->location ?? '' }}</small>
+                                            </p>
+                                          </a>
                                         @endif
 
-                                        @if ($v->status == 0)
                                         <p class="mt-3 mb-2">
-                                            <a href="/pengaduan/me/edit/{{ $v->id_pengaduan }}">Edit</a>
+                                            @if ($v->status == 0)
+                                            <a style="text-decoration: none;" href="/pengaduan/detail/{{ $v->id_pengaduan }}">Detail</a>
+                                            <a class="ml-3" href="/pengaduan/me/edit/{{ $v->id_pengaduan }}" style="text-decoration: none;">Edit</a>
                                             <a class="ml-3" data-toggle="modal"
-                                                data-target="#modalDelete{{ $v->id_pengaduan }}"
-                                                href="/pengaduan/me/delete/{{ $v->id_pengaduan }}">Hapus</a>
+                                            data-target="#modalDelete{{ $v->id_pengaduan }}"
+                                            href="/pengaduan/me/delete/{{ $v->id_pengaduan }}" style="text-decoration: none;">Hapus</a>
+                                            @else
+                                            <a style="text-decoration: none;" href="/pengaduan/detail/{{ $v->id_pengaduan }}">Detail</a>
+                                            
+                                                @endif
                                         </p>
-                                        @endif
 
                                         @if ($v->tanggapan != null)
                                         <hr>

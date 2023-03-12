@@ -44,7 +44,7 @@ class ForgotPasswordAdminController extends Controller
             ]);
     
             $token = $generateToken->token;
-            Mail::send('contents.admin.auth.forgot.resetPassword', ['token' => $token, 'nama' => $data->nama], function($message) use($request){
+            Mail::send('contents.admin.auth.forgot.resetPassword', ['token' => $token, 'nama_petugas' => $data->nama_petugas], function($message) use($request){
                 $message->to($request->email)->subject('Atur Ulang Kata Sandi');
             });
     

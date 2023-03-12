@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('password_resets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('nik_user')->nullable();
+            $table->foreignId('id_masyarakat')->nullable();
             $table->foreignId('petugas_id')->nullable();
             $table->string('token');
             $table->timestamps();

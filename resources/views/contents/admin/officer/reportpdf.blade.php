@@ -7,10 +7,11 @@
 
 <body>
     <div class="text-center">
-        <h4>Laporan Data Petugas</h4>
+        <center><h4>Laporan Data Petugas</h4></center>
+
     </div>
     <div class="container">
-        <table class="table-bordered">
+        <table class="table bordered">
             <thead>
                 <tr>
                     <th>No</th>

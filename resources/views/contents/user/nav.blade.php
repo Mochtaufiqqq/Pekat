@@ -23,7 +23,7 @@
                             <a class="nav-link ml-3 text-white" href="/home">Home</a>
                         </li>
                         
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" style="z-index: 1001;">
                             <a class="nav-link ml-4 dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               {{ Auth::guard('masyarakat')->user()->nama }}
                             </a>
@@ -38,9 +38,31 @@
                     </ul>
                     @else
                     <ul class="navbar-nav text-center ml-auto">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <button class="btn text-white" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#loginModal">Masuk</button>
+                                data-target="#loginModal">Tentang kami</button>
+                        </li> --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link ml-3 text-white" href="/contact-us">Hubungi Kami</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ml-3 text-white" href="/help">Bantuan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ml-3 text-white" href="/">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link ml-2 dropdown-toggle text-white" href="/profile" id="navbarDropdown"
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Masuk
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/login">Masuk sebagai masyarakat</a>
+                                <a class="dropdown-item" href="/admin/login">Masuk sebagai admin</a>
+                                {{-- <a class="dropdown-item" href="#">Ubah Password</a> --}}
+
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('pekat.formRegister') }}" class="btn btn-outline-purple">Daftar</a>

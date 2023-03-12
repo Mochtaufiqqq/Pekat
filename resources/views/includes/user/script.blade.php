@@ -34,7 +34,7 @@
     // Register plugin for preview image
     FilePond.registerPlugin(FilePondPluginImagePreview);
 
-    const inputElement = document.querySelector('input[type="file"]');
+    const inputElement = document.querySelector('#filepond');
 
     // Create a FilePond instance
     const pond = FilePond.create(inputElement, {
@@ -140,10 +140,26 @@
     }
 </script>
 
+{{-- photo ktp preview --}}
 <script>
     function previewImage() {
         const image = document.querySelector('#image');
         const imgPreview = document.querySelector('.img-preview');
+        imgPreview.style.display = 'block';
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+        oFReader.onload = function (oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
+
+
+{{-- profile photo preview --}}
+<script>
+    function previewImageProfile() {
+        const image = document.querySelector('#profile-image');
+        const imgPreview = document.querySelector('.preview-image-profile');
         imgPreview.style.display = 'block';
         const oFReader = new FileReader();
         oFReader.readAsDataURL(image.files[0]);
@@ -166,7 +182,11 @@
 {{-- this API map --}}
 <script>
     // you want to get it of the window global
-    const providerOSM = new GeoSearch.OpenStreetMapProvider();
+    const providerOSM = new GeoSearch.OpenStreetMapProvider({
+        params: {
+        'accept-language': 'id'
+        }
+    });
 
     //leaflet map registration
     var leafletMap = L.map('leafletMap-registration', {
@@ -220,6 +240,7 @@
 
     const search = new GeoSearch.GeoSearchControl({
         provider: providerOSM,
+        notFoundMessage: 'Maaf, sepertinya lokasi tidak ditemukan.',
         style: 'bar',
         searchLabel: 'Cari',
     });
@@ -234,3 +255,23 @@
         content.style.display = (content.style.display === "block") ? "none" : "block";
     });
 </script>
+
+
+{{-- <script>
+    const latitude = {{ $pengaduan->Location->latitude ?? 0 }};
+    const longitude = {{ $pengaduan->Location->longitude ?? 0 }};
+
+    // Create map
+    var map = L.map('map').setView([latitude, longitude], 13);
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+    // Add marker
+    L.marker([latitude, longitude]).addTo(map);
+</script> --}}

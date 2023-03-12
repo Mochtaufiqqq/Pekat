@@ -6,7 +6,7 @@
     
 <body>
     <div class="text-center">
-        <center><h3>Laporan Pengaduan</h3></center>
+        <center><h3>Laporan Pengaduan Yang Telah Dihapus</h3></center>
     </div>
     <div class="container">
         <table class="table bordered">

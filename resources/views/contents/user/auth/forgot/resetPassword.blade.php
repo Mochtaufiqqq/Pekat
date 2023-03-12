@@ -1,4 +1,4 @@
-<p>Hello, </p>
+<p>Hallo, {{ $nama }} </p>
 
 <p>Kami menerima permintaan untuk mengatur ulang kata sandi untuk akun Anda. Jika Anda membuat permintaan ini, ikuti petunjuk di bawah ini:</p>
 

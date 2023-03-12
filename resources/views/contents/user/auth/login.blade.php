@@ -29,7 +29,7 @@
                             @endif
                             
                             <div class="form-group">
-                                <label>Username</label>
+                                <label>Username / Email</label>
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input class="form-control" type="text" name="username" required=""
                                         placeholder="Username">
@@ -40,7 +40,6 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input class="form-control" type="password" name="password" required=""
                                         placeholder="*********">
-                                    <div class="show-hide"><span class="show"> </span></div>
                                 </div>
                             </div>
                             <div class="form-group">

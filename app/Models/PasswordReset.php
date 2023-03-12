@@ -11,11 +11,11 @@ class PasswordReset extends Model
 
     protected $table = 'password_resets';
 
-    protected $fillable = ['nik_user','petugas_id','token'];
+    protected $fillable = ['id_masyarakat','petugas_id','token'];
 
     public function user()
     {
-        return $this->hasMany(Masyarakat::class,'nik_user');
+        return $this->hasMany(Masyarakat::class,'id_masyarakat');
     }
 
     public function officer()

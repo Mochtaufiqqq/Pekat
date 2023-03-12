@@ -16,7 +16,7 @@ class ComplaintSeeder extends Seeder
     public function run()
     {
         Pengaduan::create([
-            'nik' => '32091030',
+            'id_masyarakat' => '1',
             'judul_laporan' => 'Jalan Rusak',
             'tgl_pengaduan' => '21-08-2023',
             'isi_laporan' => 'Beberapa jalan terlihat berlubang,sangat membahayakan sekali bagi pengendara terutama pada saat malam hari karena lampu penerangan tidak terlalu terang.',
@@ -28,7 +28,7 @@ class ComplaintSeeder extends Seeder
         ]);
 
         Pengaduan::create([
-            'nik' => '32091030',
+            'id_masyarakat' => '1',
             'judul_laporan' => 'Banjir',
             'tgl_pengaduan' => '21-08-2023',
             'isi_laporan' => 'Beberapa pemukiman tergenang air banjir dari sungai citarum ketinggian air sekitar 1 meter,sampai saat ini belum turun bantuan maupun tindakan dari instasi pemerintah mohon ditindak lanjuti.',
@@ -40,7 +40,7 @@ class ComplaintSeeder extends Seeder
         ]);
 
         Pengaduan::create([
-            'nik' => '32091031',
+            'id_masyarakat' => '2',
             'judul_laporan' => 'Listrik',
             'tgl_pengaduan' => '12-07-2023',
             'isi_laporan' => 'Listrik di desa kami mengalami padam sudah 2 hari listrik padam.',
@@ -52,7 +52,7 @@ class ComplaintSeeder extends Seeder
         ]);
 
         Pengaduan::create([
-            'nik' => '32091031',
+            'id_masyarakat' => '3',
             'judul_laporan' => 'Bangunan liar',
             'tgl_pengaduan' => '21-09-2023',
             'isi_laporan' => 'Terlihat bangunan liar pinggir jalan yang sudah berdiri 1 bulan yang lalu bangunan itu sangat menggangu karena bangunan tidak rapih serta membahayakan pengendara karena lokasinya sangat berdempetan dengan jalan raya .',

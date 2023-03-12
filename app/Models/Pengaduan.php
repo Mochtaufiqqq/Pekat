@@ -18,7 +18,7 @@ class Pengaduan extends Model
 
     protected $fillable = [
     'tgl_pengaduan',
-    'nik',
+    'id_masyarakat',
     'id_kategori',
     'judul_laporan',
     'isi_laporan',
@@ -33,9 +33,9 @@ class Pengaduan extends Model
 
     protected $dates = ['tgl_pengaduan','deleted_at'];
 
-    public function user ()
+    public function user()
     {
-        return $this->hasOne(Masyarakat::class,'nik','nik');
+        return $this->hasOne(Masyarakat::class,'id','id_masyarakat');
     }
 
     public function tanggapan()
@@ -55,7 +55,7 @@ class Pengaduan extends Model
 
     public function Kategori()
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(Kategori::class,'id_kategori');
     }
 
 

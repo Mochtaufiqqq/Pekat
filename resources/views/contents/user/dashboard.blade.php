@@ -38,18 +38,7 @@
         <input type="hidden" name="longitude" id="longitude">
         <input type="hidden" name="latitude" id="latitude">
 
-        <div class="form-group">
-            <label class="text-sm" for="judul_laporan">Kategori</label>
-            <select name="id_kategori" class="form-control">
-                <option selected disabled>Pilih Kategori</option>
-                @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->kategori }}</option>
-                @endforeach
-            </select>
-            @if ($errors->has('id_kategori'))
-            <div class="text-danger-custom">{{ $errors->first('id_kategori') }}</div>
-            @endif
-        </div>
+
 
         <div class="form-group">
             <label class="text-sm" for="judul_laporan">Judul Laporan</label>
@@ -75,54 +64,74 @@
             <div class="text-danger-custom">{{ $errors->first('tgl_pengaduan') }}</div>
             @endif
         </div>
+        
         <div class="form-group">
             <label class="text-sm" for="tgl_pengaduan">Lokasi Kejadian</label>
+            <p>
+                <small class="text-muted">Tentukan titik lokasi</small>
+            </p>
+            <div id="locationContent" class="mb-3">
+            
+                <div id="leafletMap-registration" style=""></div>
+            </div>
             <textarea class="form-control" name="lokasi_kejadian" id="address" rows="2" placeholder="Lokasi kejadian"
                 value="{{ old('lokasi_kejadian') }}">{{ old('lokasi_kejadian') }}</textarea>
-        @if ($errors->has('lokasi_kejadian'))
-        <div class="text-danger-custom">{{ $errors->first('lokasi_kejadian') }}</div>
-        @endif
-</div>
-<div id="locationContent" class="mb-3">
-    <div id="leafletMap-registration" style=""></div>
-</div>
+            @if ($errors->has('lokasi_kejadian'))
+            <div class="text-danger-custom">{{ $errors->first('lokasi_kejadian') }}</div>
+            @endif
+        </div>
 
+        <div class="form-group">
+            <label class="text-sm" for="judul_laporan">Kategori Laporan</label>
+            <select name="id_kategori" class="form-control">
+                <option selected disabled>Pilih Kategori</option>
+                @foreach ($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->kategori }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('id_kategori'))
+            <div class="text-danger-custom">{{ $errors->first('id_kategori') }}</div>
+            @endif
+        </div>
+        
+        <div class="mb-3">
+            <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
+            @if ($errors->has('images'))
+            <div class="text-danger-custom">{{ $errors->first('images') }}</div>
+            @endif
+        </div>
 
+        <div class="form-group" id="myContent" style="display: none;">
 
-<div class="mb-3">
-    <a id="myButton"><i class="fas fa-paperclip" style="text-decoration: none; "></i> Lampiran</a>
-    @if ($errors->has('images'))
-    <div class="text-danger-custom">{{ $errors->first('images') }}</div>
-    @endif
-</div>
+            <input type="file" name="image" class="filepond" multiple data-allow-reorder="true"
+                data-max-file-size="50MB" id="filepond">
+            {{-- <div id="preview-container"></div> --}}
+        </div>
 
-<div class="form-group" id="myContent" style="display: none;">
+        
+        <hr>
+        <div class="form-check">
+            <div class="row text-center mb-3">
+                <div class="col-6">
+                    <input type="checkbox" name="hide_identitas" value="2" class="form-check-input"
+                        data-toggle="tooltip" data-placement="top" title="Nama anda tidak akan terpublish"
+                        value="{{ old('hide_identitas') }}">
+                    <label class="form-check-label" for="exampleCheck1">Anonim</label>
 
-    <input type="file" name="image" class='filepond' multiple data-allow-reorder="true" data-max-file-size="50MB">
-    {{-- <div id="preview-container"></div> --}}
-</div>
-
-<hr>
-<div class="form-check">
-    <div class="row text-center mb-3">
-        <div class="col-6">
-            <input type="checkbox" name="hide_identitas" value="2" class="form-check-input" data-toggle="tooltip"
-                data-placement="top" title="Nama anda tidak akan terpublish" value="{{ old('hide_identitas') }}">
-            <label class="form-check-label" for="exampleCheck1">Anonim</label>
+                </div>
+                <div class="col-6">
+                    <input type="checkbox" name="hide_laporan" value="2" class="form-check-input" data-toggle="tooltip"
+                        data-placement="top" title="Laporan anda tidak dapat dilihat publik"
+                        value="{{ old('hide_laporan') }}">
+                    <label class="form-check-label" for="exampleCheck1">Rahasia</label>
+                </div>
+            </div>
 
         </div>
-        <div class="col-6">
-            <input type="checkbox" name="hide_laporan" value="2" class="form-check-input" data-toggle="tooltip"
-                data-placement="top" title="Laporan anda tidak dapat dilihat publik" value="{{ old('hide_laporan') }}">
-            <label class="form-check-label" for="exampleCheck1">Rahasia</label>
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-custom mt-2">Kirim</button>
         </div>
-    </div>
-
-</div>
-
-<div class="text-center mt-3">
-    <button type="submit" class="btn btn-custom mt-2">Kirim</button>
-</div>
 </div>
 </div>
 </div>

@@ -50,7 +50,7 @@
                                     <label class="form-label">Username</label>
                                     <div class="input-group">
                                         <input class="form-control @error('username') is-invalid @enderror" type="text"
-                                            name="username" placeholder="Username">
+                                            name="username" placeholder="Username" value="{{ old('username') }}">
                                     </div>
                                     @if ($errors->has('username'))
                                     <div class="text-danger">{{ $errors->first('username') }}</div>
@@ -59,7 +59,7 @@
                                 <div class="mb-3 m-form__group">
                                     <label class="form-label">Alamat</label>
                                     <div class="input-group">
-                                        <textarea class="form-control @error('email') is-invalid @enderror" name="alamat" id="" rows="2" placeholder="Alamat"></textarea >
+                                        <textarea class="form-control @error('email') is-invalid @enderror" name="alamat" id="" rows="2" placeholder="Alamat">{{ old('alamat') }}</textarea >
                                     </div>
                                     @if ($errors->has('alamat'))
                                     <div class="text-danger">{{ $errors->first('alamat') }}</div>
@@ -69,7 +69,7 @@
                                     <label class="form-label">Email</label>
                                     <div class="input-group">
                                         <input class="form-control @error('email') is-invalid @enderror" type="email"
-                                            name="email" placeholder="contoh@gmail.com">
+                                            name="email" placeholder="contoh@gmail.com" value="{{ old('email') }}">
                                     </div>
                                     @if ($errors->has('email'))
                                     <div class="text-danger">{{ $errors->first('email') }}</div>
@@ -79,7 +79,7 @@
                                     <label class="form-label">Telp</label>
                                     <div class="input-group">
                                         <input class="form-control @error('telp') is-invalid @enderror" type="number"
-                                            name="telp" placeholder="contoh:08909890" id="inputNumber">
+                                            name="telp" placeholder="contoh:08909890" id="inputNumber" value="{{ old('telp') }}">
                                     </div>
                                     @if ($errors->has('telp'))
                                     <div class="text-danger">{{ $errors->first('telp') }}</div>

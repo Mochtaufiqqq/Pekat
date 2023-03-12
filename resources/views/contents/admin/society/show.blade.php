@@ -14,6 +14,14 @@
                 {{ session('success') }}
               </div>
               @endif
+
+              @if (session('error'))
+              <div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error ! </strong>
+                  <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close" data-bs-original-title="" title=""></button>
+                  {{ session('error') }}
+                </div>
+                @endif
+                
             <div class="col-sm-6">
               
                 <h3>Masyarakat</h3>
@@ -56,11 +64,11 @@
                                     <td>{{ $s->email }}</td>
                                     <td>
                                       <div class="mx-auto">
-                                        <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->nik }}">Detail</a>
-                                        <a class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->nik }}" href="/admin/masyarakat/delete/{{ $s->nik }}">Hapus</a>
+                                        <a class="btn mb-2" style="background-color: #645CBB; color: white;" href="/admin/masyarakat/detail/{{ $s->id }}">Detail</a>
+                                        <a class="btn btn-danger mb-2" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $s->id }}" href="/admin/masyarakat/delete/{{ $s->id }}">Hapus</a>
                                       </div>
                                          {{-- modal delete --}}
-                                   <div class="modal fade" id="modalDelete{{ $s->nik }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                   <div class="modal fade" id="modalDelete{{ $s->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                       <div class="modal-content">
                                         <div class="modal-header">
@@ -73,7 +81,7 @@
                                         </div>
                                         <div class="modal-footer">
                                           <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
-                                          <form action="/admin/masyarakat/delete/{{ $s->nik }}" method="POST">
+                                          <form action="/admin/masyarakat/delete/{{ $s->id }}" method="POST">
                                             @csrf
                                             @method('delete')
                                           <button class="btn btn-primary" type="submit">Yakin</button>

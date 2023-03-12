@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('foto_laporans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pengaduan_id')->nullable();
+            $table->foreignId('pengaduan_id');
             $table->string('folder')->nullable();
             $table->string('image');
             $table->timestamps();

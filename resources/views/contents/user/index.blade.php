@@ -2,7 +2,7 @@
 
 
 @section('title','Layanan Pengaduan Masyarakat')
-    
+
 
 @section('content')
 {{-- Section Header --}}
@@ -19,11 +19,20 @@
                             <h5 class="card-subtitle mb-3">Jumlah Akun Terdaftar</h5>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <h2 class="mb-2 counter" data-max="{{ $verif }}">0</h2>
+                                    <div class="d-flex">
+                                        <div class="icon" style="background-color: #83e45f; width: 11px; height: 11px;
+                                        border-radius: 50%; margin-top: 10px;"></div>
+                                        <h2 class="mb-2 counter ml-2" data-max="{{ $verif }}">0</h2>
+                                    </div>
                                     <p class="mb-2 text-muted">Terverifikasi</p>
                                 </div>
+                                
                                 <div class="col-sm-6">
-                                    <h2 class="mb-2 counter" data-max="{{ $nonverif }}">0</h2>
+                                    <div class="d-flex">
+                                        <div class="icon" style="background-color: #fd4d31; width: 11px; height: 11px;
+                                        border-radius: 50%; margin-top: 10px;"></div>
+                                        <h2 class="mb-2 counter ml-2" data-max="{{ $nonverif }}">0</h2>
+                                    </div>
                                     <p class="mb-2 text-muted">Belum Terverifikasi</p>
                                 </div>
                             </div>
@@ -34,7 +43,12 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-subtitle text-center mb-3">Pengaduan</h4>
-                            <h2 class="mb-2 text-center counter" data-max="{{ $cp->count() }}" >0</h2>
+                            <div class="d-flex justify-content-center">
+                                <div class="icon" style="background-color: #36baff; width: 11px; height: 11px;
+                                border-radius: 50%; margin-top: 10px;"></div>
+                                <h2 class="mb-2 text-center counter ml-2" data-max="{{ $cp->count() }}">0</h2>
+                                
+                            </div>
                             <p class="mb-0 text-muted text-center">Total Pengaduan</p>
                         </div>
                     </div>
@@ -43,7 +57,11 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-subtitle mb-3 text-center">Ditanggapi</h4>
-                            <h2 class="mb-2 counter text-center" data-max="{{ $ditanggapi }}">0</h2>
+                            <div class="d-flex justify-content-center">
+                                <div class="icon" style="background-color: #3cae12; width: 11px; height: 11px;
+                                border-radius: 50%; margin-top: 10px;"></div>
+                                <h2 class="mb-2 counter text-center ml-2" data-max="{{ $ditanggapi }}">0</h2>
+                            </div>
                             <p class="mb-0 text-muted text-center">Sudah Ditanggapi</p>
                         </div>
                     </div>
@@ -58,11 +76,21 @@
     <div class="content">
         <h5 class="mb-4">Semua Laporan</h5>
 
+
         @foreach ($pengaduan as $k => $v)
 
         <div class="myShadow shadow">
             <div class="laporan-top">
-                <img src="{{ asset('images/user_default.svg') }}" alt="profile" class="profile">
+                @if ($v->hide_identitas == 2)
+                <img src="{{ asset('/images/anonim.png') }}" alt="profile" class="profile">
+
+                @elseif($v->user->foto_profil)
+                <img src="{{ asset($v->user->foto_profil) }}" alt="profile" class="profile gambar-lampiran"
+                    data-toggle="modal" data-target="#imageModal" data-src="{{ asset($v->user->foto_profil) }}">
+
+                @else
+                <img src="{{ asset('/images/user_default.svg') }}" alt="profile" class="profile">
+                @endif
                 <div class="d-flex justify-content-between">
                     <div>
                         @if ($v->hide_identitas == 2)
@@ -78,6 +106,7 @@
                         <p class="text-success">Selesai</p>
                         @endif
                     </div>
+                    
                     <div>
                         <p>{{ $v->tgl_pengaduan->format('d,M,Y')  }}</p>
                     </div>
@@ -87,30 +116,33 @@
                 <div class="judul-laporan">
                     {{ $v->judul_laporan }}
                 </div>
-                <p>{{ $v->isi_laporan }}</p>
+                <p class="isi-laporan">{{ Str::limit($v->isi_laporan,200) }}</p>
             </div>
             <div class="laporan-bottom">
 
-                @if ($v->foto != null)
-                @foreach (explode('|', $v->foto) as $img)
+                @if ($v->Images != '')
+                @foreach ($v->Images as $key => $item)
 
+                <img src="{{ asset('storage/complaint-images/' .$item->folder. '/' .$item->image) ?? ''}}"
+                    class="gambar-lampiran mb-0" data-toggle="modal" data-target="#imageModal"
+                    data-src="{{ asset('/storage/complaint-images/' .$item->folder. '/' .$item->image) ?? '' }}">
 
-                <img src="/storage/{{ $img }}" alt="{{ 'Gambar '.$v->judul_laporan }}"
-                    class="gambar-lampiran mb-4" data-toggle="modal" data-target="#imageModal"
-                    data-src="/storage/{{ $img }}">
                 @endforeach
                 @endif
-                @if ($v->lokasi_kejadian != '')
-                <p>
-                    <i class="fas fa-map-marker-alt"></i> <small class="text-muted">{{ $v->lokasi_kejadian }}</small>
-                </p>
+                @if ($v->Location && $v->Location->location)
+                <a href="https://www.google.com/maps/search/?api=1&query={{ $v->Location->latitude }},{{ $v->Location->longitude }}"> 
+                    <p><i class="fas fa-map-marker-alt"></i> 
+                    <small class="text-muted">{{ $v->Location->location ?? '' }}</small>
+                    </p>
+                  </a>
                 @endif
+                <a style="text-decoration: none; font-size: 15px;" href="/pengaduan/detail/{{ $v->id_pengaduan }}">Lihat Detail</a>
                 <hr>
                 @if ($v->tanggapan->tanggapan != null)
                 <p>
                     <button class="myTanggapan"><i class="far fa-comment"></i> <small>Tanggapan Petugas</small></button>
                 </p>
-               
+
                 <div class="tanggapanContent" style="display: none;">
 
                     <p class=" mb-1">
@@ -124,12 +156,15 @@
             @endif
         </div>
         @endforeach
+
+
+
     </div>
 </div>
 
 <!-- Modal image -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-ctn">
             <div class="modal-body text-center">

@@ -22,7 +22,7 @@
                                     <div class="media"><img class="img-70 rounded-circle" alt=""
                                             src="/images/user_default.svg">
                                         <div class="media-body">
-                                            <a href="/admin/masyarakat/detail/{{ $pengaduan->user->nik }}">
+                                            <a href="/admin/masyarakat/detail/{{ $pengaduan->user->id }}">
                                                 <h3 class="mb-1 f-20 txt-primary">{{ $pengaduan->user->username }}  @if ($pengaduan->user->foto_ktp == '' || $pengaduan->user->alamat == '' || $pengaduan->user->email == '' || $pengaduan->user->telp == '')
                                                     <small class="text-danger">!</small>
                                                     
@@ -50,23 +50,31 @@
 
                             <div class="mb-3">
                                 <label class="form-label text-primary">Lokasi Kejadian</label>
-                                <p>{{ $pengaduan->lokasi_kejadian }}
-                                    {{ $pengaduan->latitude }},{{ $pengaduan->longitude }}</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ $pengaduan->Location->latitude }},{{ $pengaduan->Location->longitude }}"> 
+                                <p>{{ $pengaduan->Location->location ?? '' }}
+                                    {{ $pengaduan->Location->latitude ?? '' }},{{ $pengaduan->Location->longitude ?? ''}}</p></a>
                             </div>
+                            @if ($pengaduan->Kategori)
+                                
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Kategori Laporan</label>
+                                <p>{{ $pengaduan->Kategori->kategori }}</p>
+                            </div>
+                            @endif
                             <div class="mb-3">
                                 <label class="form-label text-primary">Tanggal Laporan</label>
                                 <p>{{ $pengaduan->tgl_pengaduan }}</p>
                             </div>
 
-                            @if ($pengaduan->foto != '')
+                            @if ($pengaduan->Images != '')
                             <div class="mb-3">
                                 <label class="form-label text-primary">Foto Laporan</label>
                                 <div class="row">
-                                    @foreach (explode('|', $pengaduan->foto) as $img)
+                                    @foreach ($pengaduan->Images as $img)
                                     <div class="col-sm-3 mb-2">
-                                        <img src="/storage/{{ $img }}" 
+                                        <img src="{{ asset('storage/complaint-images/' .$img->folder. '/' .$img->image) ?? ''}}" 
                                             class="gambar-lampiran" data-bs-toggle="modal" data-bs-target="#imageModal"
-                                            data-src="/storage/{{ $img }}" width="100">
+                                            data-src="{{ asset('storage/complaint-images/' .$img->folder. '/' .$img->image) ?? ''}}" width="100">
                                     </div>
                                     @endforeach
                                 </div>
@@ -138,6 +146,15 @@
                                         placeholder="Beri tanggapan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
                                 </div>
                             </div>
+                            {{-- @if ($tanggapan != '')
+                                
+                            
+                            <div class="col-md-12">
+                                <div>
+                                    <p class="" style="font-weight: 500;">Terakhir ditanggapi oleh: {{ $tanggapan->Petugas->nama_petugas }}</p>
+                                </div>
+                            </div>
+                            @endif --}}
                             
 
                         </div>

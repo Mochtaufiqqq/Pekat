@@ -34,6 +34,7 @@
                 </div>
                 <div class="card-body">
                   {{-- <a class="btn btn-success mb-2" href="/admin/tambahpetugas">Tambah Data</a> --}}
+                  <a class="btn btn-secondary mb-2" href="/admin/sampah/print">Export PDF</a>
                     <div class="dt-ext table-responsive">
                       <table class="table table-bordered" id="basic-row-reorder">
                         <thead>
@@ -53,8 +54,8 @@
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $p->tgl_pengaduan->format('d-M-Y') }}</td>
-                                    <td>{{ $p->nik }}</td>
-                                    <td>{{ $p->user->nama }}</td>
+                                    <td>{{ $p->user->nik ?? '' }}</td>
+                                    <td>{{ $p->user->nama ?? ''}}</td>
                                     <td>{{ $p->isi_laporan }}</td>
                                     <td>
                                         @if ($p->status == '0')

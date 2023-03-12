@@ -42,7 +42,8 @@
                                 <th scope="col">No</th>
                                 <th scope="col">Nama</th>
                                 <th scope="col">Username</th>
-                                <th scope="col">No telp</th>
+                                <th scope="col">Email</th>
+                                {{-- <th scope="col">No telp</th> --}}
                                 <th scope="col">level</th>
                                 <th scope="col">Opsi</th>
                             </tr>
@@ -53,7 +54,8 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $p->nama_petugas }}</td>
                                     <td>{{ $p->username }}</td>
-                                    <td>{{ $p->telp }}</td>
+                                    <td>{{ $p->email }}</td>
+                                    {{-- <td>{{ $p->telp }}</td> --}}
                                     <td>{{ $p->level }}</td>
                                     <td>
                                         <a class="btn mb-3" href="/admin/petugas/detail/{{ $p->id_petugas }}" style="color: white; background-color:#645CBB;">Detail</a>

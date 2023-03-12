@@ -17,11 +17,16 @@
                     <li class="breadcrumb-item active"><a href="/usernonaktif"></a> User Nonaktif</li> --}}
                 </ol>
             </div>
+            <div class="col-sm-12">
+            @if (Session::has('error'))
+            <div class="alert alert-danger">Error! {{ Session::get('error') }}</div>
+                
+            @endif
+            </div>
         </div>
     </div>
 </div>
 <!-- Container-fluid Ends-->
-
 
 <div class="container-fluid">
     <div class="edit-profile">
@@ -44,8 +49,14 @@
                                         <div class="profile-mail">
                                             <div class="media align-items-center">
 
+                                                @if ($society->foto_profil != '')
+                                                <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0"
+                                                src="{{ asset($society->foto_profil) }}" alt="">
+                                                @else
                                                 <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0"
                                                     src="/images/user_default.svg" alt="">
+                                                @endif
+                                                
 
                                                 <input class="updateimg" type="file" name="img"
                                                     onchange="readURL(this,0)">
@@ -67,13 +78,13 @@
                                                     <ul>
                                                         {{-- <li><a href="/admin/masyarakat/delete/{{ $society->nik }}"
                                                                 onclick="editContact(0)">Edit</a></li> --}}
-                                                        <li><a href="/admin/masyarakat/delete/{{ $society->nik }}"
+                                                        <li><a href="/admin/masyarakat/delete/{{ $society->id }}"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#modalDelete{{ $society->nik }}">Hapus</a>
+                                                                data-bs-target="#modalDelete{{ $society->id }}">Hapus</a>
                                                         </li>
 
                                                         {{-- modal delete --}}
-                                                        <div class="modal fade" id="modalDelete{{ $society->nik }}"
+                                                        <div class="modal fade" id="modalDelete{{ $society->id }}"
                                                             tabindex="-1" role="dialog"
                                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog" role="document">
@@ -93,7 +104,7 @@
                                                                         <button class="btn btn-secondary" type="button"
                                                                             data-bs-dismiss="modal">Batal</button>
                                                                         <form
-                                                                            action="/admin/masyarakat/delete/{{ $society->nik }}"
+                                                                            action="/admin/masyarakat/delete/{{ $society->id }}"
                                                                             method="POST">
                                                                             @method('delete')
                                                                             @csrf
@@ -135,6 +146,9 @@
                                                        </div>
                                                     </li>
                                                     <hr>
+                                                    {{-- <li>Jumlah Pengaduan<span class="font-primary">
+                                                        {{ $complaint->user->count() }}</span>
+                                                </li> --}}
                                                 </ul>
                                             </div>
                                         </div>

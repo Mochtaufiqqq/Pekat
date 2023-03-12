@@ -21,27 +21,25 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $username = Petugas::where('username', $request->username)->first();
+        $user = Petugas::where('username', $request->username)
+        ->orWhere('email', $request->username)
+        ->first();
 
-        if (!$username) {
-            return redirect()->back()->with(['pesan' => 'Username / Password anda salah!']);
+        if (!$user) {
+        return redirect()->back()->with(['pesan' => 'Username / Email / Password anda salah !']);
         }
 
-        $password = Hash::check($request->password, $username->password);
+        $password = Hash::check($request->password, $user->password);
 
         if (!$password) {
-            return redirect()->back()->with(['pesan' => 'Username / Password anda salah!']);
+        return redirect()->back()->with(['pesan' => 'Username / Email / Password anda salah !']);
         }
 
-        $auth = Auth::guard('admin')->attempt([
-            'username' => $request->username,
-            'password' => $request->password
-        ]);
-
-        if ($auth) {
-            return redirect()->route('dashboard.index');
+        if (Auth::guard('admin')->attempt(['username' => $user->username, 'password' => $request->password])
+        || Auth::guard('admin')->attempt(['email' => $user->email, 'password' => $request->password])) {
+        return redirect()->route('dashboard.index');
         } else {
-            return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
+        return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
         }
     }
 
@@ -54,7 +52,7 @@ class AdminController extends Controller
 
     public function pengaduan() 
     {
-        $pengaduan = Pengaduan::orderBy('tgl_pengaduan', 'desc')->get();
+        $pengaduan = Pengaduan::latest()->get();
 
         return view('contents.admin.report.show',compact('pengaduan'));
     }
@@ -117,7 +115,7 @@ class AdminController extends Controller
 
     public function pengaduantrash()
     {
-        $pengaduan = Pengaduan::onlyTrashed()->get();
+        $pengaduan = Pengaduan::onlyTrashed()->latest()->get();
         return view('contents.admin.report.trash', compact('pengaduan'));
     }
     public function restorepengaduan($id_pengaduan)
@@ -143,58 +141,69 @@ class AdminController extends Controller
         return view('contents.admin.society.show',compact('society'));
     }
     
-    public function editsociety($nik)
-    {
-        $society = Masyarakat::where('nik', $nik)->first();
+    // public function editsociety($id)
+    // {
+    //     $society = Masyarakat::where('id', $id)->first();
 
-        return view('contents.admin.society.edit',compact('society'));
-    }
+    //     return view('contents.admin.society.edit',compact('society'));
+    // }
 
-    public function updatesociety(Request $request, $nik)
-    {
-        // $username = Masyarakat::where('username'. $request->username);
-        // if ($username) {
-        //     return redirect()->back()->with(['pesan' => 'Username sudah ada!']);
-        // }
-        $validatedData = $request->validate([
-            'nik' => 'required',
-            'nama' => 'required',
-            // 'username' => 'required',
-            'email'  => 'required',
-            // 'confirmation' => 'required|same:password',
-        ]);
+    // public function updatesociety(Request $request, $id)
+    // {
+    //     // $username = Masyarakat::where('username'. $request->username);
+    //     // if ($username) {
+    //     //     return redirect()->back()->with(['pesan' => 'Username sudah ada!']);
+    //     // }
+    //     $validatedData = $request->validate([
+    //         'nik' => 'required',
+    //         'nama' => 'required',
+    //         // 'username' => 'required',
+    //         'email'  => 'required',
+    //         // 'confirmation' => 'required|same:password',
+    //     ]);
 
-        if($request['nik'] === $nik) {
-            Masyarakat::where('nik',$nik)->update([
-                'nama' => $request['nama'],
-                'email' => $request['email'] ?? '',
-                'password' => Hash::make($request['password']),
+    //     if($request['nik'] === $id) {
+    //         Masyarakat::where('nik',$nik)->update([
+    //             'nama' => $request['nama'],
+    //             'email' => $request['email'] ?? '',
+    //             'password' => Hash::make($request['password']),
     
-            ]);
+    //         ]);
         
-        } else {
-            Masyarakat::where('nik',$nik)->update($validatedData);
-        }
+    //     } else {
+    //         Masyarakat::where('nik',$nik)->update($validatedData);
+    //     }
        
-        return redirect('/admin/masyarakat')->with('success','Data berhasil di update');
+    //     return redirect('/admin/masyarakat')->with('success','Data berhasil di update');
 
-    }
+    // }
 
-    public function detailsociety($nik)
+    public function detailsociety($id)
     {
         
-        $society = Masyarakat::where('nik',$nik)->first();
+        $society = Masyarakat::where('id',$id)->first();
+        $complaint = Pengaduan::where('id_masyarakat',$id)->first();
 
-        return view('contents.admin.society.detail',compact('society'));
+        return view('contents.admin.society.detail',compact('society','complaint'));
     }
 
-    public function destroysociety($nik)
+    public function destroysociety($id)
     {
-        $society = Masyarakat::findOrFail($nik);
+        $society = Masyarakat::findOrFail($id);
 
-        $society->delete();
+        $has_verif_complaints = Pengaduan::where('id_masyarakat',$id)->where('status','!=','0')->first();
 
+         // If society has verif complaints, return error message
+        if ($has_verif_complaints) {
+        return redirect()->back()->with('error', 'Masyarakat tidak dapat dihapus karena memiliki pengaduan yang sudah diverifikasi');
+        } else{
+            // Delete the related complaints
+            Pengaduan::where('id_masyarakat', $id)->forceDelete();
+            $society->delete();
+        }
+         
         return redirect('/admin/masyarakat')->with('success','Masyarakat berhasil dihapus');
+
     }
 
     public function profile()
@@ -255,8 +264,23 @@ class AdminController extends Controller
         
     $pdf = PDF::loadview('contents.admin.report.export-pdf',[
         'complaint'=> $complaint,
-        ])->setOptions(['defaultFont' => 'sans-serif']);
+        ])
+        ->setOptions(['defaultFont' => 'sans-serif'])
+        ->setPaper('a4', 'landscape');
         return $pdf->download('Laporan-pengaduan.pdf');
         return redirect('/admin/pengaduan');
+   }
+
+   public function printTrashPdf()
+   {
+    $complaint = Pengaduan::onlyTrashed()->latest()->get();
+        
+    $pdf = PDF::loadview('contents.admin.report.printTrash',[
+        'complaint'=> $complaint,
+        ])
+        ->setOptions(['defaultFont' => 'sans-serif'])
+        ->setPaper('a4', 'landscape');
+        return $pdf->download('Trash-pengaduan.pdf');
+        return redirect('/admin/sampah');
    }
 }

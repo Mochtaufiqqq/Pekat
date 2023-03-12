@@ -7,13 +7,14 @@
 
 <body>
     <div class="text-center">
-        <h4>Laporan Data Masyarakat</h4>
+        <center><h5>Laporan Data Masyarakat</h5></center>
     </div>
     <div class="container">
         <table class="table bordered">
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>NIK</th>
                     <th>Nama</th>
                     <th>Username</th>
                     <th>Email</th>
@@ -26,6 +27,7 @@
                 @foreach ($socities as $society)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td>{{ $society->nik }}</td>
                     <td>{{ $society->nama }}</td>
                     <td>{{ $society->username }}</td>
                     <td>{{ $society->email }}</td>
